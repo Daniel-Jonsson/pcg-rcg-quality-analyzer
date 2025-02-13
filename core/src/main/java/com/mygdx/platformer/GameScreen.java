@@ -99,8 +99,6 @@ public class GameScreen extends ScreenAdapter {
     private void draw() {
        // This may not be necessary if we choose to use a background image of some kind
         ScreenUtils.clear(Color.BLACK);
-
-        ScreenUtils.clear(Color.BLACK);
         viewport.apply();
 
         camera.update();

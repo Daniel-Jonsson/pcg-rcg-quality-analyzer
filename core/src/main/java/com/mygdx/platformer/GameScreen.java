@@ -97,9 +97,8 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void draw() {
-       // This screen buffering may not be necessary if we choose to use a background image of some kind
-        Gdx.gl.glClearColor(0, 0, 0, 1);    // set bg color to clear the screen
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);            // prevent overlap between new and previous frame
+       // This may not be necessary if we choose to use a background image of some kind
+        ScreenUtils.clear(Color.BLACK);
 
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();

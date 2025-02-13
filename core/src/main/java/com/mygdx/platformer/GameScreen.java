@@ -9,19 +9,28 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends ScreenAdapter {
 
    private PlatformerGame game;
 
+    private static final float WORLD_WIDTH = 1000;
+    private static final float WORLD_HEIGHT = 600;
+
+
    private Sprite sprite;
 
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private FitViewport viewport;
+
+
     private Texture texture;        // for graphics test
 
     private float runTime; // tracks how long the game has run
-    
+
 
    public GameScreen(PlatformerGame game) {
        this.game = game; // reference main class to enable switching to another screen
@@ -43,6 +52,8 @@ public class GameScreen extends ScreenAdapter {
        sprite.setPosition(100, 100);
        sprite.setSize(width, height);
 
+       pixmap.dispose();
+
 
    }
 
@@ -55,39 +66,55 @@ public class GameScreen extends ScreenAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false); // invert coordinates (y = 0 at bottom of window)
 
+        viewport = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT, camera);
+        viewport.apply();  // apply viewport settings
+
+        camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
+        camera.update();
+
         createTestGraphics();
 
     }
 
-    // updates logic
-    private void update(float deltaTime) {
-        runTime += deltaTime;
-        sprite.translate(1, 0);
-    }
+
 
     // updated logics, graphics etc. Equivalent to game loop.
     @Override
     public void render(float deltaTime) {
-        // buffer screen
-        Gdx.gl20.glClearColor(0, 0, 0, 1);
-        Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+       input();
+       logic(deltaTime);
+       draw();
+    }
 
-        batch.setProjectionMatrix(camera.combined);
-
-        // update here
-        update(deltaTime);
+    private void input() {
+        // input handling here
+    }
+    // updates logic
+    private void logic(float deltaTime) {
+        //runTime += deltaTime;
+        sprite.translate(1, 0);
         sprite.rotate(1);
-        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+    }
+
+    private void draw() {
+       // This screen buffering may not be necessary if we choose to use a background image of some kind
+        Gdx.gl.glClearColor(0, 0, 0, 1);    // set bg color to clear the screen
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);            // prevent overlap between new and previous frame
+
+        ScreenUtils.clear(Color.BLACK);
+        viewport.apply();
+
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
 
         batch.begin();  // render
         sprite.draw(batch);
         batch.end();
-
     }
 
     @Override
     public void resize(int width, int height) {
-        // Resize your screen here. The parameters represent the new window size.
+        viewport.update(width, height, true);
     }
 
     // executes when the game loses focus, e.g. when minimized
@@ -112,5 +139,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         // Destroy screen's assets here.
+        batch.dispose();
+        texture.dispose();
     }
 }

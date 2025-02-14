@@ -11,14 +11,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.platformer.utilities.AppConfig;
 
 public class GameScreen extends ScreenAdapter {
 
    private PlatformerGame game;
-
-    private static final float WORLD_WIDTH = 1000;
-    private static final float WORLD_HEIGHT = 600;
-
 
    private Sprite sprite;
 
@@ -66,10 +63,10 @@ public class GameScreen extends ScreenAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false); // invert coordinates (y = 0 at bottom of window)
 
-        viewport = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT, camera);
+        viewport = new FitViewport(AppConfig.SCREEN_WIDTH, AppConfig.SCREEN_HEIGHT, camera);
         viewport.apply();  // apply viewport settings
 
-        camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
+        camera.position.set((float) AppConfig.SCREEN_WIDTH / 2, (float) AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
 
         createTestGraphics();

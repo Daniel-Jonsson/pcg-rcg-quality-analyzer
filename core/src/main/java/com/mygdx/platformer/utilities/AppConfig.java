@@ -7,4 +7,7 @@ public final class AppConfig {
 
     /** The default screen height. **/
     public static final int SCREEN_HEIGHT = 720;
+
+    /** Pixels per meter **/
+    public static final float PPM = 50f;
 }

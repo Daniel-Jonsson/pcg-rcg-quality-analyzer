@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.platformer.player.Player;
@@ -16,6 +16,8 @@ import com.mygdx.platformer.utilities.AppConfig;
 public class GameScreen extends ScreenAdapter {
 
    private PlatformerGame game;
+
+   private World world;
 
    private Sprite sprite;
 
@@ -26,7 +28,7 @@ public class GameScreen extends ScreenAdapter {
 
     Player player;
 
-    private Texture texture;        // for graphics test
+
 
     private float runTime; // tracks how long the game has run
 
@@ -37,29 +39,10 @@ public class GameScreen extends ScreenAdapter {
         Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
    }
 
-   private void createTestGraphics() {
-       int width = 50;
-       int height = 50;
-
-       Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-       pixmap.setColor(Color.RED);
-       pixmap.fill();
-       pixmap.drawRectangle(0, 0, width, height);
-
-       texture = new Texture(pixmap);
-       sprite = new Sprite(texture);
-       sprite.setPosition(100, 100);
-       sprite.setSize(width, height);
-
-       pixmap.dispose();
-
-
-   }
-
     // Executes when this screen is set as the active screen
     @Override
     public void show() {
-        Gdx.app.log(this.getClass().getSimpleName(), "Show");
+        world = new World(new Vector2(0, -9.8f), true); // init world and set y gravity to -10
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -71,9 +54,7 @@ public class GameScreen extends ScreenAdapter {
         camera.position.set((float) AppConfig.SCREEN_WIDTH / 2, (float) AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
 
-        // createTestGraphics();
-
-        player = new Player(10, 10);
+         player = new Player(world,300, 300);
 
 
     }
@@ -83,6 +64,11 @@ public class GameScreen extends ScreenAdapter {
     // updated logics, graphics etc. Equivalent to game loop.
     @Override
     public void render(float deltaTime) {
+
+       world.step(1 / 60f, 6, 2);
+
+       player.update();
+
        input();
        logic(deltaTime);
        draw();
@@ -94,7 +80,7 @@ public class GameScreen extends ScreenAdapter {
     // updates logic
     private void logic(float deltaTime) {
         //runTime += deltaTime;
-        player.update(deltaTime);
+
     }
 
     private void draw() {
@@ -139,6 +125,9 @@ public class GameScreen extends ScreenAdapter {
     public void dispose() {
         // Destroy screen's assets here.
         batch.dispose();
-        texture.dispose();
+        world.dispose();
+        if (player != null) {
+            player.dispose();
+        }
     }
 }

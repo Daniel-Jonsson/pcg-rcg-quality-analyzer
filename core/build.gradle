@@ -3,6 +3,7 @@ eclipse.project.name = appName + '-core'
 
 dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
+  api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion" // Optional: Add if core uses Box2D directly
   api "com.github.tommyettinger:libgdx-utils-box2d:$utilsBox2dVersion"
   api "com.github.tommyettinger:libgdx-utils:$utilsVersion"
 

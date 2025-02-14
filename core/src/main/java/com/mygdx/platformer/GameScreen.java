@@ -89,11 +89,12 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void input() {
-        // input handling here
+
     }
     // updates logic
     private void logic(float deltaTime) {
         //runTime += deltaTime;
+        player.update(deltaTime);
     }
 
     private void draw() {

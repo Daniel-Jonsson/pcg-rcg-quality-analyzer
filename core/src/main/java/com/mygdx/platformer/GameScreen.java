@@ -3,7 +3,6 @@ package com.mygdx.platformer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.platformer.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
 
 public class GameScreen extends ScreenAdapter {
@@ -23,6 +23,8 @@ public class GameScreen extends ScreenAdapter {
     private OrthographicCamera camera;
     private FitViewport viewport;
 
+
+    Player player;
 
     private Texture texture;        // for graphics test
 
@@ -69,7 +71,10 @@ public class GameScreen extends ScreenAdapter {
         camera.position.set((float) AppConfig.SCREEN_WIDTH / 2, (float) AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
 
-        createTestGraphics();
+        // createTestGraphics();
+
+        player = new Player(10, 10);
+
 
     }
 
@@ -89,8 +94,6 @@ public class GameScreen extends ScreenAdapter {
     // updates logic
     private void logic(float deltaTime) {
         //runTime += deltaTime;
-        sprite.translate(1, 0);
-        sprite.rotate(1);
     }
 
     private void draw() {
@@ -101,9 +104,10 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        batch.begin();  // render
-        sprite.draw(batch);
+        batch.begin();
+        player.render(batch);
         batch.end();
+
     }
 
     @Override

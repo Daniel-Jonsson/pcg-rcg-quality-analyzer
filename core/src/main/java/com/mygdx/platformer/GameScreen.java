@@ -64,14 +64,24 @@ public class GameScreen extends ScreenAdapter {
     // updated logics, graphics etc. Equivalent to game loop.
     @Override
     public void render(float deltaTime) {
+        player.update();
 
-       world.step(1 / 60f, 6, 2);
+        input();
+        logic(deltaTime);
+        draw();
 
-       player.update();
+        doPhysicsStep(deltaTime);
+    }
 
-       input();
-       logic(deltaTime);
-       draw();
+    private void doPhysicsStep(float deltaTime) {
+        // fixed time step
+        // max frame time
+        float frameTime = Math.min(deltaTime * AppConfig.TIME_SCALE, 0.25f);
+        runTime += frameTime;
+        while (runTime >= AppConfig.TIME_STEP) {
+            world.step(AppConfig.TIME_STEP, AppConfig.VELOCITY_ITERATIONS, AppConfig.POSITION_ITERATIONS);
+            runTime -= AppConfig.TIME_STEP;
+        }
     }
 
     private void input() {

@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -28,7 +31,7 @@ public class GameScreen extends ScreenAdapter {
 
     Player player;
 
-
+    BodyDef groundBodyDef;
 
     private float runTime; // tracks how long the game has run
 
@@ -54,14 +57,12 @@ public class GameScreen extends ScreenAdapter {
         camera.position.set((float) AppConfig.SCREEN_WIDTH / 2, (float) AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
 
-         player = new Player(world,300, 300);
+        player = new Player(world,300, 300);
 
+         createGround();
 
     }
 
-
-
-    // updated logics, graphics etc. Equivalent to game loop.
     @Override
     public void render(float deltaTime) {
         player.update();
@@ -74,7 +75,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void doPhysicsStep(float deltaTime) {
-        // fixed time step
+
         // max frame time
         float frameTime = Math.min(deltaTime * AppConfig.TIME_SCALE, 0.25f);
         runTime += frameTime;
@@ -87,9 +88,8 @@ public class GameScreen extends ScreenAdapter {
     private void input() {
 
     }
-    // updates logic
+
     private void logic(float deltaTime) {
-        //runTime += deltaTime;
 
     }
 
@@ -133,11 +133,24 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        // Destroy screen's assets here.
         batch.dispose();
         world.dispose();
-        if (player != null) {
-            player.dispose();
-        }
+        player.dispose();
+    }
+
+    private void createGround() {
+
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;
+        groundBodyDef.position.set(camera.viewportWidth / 2, 0);
+
+        Body groundBody = world.createBody(groundBodyDef);
+
+        PolygonShape groundBox = new PolygonShape();
+        groundBox.setAsBox(camera.viewportWidth / 2, 0);
+
+        groundBody.createFixture(groundBox, 0.0f);
+
+        groundBox.dispose();
     }
 }

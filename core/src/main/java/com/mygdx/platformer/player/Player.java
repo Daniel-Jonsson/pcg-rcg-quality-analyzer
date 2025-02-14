@@ -36,7 +36,7 @@ public class Player {
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
         fixtureDef.friction = 1f;
-        fixtureDef.restitution = 1f;
+        fixtureDef.restitution = 0f;
         body.createFixture(fixtureDef);
         shape.dispose();
     }
@@ -47,7 +47,9 @@ public class Player {
 
     public void update() {
        // this syncs the sprite position with the Box2D body
-        sprite.setPosition((body.getPosition().x * AppConfig.PPM), (body.getPosition().y * AppConfig.PPM));
+        sprite.setPosition(
+            (body.getPosition().x * AppConfig.PPM) - sprite.getWidth() / 2,
+            (body.getPosition().y * AppConfig.PPM) - sprite.getHeight() / 2);
 
     }
 

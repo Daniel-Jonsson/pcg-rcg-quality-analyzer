@@ -3,97 +3,94 @@ package com.mygdx.platformer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.platformer.player.Player;
+import com.mygdx.platformer.utilities.AppConfig;
 
 public class GameScreen extends ScreenAdapter {
 
    private PlatformerGame game;
 
-    private static final float WORLD_WIDTH = 1000;
-    private static final float WORLD_HEIGHT = 600;
-
-
-   private Sprite sprite;
+   private World world;
 
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private FitViewport viewport;
 
-
-    private Texture texture;        // for graphics test
+    private Player player;
 
     private float runTime; // tracks how long the game has run
 
 
-   public GameScreen(PlatformerGame game) {
-       this.game = game; // reference main class to enable switching to another screen
+   public GameScreen(final PlatformerGame g) {
+       this.game = g; // reference main class to enable switching to another screen
 
         Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
-   }
-
-   private void createTestGraphics() {
-       int width = 50;
-       int height = 50;
-
-       Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-       pixmap.setColor(Color.RED);
-       pixmap.fill();
-       pixmap.drawRectangle(0, 0, width, height);
-
-       texture = new Texture(pixmap);
-       sprite = new Sprite(texture);
-       sprite.setPosition(100, 100);
-       sprite.setSize(width, height);
-
-       pixmap.dispose();
-
-
    }
 
     // Executes when this screen is set as the active screen
     @Override
     public void show() {
-        Gdx.app.log(this.getClass().getSimpleName(), "Show");
+        world = new World(new Vector2(0, AppConfig.GRAVITY), true); // init world and set y gravity to -10
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false); // invert coordinates (y = 0 at bottom of window)
 
-        viewport = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT, camera);
+        viewport = new FitViewport(AppConfig.SCREEN_WIDTH, AppConfig.SCREEN_HEIGHT, camera);
         viewport.apply();  // apply viewport settings
 
-        camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, 0);
+        camera.position.set((float) AppConfig.SCREEN_WIDTH / 2, (float) AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
 
-        createTestGraphics();
+        player = new Player(world, AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
+
+         createGround();
+         initCollisionListener();
 
     }
 
-
-
-    // updated logics, graphics etc. Equivalent to game loop.
     @Override
-    public void render(float deltaTime) {
-       input();
-       logic(deltaTime);
-       draw();
+    public void render(final float deltaTime) {
+        player.update();
+
+        input();
+        logic(deltaTime);
+        draw();
+
+        doPhysicsStep(deltaTime);
+    }
+
+    private void doPhysicsStep(final float deltaTime) {
+
+        // max frame time
+        float frameTime = Math.min(deltaTime * AppConfig.TIME_SCALE, AppConfig.MAX_FRAME_TIME);
+        runTime += frameTime;
+        while (runTime >= AppConfig.TIME_STEP) {
+            world.step(AppConfig.TIME_STEP, AppConfig.VELOCITY_ITERATIONS, AppConfig.POSITION_ITERATIONS);
+            runTime -= AppConfig.TIME_STEP;
+        }
     }
 
     private void input() {
-        // input handling here
+
     }
-    // updates logic
-    private void logic(float deltaTime) {
-        //runTime += deltaTime;
-        sprite.translate(1, 0);
-        sprite.rotate(1);
+
+    private void logic(final float deltaTime) {
+
     }
 
     private void draw() {
@@ -104,13 +101,14 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        batch.begin();  // render
-        sprite.draw(batch);
+        batch.begin();
+        player.render(batch);
         batch.end();
+
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         viewport.update(width, height, true);
     }
 
@@ -135,8 +133,54 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        // Destroy screen's assets here.
         batch.dispose();
-        texture.dispose();
+        world.dispose();
+        player.dispose();
+    }
+
+    private void createGround() {
+
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;
+        groundBodyDef.position.set(camera.viewportWidth / 2, 0);
+
+        Body groundBody = world.createBody(groundBodyDef);
+
+        PolygonShape groundBox = new PolygonShape();
+        groundBox.setAsBox(camera.viewportWidth / 2, 0);
+
+        groundBody.createFixture(groundBox, 0.0f);
+
+        groundBox.dispose();
+    }
+
+    private void initCollisionListener() {
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                Fixture a = contact.getFixtureA();
+                Fixture b = contact.getFixtureB();
+
+                if (a.getBody() == player.getBody() || b.getBody() == player.getBody()) {
+                    player.setGrounded(true);
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+                Fixture a = contact.getFixtureA();
+                Fixture b = contact.getFixtureB();
+
+                if (a.getBody() == player.getBody() || b.getBody() == player.getBody()) {
+                    player.setGrounded(false);
+                }
+            }
+
+            @Override
+            public void preSolve(final Contact contact, final Manifold manifold) { }
+
+            @Override
+            public void postSolve(final Contact contact, final ContactImpulse contactImpulse) { }
+        });
     }
 }

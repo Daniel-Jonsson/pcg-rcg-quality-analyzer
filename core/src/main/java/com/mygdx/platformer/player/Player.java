@@ -22,6 +22,7 @@ public class Player {
     private float moveSpeed = 10f;
     private float jumpForce = 30f;
 
+    private boolean isGrounded = false;
 
     public Player(World world, float x, float y) {
         texture = new Texture("player.png");
@@ -76,12 +77,20 @@ public class Player {
 
         body.setLinearVelocity(move, body.getLinearVelocity().y);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {
             body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
+            isGrounded = false;
         }
     }
 
     public void dispose() {
         texture.dispose();
+    }
+
+    public void setGrounded(boolean grounded) {
+        isGrounded = grounded;
+    }
+    public Body getBody() {
+        return body;
     }
 }

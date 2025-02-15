@@ -19,16 +19,16 @@ public class Player {
     private final Sprite sprite;
     private final Body body;
 
-    private float moveSpeed = 10f;
-    private float jumpForce = 30f;
+    private float moveSpeed = AppConfig.PLAYER_MOVE_SPEED;
+    private float jumpForce = AppConfig.PLAYER_JUMP_FORCE;
 
     private boolean isGrounded = false;
 
-    public Player(World world, float x, float y) {
+    public Player(World world, final float x, final float y) {
         texture = new Texture("player.png");
 
-        float playerWidth = 70;
-        float playerHeight = 100;
+        float playerWidth = AppConfig.PLAYER_WIDTH;
+        float playerHeight = AppConfig.PLAYER_HEIGHT;
         sprite = new Sprite(texture);
         sprite.setSize(playerWidth, playerHeight);
 

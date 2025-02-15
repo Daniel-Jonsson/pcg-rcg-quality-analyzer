@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -31,13 +30,13 @@ public class GameScreen extends ScreenAdapter {
     private OrthographicCamera camera;
     private FitViewport viewport;
 
-    Player player;
+    private Player player;
 
     private float runTime; // tracks how long the game has run
 
 
-   public GameScreen(PlatformerGame game) {
-       this.game = game; // reference main class to enable switching to another screen
+   public GameScreen(final PlatformerGame g) {
+       this.game = g; // reference main class to enable switching to another screen
 
         Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
    }
@@ -45,7 +44,7 @@ public class GameScreen extends ScreenAdapter {
     // Executes when this screen is set as the active screen
     @Override
     public void show() {
-        world = new World(new Vector2(0, -9.8f), true); // init world and set y gravity to -10
+        world = new World(new Vector2(0, AppConfig.GRAVITY), true); // init world and set y gravity to -10
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -57,7 +56,7 @@ public class GameScreen extends ScreenAdapter {
         camera.position.set((float) AppConfig.SCREEN_WIDTH / 2, (float) AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
 
-        player = new Player(world,300, 300);
+        player = new Player(world, AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
 
          createGround();
          initCollisionListener();
@@ -65,7 +64,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     @Override
-    public void render(float deltaTime) {
+    public void render(final float deltaTime) {
         player.update();
 
         input();
@@ -75,10 +74,10 @@ public class GameScreen extends ScreenAdapter {
         doPhysicsStep(deltaTime);
     }
 
-    private void doPhysicsStep(float deltaTime) {
+    private void doPhysicsStep(final float deltaTime) {
 
         // max frame time
-        float frameTime = Math.min(deltaTime * AppConfig.TIME_SCALE, 0.25f);
+        float frameTime = Math.min(deltaTime * AppConfig.TIME_SCALE, AppConfig.MAX_FRAME_TIME);
         runTime += frameTime;
         while (runTime >= AppConfig.TIME_STEP) {
             world.step(AppConfig.TIME_STEP, AppConfig.VELOCITY_ITERATIONS, AppConfig.POSITION_ITERATIONS);
@@ -90,7 +89,7 @@ public class GameScreen extends ScreenAdapter {
 
     }
 
-    private void logic(float deltaTime) {
+    private void logic(final float deltaTime) {
 
     }
 
@@ -109,7 +108,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         viewport.update(width, height, true);
     }
 
@@ -178,11 +177,10 @@ public class GameScreen extends ScreenAdapter {
             }
 
             @Override
-            public void preSolve(Contact contact, Manifold manifold) {}
+            public void preSolve(final Contact contact, final Manifold manifold) { }
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse contactImpulse) {}
+            public void postSolve(final Contact contact, final ContactImpulse contactImpulse) { }
         });
     }
-
 }

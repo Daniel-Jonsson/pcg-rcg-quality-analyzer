@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * This class is responsible for procedurally generating the platforms in a level.
+ * @author Robert Kullman
+ * @author Daniel Jönsson
+ */
 public class PlatformGenerator {
     private List<Platform> platforms;
 
@@ -23,6 +28,11 @@ public class PlatformGenerator {
     private float maxYvariation = AppConfig.MAX_Y_VARIATION;
     private float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
 
+    /**
+     * Constructor for the PlatformGenerator class. This method initializes the game world instance reference,
+     * and generates an initial starting platform.
+     * @param gameWorld The Box2D physics world.
+     */
     public PlatformGenerator(World gameWorld) {
         this.world = gameWorld;
         platforms = new ArrayList<>();
@@ -35,6 +45,11 @@ public class PlatformGenerator {
         lastPlatformX = initialX + initialWidth / 2;
     }
 
+    /**
+     * Generates new platforms until the offscreen limit is reached.
+     * @param cameraX x-axis position of the camera.
+     * @param viewportWidth the width of the viewport (in world units).
+     */
     public void update( float cameraX, float viewportWidth) {
         while (lastPlatformX < cameraX + viewportWidth / 2 + rightOffscreenMargin) {
             float gap = minGap + (float) Math.random() * (maxGap - minGap);
@@ -46,6 +61,7 @@ public class PlatformGenerator {
             lastPlatformX = newX + width / 2;
         }
 
+        // dispose platforms when they move offscreen.
         Iterator<Platform> iter = platforms.iterator();
         while (iter.hasNext()) {
             Platform platform = iter.next();
@@ -58,12 +74,19 @@ public class PlatformGenerator {
         }
     }
 
+    /**
+     * Renders the platforms.
+     * @param batch SpriteBatch for rendering.
+     */
     public void render(SpriteBatch batch) {
         for (Platform platform : platforms) {
             platform.render(batch);
         }
     }
 
+    /**
+     * Frees resources by disposing of the textures for all currently active platforms.
+     */
     public void dispose() {
         for (Platform platform : platforms) {
             platform.dispose();

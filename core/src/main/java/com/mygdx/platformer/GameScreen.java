@@ -53,7 +53,7 @@ public class GameScreen extends ScreenAdapter {
         viewport = new FitViewport(AppConfig.SCREEN_WIDTH, AppConfig.SCREEN_HEIGHT, camera);
         viewport.apply();  // apply viewport settings
 
-        camera.position.set((float) AppConfig.SCREEN_WIDTH / 2, (float) AppConfig.SCREEN_HEIGHT / 2, 0);
+        camera.position.set(AppConfig.SCREEN_WIDTH / 2, AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
 
         player = new Player(world, AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
@@ -66,11 +66,9 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(final float deltaTime) {
         player.update();
-
         input();
         logic(deltaTime);
         draw();
-
         doPhysicsStep(deltaTime);
     }
 
@@ -147,7 +145,7 @@ public class GameScreen extends ScreenAdapter {
         Body groundBody = world.createBody(groundBodyDef);
 
         PolygonShape groundBox = new PolygonShape();
-        groundBox.setAsBox(camera.viewportWidth / 2, 0);
+        groundBox.setAsBox(camera.viewportWidth / 2, 0.1f);
 
         groundBody.createFixture(groundBox, 0.0f);
 

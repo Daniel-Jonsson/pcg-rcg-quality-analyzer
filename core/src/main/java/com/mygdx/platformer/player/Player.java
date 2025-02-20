@@ -29,18 +29,19 @@ public class Player {
 
         float playerWidth = AppConfig.PLAYER_WIDTH;
         float playerHeight = AppConfig.PLAYER_HEIGHT;
+
         sprite = new Sprite(texture);
         sprite.setSize(playerWidth, playerHeight);
 
         // physics body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x / AppConfig.PPM, y / AppConfig.PPM);
+        bodyDef.position.set(x, y);
         body = world.createBody(bodyDef); // add player body to game world
 
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(playerWidth / 2 / AppConfig.PPM, playerHeight / 2 / AppConfig.PPM);
+        shape.setAsBox(playerWidth / 2, playerHeight / 2);
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -61,8 +62,8 @@ public class Player {
 
        // this syncs the sprite position with the Box2D body
         sprite.setPosition(
-            (body.getPosition().x * AppConfig.PPM) - sprite.getWidth() / 2,
-            (body.getPosition().y * AppConfig.PPM) - sprite.getHeight() / 2);
+            body.getPosition().x - sprite.getWidth() / 2,
+            body.getPosition().y - sprite.getHeight() / 2);
 
     }
 

@@ -9,12 +9,32 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+/**
+ * This class represents a platform in the game world. It uses a
+ * Box2D body for physics and a sprite for rendering.
+ * @author Robert Kullman
+ * @author Daniel Jönsson
+ */
 public class Platform {
 
+    /** Texture used to render the platform. */
     private Texture texture;
+
+    /** Sprite representation of the platform for rendering. */
     private Sprite sprite;
+
+    /** Box2D body representing the platform in the physics world. */
     private Body body;
 
+    /**
+     * Constructs a new platform at the given position with the specified dimensions.
+     *
+     * @param world The Box2D world where the platform exists.
+     * @param x The x-coordinate (center) of the platform in world units.
+     * @param y The y-coordinate (center) of the platform in world units.
+     * @param width The width of the platform in world units.
+     * @param height The height of the platform in world units.
+     */
     public Platform(World world, float x, float y, float width, float height) {
         texture = new Texture("platform.png");
         sprite = new Sprite(texture);
@@ -37,6 +57,10 @@ public class Platform {
         shape.dispose();
     }
 
+    /**
+     * Renders the platform by drawing the sprite.
+     * @param batch SpriteBatch for rendering.
+     */
     public void render(SpriteBatch batch) {
         // Sync sprite position
         sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2,
@@ -44,15 +68,27 @@ public class Platform {
         sprite.draw(batch);
     }
 
+    /**
+     * Disposes of the platform's texture to free resources.
+     */
     public void dispose() {
         texture.dispose();
     }
 
-
+    /**
+     * Accessor for the Box2D body associated with this platform.
+     *
+     * @return The platform's physics body.
+     */
     public Body getBody() {
         return body;
     }
 
+    /**
+     * Accessor for the width of the platform in world units.
+     *
+     * @return The width of the platform.
+     */
     public float getWidth() {
         return sprite.getWidth();
     }

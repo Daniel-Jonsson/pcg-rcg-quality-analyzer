@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.platformer.pcg.PlatformGenerator;
 import com.mygdx.platformer.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
 
@@ -33,6 +34,8 @@ public class GameScreen extends ScreenAdapter {
     private Player player;
 
     private float runTime; // tracks how long the game has run
+
+    private PlatformGenerator platformGenerator;
 
 
    public GameScreen(final PlatformerGame g) {
@@ -55,6 +58,8 @@ public class GameScreen extends ScreenAdapter {
 
         camera.position.set(AppConfig.SCREEN_WIDTH / 2, AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
+
+        platformGenerator = new PlatformGenerator(world);
 
         player = new Player(world, AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
 
@@ -100,6 +105,7 @@ public class GameScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
+        platformGenerator.render(batch);
         player.render(batch);
         batch.end();
 
@@ -145,7 +151,7 @@ public class GameScreen extends ScreenAdapter {
         Body groundBody = world.createBody(groundBodyDef);
 
         PolygonShape groundBox = new PolygonShape();
-        groundBox.setAsBox(camera.viewportWidth / 2, 0.1f);
+        groundBox.setAsBox(camera.viewportWidth / 2, 0.01f);
 
         groundBody.createFixture(groundBox, 0.0f);
 

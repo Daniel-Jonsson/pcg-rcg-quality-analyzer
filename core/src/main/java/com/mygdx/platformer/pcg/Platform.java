@@ -32,7 +32,6 @@ public class Platform {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.friction = 0.8f;
         fixtureDef.restitution = 0f;
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -47,6 +46,15 @@ public class Platform {
 
     public void dispose() {
         texture.dispose();
+    }
+
+
+    public Body getBody() {
+        return body;
+    }
+
+    public float getWidth() {
+        return sprite.getWidth();
     }
 
 }

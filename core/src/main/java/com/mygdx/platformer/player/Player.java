@@ -45,7 +45,7 @@ public class Player {
 
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(playerWidth * 0.9f / 2, playerHeight * 0.9f / 2);
+        shape.setAsBox(playerWidth * AppConfig.PLAYER_HITBOX_SCALE / 2, playerHeight * AppConfig.PLAYER_HITBOX_SCALE / 2);
 
 
         // attach the polygon shape to the body
@@ -58,7 +58,7 @@ public class Player {
         shape.dispose();
 
         MassData massData = new MassData();
-        massData.mass = 0.35f;
+        massData.mass = AppConfig.PLAYER_MASS;
         body.setMassData(massData);
     }
 

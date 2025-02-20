@@ -63,17 +63,37 @@ public class GameScreen extends ScreenAdapter {
 
         player = new Player(world, AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
 
-         createGround();
-         initCollisionListener();
+        // createGround();
+        initCollisionListener();
 
     }
 
     @Override
     public void render(final float deltaTime) {
         player.update();
+
+        camera.position.x += 2f * deltaTime; // example fixed scroll speed (adjust as needed)
+        camera.update();
+
         input();
         logic(deltaTime);
-        draw();
+
+        platformGenerator.update(camera.position.x, AppConfig.SCREEN_WIDTH);
+
+        // This may not be necessary if we choose to use a background image of some kind
+        // clear screen
+        ScreenUtils.clear(Color.BLACK);
+        viewport.apply();
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
+        // render objects
+        batch.begin();
+        platformGenerator.render(batch);
+        player.render(batch);
+        batch.end();
+
+        // physics step
         doPhysicsStep(deltaTime);
     }
 
@@ -93,21 +113,6 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void logic(final float deltaTime) {
-
-    }
-
-    private void draw() {
-       // This may not be necessary if we choose to use a background image of some kind
-        ScreenUtils.clear(Color.BLACK);
-        viewport.apply();
-
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-
-        batch.begin();
-        platformGenerator.render(batch);
-        player.render(batch);
-        batch.end();
 
     }
 
@@ -140,23 +145,24 @@ public class GameScreen extends ScreenAdapter {
         batch.dispose();
         world.dispose();
         player.dispose();
+        platformGenerator.dispose();
     }
 
-    private void createGround() {
-
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;
-        groundBodyDef.position.set(camera.viewportWidth / 2, 0);
-
-        Body groundBody = world.createBody(groundBodyDef);
-
-        PolygonShape groundBox = new PolygonShape();
-        groundBox.setAsBox(camera.viewportWidth / 2, 0.01f);
-
-        groundBody.createFixture(groundBox, 0.0f);
-
-        groundBox.dispose();
-    }
+//    private void createGround() {
+//
+//        BodyDef groundBodyDef = new BodyDef();
+//        groundBodyDef.type = BodyDef.BodyType.StaticBody;
+//        groundBodyDef.position.set(camera.viewportWidth / 2, 0);
+//
+//        Body groundBody = world.createBody(groundBodyDef);
+//
+//        PolygonShape groundBox = new PolygonShape();
+//        groundBox.setAsBox(camera.viewportWidth / 2, 0.01f);
+//
+//        groundBody.createFixture(groundBox, 0.0f);
+//
+//        groundBox.dispose();
+//    }
 
     private void initCollisionListener() {
         world.setContactListener(new ContactListener() {

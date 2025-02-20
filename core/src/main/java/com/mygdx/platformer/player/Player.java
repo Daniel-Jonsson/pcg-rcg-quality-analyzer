@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -40,9 +41,12 @@ public class Player {
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef); // add player body to game world
 
+
+
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(playerWidth / 2, playerHeight / 2);
+        shape.setAsBox(playerWidth * 0.9f / 2, playerHeight * 0.9f / 2);
+
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -52,6 +56,10 @@ public class Player {
         fixtureDef.restitution = 0f;
         body.createFixture(fixtureDef);
         shape.dispose();
+
+        MassData massData = new MassData();
+        massData.mass = 0.35f;
+        body.setMassData(massData);
     }
 
     public void render(SpriteBatch batch) {

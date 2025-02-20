@@ -37,6 +37,7 @@ public class Player {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
+        bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef); // add player body to game world
 
         // collision box

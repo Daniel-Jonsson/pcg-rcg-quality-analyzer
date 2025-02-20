@@ -6,14 +6,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
+
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -21,30 +19,50 @@ import com.mygdx.platformer.pcg.PlatformGenerator;
 import com.mygdx.platformer.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
 
+/**
+ * This class represents the main game screen.
+ * @author Robert Kullman
+ * @author Daniel Jönsson
+ */
 public class GameScreen extends ScreenAdapter {
+    /** Reference to the main game instance to allow screen switching. */
+    private PlatformerGame game;
 
-   private PlatformerGame game;
+    /** The Box2D physics world for managing physics interactions. */
+    private World world;
 
-   private World world;
-
+    /** SpriteBatch for rendering game elements. */
     private SpriteBatch batch;
+
+    /** Camera for viewing the game world. */
     private OrthographicCamera camera;
+
+    /** Viewport */
     private FitViewport viewport;
 
+    /** The player character. */
     private Player player;
 
+    /** Tracks run time, for physics updates. */
     private float runTime; // tracks how long the game has run
 
+    /** Manages procedural platform generation. */
     private PlatformGenerator platformGenerator;
 
-
+    /**
+     * Constructor for the GameScreen class, which initializes a reference to the
+     * game instance.
+     * @param g main Game instance.
+     */
    public GameScreen(final PlatformerGame g) {
        this.game = g; // reference main class to enable switching to another screen
 
-        Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
+        //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
    }
 
-    // Executes when this screen is set as the active screen
+    /**
+     * Executes when this screen is set as the active screen.
+     */
     @Override
     public void show() {
         world = new World(new Vector2(0, AppConfig.GRAVITY), true); // init world and set y gravity to -10
@@ -68,6 +86,11 @@ public class GameScreen extends ScreenAdapter {
 
     }
 
+    /**
+     * This method essentially serves as the game loop, rendering objects, performing physics
+     * updates, and logic updates.
+     * @param deltaTime The time since the last render.
+     */
     @Override
     public void render(final float deltaTime) {
         player.update();
@@ -97,6 +120,12 @@ public class GameScreen extends ScreenAdapter {
         doPhysicsStep(deltaTime);
     }
 
+    /**
+     * Performs physics simulations in fixed time steps. These updates are decoupled
+     * from the render() update frequency, to allow more freedom for physics updates, not
+     * having to adhere to the monitor update frequency.
+     * @param deltaTime The time since the last render.
+     */
     private void doPhysicsStep(final float deltaTime) {
 
         // max frame time
@@ -108,38 +137,59 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * Handles input. (currently empty, will be expanded later).
+     */
     private void input() {
 
     }
 
+    /**
+     * Handles logix. (currently empty, will be expanded later).
+     */
     private void logic(final float deltaTime) {
 
     }
 
+    /**
+     * Handles resizing the screen, updating the viewport with the new size.
+     * @param width The new screen width.
+     * @param height The new screen height.
+     */
     @Override
     public void resize(final int width, final int height) {
         viewport.update(width, height, true);
     }
 
-    // executes when the game loses focus, e.g. when minimized
+
+    /**
+     * Executes when the game loses focus, e.g. when minimized
+     */
     @Override
     public void pause() {
 
         Gdx.app.log(this.getClass().getSimpleName(), "Paused");
     }
 
-    // executed when game regains focus, i.e. when it is brought to the foreground.
+    /**
+     * executed when game regains focus, i.e. when it is brought to the foreground.
+     */
     @Override
     public void resume() {
         Gdx.app.log(this.getClass().getSimpleName(), "Resumed");
     }
 
+    /**
+     * This method is called when another screen replaces this one.
+     */
     @Override
     public void hide() {
-        // This method is called when another screen replaces this one.
         Gdx.app.log(this.getClass().getSimpleName(), "Hide");
     }
 
+    /**
+     * Releases resources when the screen is no longer needed.
+     */
     @Override
     public void dispose() {
         batch.dispose();
@@ -164,6 +214,9 @@ public class GameScreen extends ScreenAdapter {
 //        groundBox.dispose();
 //    }
 
+    /**
+     * Initializes collision detection logic.
+     */
     private void initCollisionListener() {
         world.setContactListener(new ContactListener() {
             @Override

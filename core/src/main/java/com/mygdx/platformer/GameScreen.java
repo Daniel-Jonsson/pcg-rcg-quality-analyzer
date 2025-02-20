@@ -37,7 +37,7 @@ public class GameScreen extends ScreenAdapter {
     /** Camera for viewing the game world. */
     private OrthographicCamera camera;
 
-    /** Viewport */
+    /** Viewport. */
     private FitViewport viewport;
 
     /** The player character. */
@@ -146,6 +146,7 @@ public class GameScreen extends ScreenAdapter {
 
     /**
      * Handles logix. (currently empty, will be expanded later).
+     * @param deltaTime Time passed since last update.
      */
     private void logic(final float deltaTime) {
 

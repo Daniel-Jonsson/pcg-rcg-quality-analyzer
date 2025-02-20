@@ -2,9 +2,9 @@ package com.mygdx.platformer.utilities;
 
 public final class AppConfig {
 
-    private AppConfig() {}  // private constructor prevents instantiation
+    private AppConfig() { }  // private constructor prevents instantiation
 
-    /** Pixels per meter **/
+    /** Pixels per meter. **/
     public static final float PPM = 50f;
 
     public static final int SCREEN_WIDTH_PIXELS = 1280;

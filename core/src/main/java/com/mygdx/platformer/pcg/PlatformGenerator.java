@@ -50,7 +50,7 @@ public class PlatformGenerator {
      * @param cameraX x-axis position of the camera.
      * @param viewportWidth the width of the viewport (in world units).
      */
-    public void update( float cameraX, float viewportWidth) {
+    public void update(float cameraX, float viewportWidth) {
         while (lastPlatformX < cameraX + viewportWidth / 2 + rightOffscreenMargin) {
             float gap = minGap + (float) Math.random() * (maxGap - minGap);
             float width = minWidth + (float) Math.random() * (maxWidth - minWidth);

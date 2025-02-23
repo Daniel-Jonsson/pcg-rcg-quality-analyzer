@@ -10,7 +10,7 @@ public class PlatformerGame extends Game {
      */
     @Override
     public void create() {
-        setScreen(new GameScreen(this));
+        setScreen(new StartScreen(this));
     }
 
     @Override

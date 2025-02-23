@@ -43,8 +43,13 @@ public class Player {
      * spacebar is being held down.*/
     private boolean isJumping = false;
 
-    /** Tracks how long time a jump has been going on for */
-    private long jumpPressTime;
+    private boolean jumpRequested = false;
+    private boolean jumpHolding = false;
+    private float moveDirection = 0;
+
+    private boolean wasJumpKeyPressed = false;
+    private float jumpHoldTime = 0;
+
 
 
     /**
@@ -69,12 +74,9 @@ public class Player {
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef); // add player body to game world
 
-
-
         // collision box
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(playerWidth * AppConfig.PLAYER_HITBOX_SCALE / 2, playerHeight * AppConfig.PLAYER_HITBOX_SCALE / 2);
-
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -101,49 +103,52 @@ public class Player {
     /**
      * Updates the player state.
      */
-    public void update() {
-        handleInput();
+    public void update(float deltaTime) {
+        body.setLinearVelocity(moveDirection, body.getLinearVelocity().y);
 
-       // this syncs the sprite position with the Box2D body
+        if (jumpRequested) {
+            body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
+            isGrounded = false;
+            jumpRequested = false;
+            jumpHoldTime = 0;
+        }
+
+        if (jumpHolding && jumpHoldTime < AppConfig.MAX_JUMP_HOLD_TIME && body.getLinearVelocity().y > 0) {
+            body.applyForce(new Vector2(0, AppConfig.JUMP_HOLD_FORCE), body.getWorldCenter(), true);
+            jumpHoldTime += deltaTime;
+            System.out.println(jumpHoldTime);
+        } else {
+            jumpHolding = false;
+        }
+
         sprite.setPosition(
             body.getPosition().x - sprite.getWidth() / 2,
             body.getPosition().y - sprite.getHeight() / 2);
-
     }
+
 
     /**
      * Handles player input.
      */
-    private void handleInput() {
-        float move = 0;
+    public void handleInput() {
+        moveDirection = 0;
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            move = -moveSpeed;
+            moveDirection = -moveSpeed;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            move = moveSpeed;
+            moveDirection = moveSpeed;
         }
-
-        body.setLinearVelocity(move, body.getLinearVelocity().y);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {
-
-            body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
-            isGrounded = false;
-            isJumping = true;
-            jumpPressTime = System.currentTimeMillis();
+            jumpRequested = true;
+            jumpHolding = true;
         }
 
-        if (isJumping && Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            long holdDuration = System.currentTimeMillis() - jumpPressTime;
-
-            if (holdDuration <= AppConfig.MAX_JUMP_HOLD_TIME && body.getLinearVelocity().y > 0) {
-                body.applyForce(new Vector2(0, AppConfig.JUMP_HOLD_FORCE),
-                    body.getWorldCenter(),
-                    true);
-            } else {
-                isJumping = false;
-            }
+        if (wasJumpKeyPressed && !Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            jumpHolding = false;
         }
+
+        wasJumpKeyPressed = Gdx.input.isKeyPressed(Input.Keys.SPACE);
     }
 
     /**

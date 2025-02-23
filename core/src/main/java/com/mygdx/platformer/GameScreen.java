@@ -132,7 +132,7 @@ public class GameScreen extends ScreenAdapter {
         float frameTime = Math.min(deltaTime * AppConfig.TIME_SCALE, AppConfig.MAX_FRAME_TIME);
         runTime += frameTime;
         while (runTime >= AppConfig.TIME_STEP) {
-            player.update(deltaTime);
+            player.update(AppConfig.TIME_STEP);
             world.step(AppConfig.TIME_STEP, AppConfig.VELOCITY_ITERATIONS, AppConfig.POSITION_ITERATIONS);
             runTime -= AppConfig.TIME_STEP;
         }

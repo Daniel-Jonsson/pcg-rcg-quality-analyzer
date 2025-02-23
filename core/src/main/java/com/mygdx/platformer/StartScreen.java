@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -34,6 +35,9 @@ public class StartScreen implements Screen {
 
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
+        // game title
+        Label titleLabel = new Label("GAME TITLE", skin);
+
         // Buttons
         TextButton startButton = new TextButton("Start Game", skin);
         startButton.addListener(new ClickListener() {
@@ -56,8 +60,19 @@ public class StartScreen implements Screen {
         // Arrange UI with Table
         Table table = new Table();
         table.setFillParent(true);
-        table.add(startButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT).row();
-        table.add(quitButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT);
+
+        table.top().padTop(50);
+
+        table.add(titleLabel).padBottom(100).row();
+
+        table.add(startButton)
+            .width(AppConfig.BUTTON_WIDTH)
+            .height(AppConfig.BUTTON_HEIGHT)
+            .padBottom(20)
+            .row();
+        table.add(quitButton)
+            .width(AppConfig.BUTTON_WIDTH)
+            .height(AppConfig.BUTTON_HEIGHT);
 
         stage.addActor(table);
     }

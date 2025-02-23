@@ -35,7 +35,7 @@ public final class AppConfig {
 
     public static final float PLAYER_MOVE_SPEED = 7f;
 
-    public static final float PLAYER_JUMP_FORCE = 4f;
+    public static final float PLAYER_JUMP_FORCE = 2f;
 
     public static final float PLAYER_WIDTH = 0.5f;
 

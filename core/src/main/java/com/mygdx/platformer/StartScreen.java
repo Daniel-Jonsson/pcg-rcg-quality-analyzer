@@ -34,6 +34,7 @@ public class StartScreen implements Screen {
 
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
+        // Buttons
         TextButton startButton = new TextButton("Start Game", skin);
         startButton.addListener(new ClickListener() {
             @Override
@@ -42,10 +43,21 @@ public class StartScreen implements Screen {
             }
         });
 
+        TextButton quitButton = new TextButton("Quit", skin);
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+
+
+
         // Arrange UI with Table
         Table table = new Table();
         table.setFillParent(true);
-        table.add(startButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT);
+        table.add(startButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT).row();
+        table.add(quitButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT);
 
         stage.addActor(table);
     }

@@ -65,4 +65,9 @@ public final class AppConfig {
 
     public static final float FIRST_PLATFORM_WIDTH = 8f;
     public static final float FIRST_PLATFORM_X = 4f;
+
+    /* UI */
+
+    public static final int BUTTON_WIDTH = 250;
+    public static final int BUTTON_HEIGHT = 50;
 }

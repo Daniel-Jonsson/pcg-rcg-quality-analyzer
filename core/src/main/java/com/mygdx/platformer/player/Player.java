@@ -39,6 +39,14 @@ public class Player {
     /** Tracks whether the player is currently on the ground. */
     private boolean isGrounded = false;
 
+    /** Tracks whether the player is currently jumping or not. i.e if the
+     * spacebar is being held down.*/
+    private boolean isJumping = false;
+
+    /** Tracks how long time a jump has been going on for */
+    private long jumpPressTime;
+
+
     /**
      * Instantiates the player in the game world.
      * @param world The Box2D world.
@@ -118,8 +126,23 @@ public class Player {
         body.setLinearVelocity(move, body.getLinearVelocity().y);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {
+
             body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
             isGrounded = false;
+            isJumping = true;
+            jumpPressTime = System.currentTimeMillis();
+        }
+
+        if (isJumping && Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            long holdDuration = System.currentTimeMillis() - jumpPressTime;
+
+            if (holdDuration <= AppConfig.MAX_JUMP_HOLD_TIME && body.getLinearVelocity().y > 0) {
+                body.applyForce(new Vector2(0, AppConfig.JUMP_HOLD_FORCE),
+                    body.getWorldCenter(),
+                    true);
+            } else {
+                isJumping = false;
+            }
         }
     }
 

@@ -37,6 +37,10 @@ public final class AppConfig {
 
     public static final float PLAYER_JUMP_FORCE = 2f;
 
+    public static final long MAX_JUMP_HOLD_TIME = 200L;
+
+    public static final float JUMP_HOLD_FORCE = 15f;
+
     public static final float PLAYER_WIDTH = 0.5f;
 
     public static final float PLAYER_HEIGHT = 0.7f;

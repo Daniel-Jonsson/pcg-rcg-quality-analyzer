@@ -163,7 +163,7 @@ public class Player {
 
     /**
      * Accessor for the player's physics body.
-     * @return
+     * @return The Box2D physics body of the player.
      */
     public Body getBody() {
         return body;

@@ -33,9 +33,13 @@ public final class AppConfig {
 
     public static final float MAX_FRAME_TIME = 0.25f;
 
-    public static final float PLAYER_MOVE_SPEED = 7f;
+    public static final float PLAYER_MOVE_SPEED = 5f;
 
-    public static final float PLAYER_JUMP_FORCE = 4f;
+    public static final float PLAYER_JUMP_FORCE = 1f;
+
+    public static final float MAX_JUMP_HOLD_TIME = 0.15f;
+
+    public static final float JUMP_HOLD_FORCE = 25f;
 
     public static final float PLAYER_WIDTH = 0.5f;
 

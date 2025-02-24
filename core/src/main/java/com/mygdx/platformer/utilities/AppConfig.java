@@ -74,4 +74,9 @@ public final class AppConfig {
 
     public static final int BUTTON_WIDTH = 250;
     public static final int BUTTON_HEIGHT = 50;
+
+    public static final String QUIT = "Quit";
+    public static final String MAIN_MENU = "Main Menu";
+    public static final String SURVIVAL_TIME = "Survival Time: ";
+    public static final String GAME_OVER = "Game Over";
 }

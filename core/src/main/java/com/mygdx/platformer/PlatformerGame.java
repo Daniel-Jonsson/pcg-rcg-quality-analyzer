@@ -1,6 +1,7 @@
 package com.mygdx.platformer;
 
 import com.badlogic.gdx.Game;
+import com.mygdx.platformer.screens.StartScreen;
 import com.mygdx.platformer.utilities.Assets;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */

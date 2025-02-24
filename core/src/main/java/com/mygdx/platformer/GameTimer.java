@@ -49,4 +49,8 @@ public class GameTimer {
     public void dispose() {
         stage.dispose();
     }
+
+    public float getElapsedTime() {
+        return elapsedTime;
+    }
 }

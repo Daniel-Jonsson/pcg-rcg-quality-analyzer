@@ -49,6 +49,8 @@ public class GameScreen extends ScreenAdapter {
     /** Manages procedural platform generation. */
     private PlatformGenerator platformGenerator;
 
+    GameTimer gameTimer;
+
 
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
@@ -57,7 +59,7 @@ public class GameScreen extends ScreenAdapter {
      */
    public GameScreen(final PlatformerGame g) {
        this.game = g; // reference main class to enable switching to another screen
-
+       this.gameTimer = new GameTimer();
 
         //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
    }
@@ -96,6 +98,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(final float deltaTime) {
         player.handleInput();
+        gameTimer.update(deltaTime);
 
         camera.position.x += 2f * deltaTime; // example fixed scroll speed (adjust as needed)
         camera.update();
@@ -118,6 +121,7 @@ public class GameScreen extends ScreenAdapter {
         player.render(batch);
         batch.end();
 
+        gameTimer.render();
         // physics step
         doPhysicsStep(deltaTime);
     }

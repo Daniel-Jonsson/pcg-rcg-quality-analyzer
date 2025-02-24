@@ -73,7 +73,7 @@ public class Platform {
      * Disposes of the platform's texture to free resources.
      */
     public void dispose() {
-
+        // no need to dispose here because of AssetManager
     }
 
     /**

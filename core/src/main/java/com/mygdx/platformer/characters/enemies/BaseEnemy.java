@@ -2,6 +2,7 @@ package com.mygdx.platformer.characters.enemies;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -49,5 +50,11 @@ public abstract class BaseEnemy {
         shape.dispose();
     }
 
-
+    public void render(SpriteBatch batch) {
+        if (sprite != null && body != null) {
+            sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2,
+                body.getPosition().y - sprite.getHeight() / 2);
+            sprite.draw(batch);
+        }
+    }
 }

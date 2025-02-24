@@ -51,6 +51,8 @@ public class GameScreen extends ScreenAdapter {
 
     GameTimer gameTimer;
 
+    EnemyManager enemyManager;
+
 
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
@@ -60,6 +62,7 @@ public class GameScreen extends ScreenAdapter {
    public GameScreen(final PlatformerGame g) {
        this.game = g; // reference main class to enable switching to another screen
        this.gameTimer = new GameTimer();
+
 
         //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
    }
@@ -71,6 +74,8 @@ public class GameScreen extends ScreenAdapter {
     public void show() {
         world = new World(new Vector2(0, AppConfig.GRAVITY), true); // init world and set y gravity to -10
 
+        this.enemyManager = new EnemyManager(world);
+
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false); // invert coordinates (y = 0 at bottom of window)
@@ -81,7 +86,8 @@ public class GameScreen extends ScreenAdapter {
         camera.position.set(AppConfig.SCREEN_WIDTH / 2, AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
 
-        platformGenerator = new PlatformGenerator(world);
+        platformGenerator = new PlatformGenerator(world, enemyManager);
+
 
         player = new Player(world, AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
 
@@ -119,6 +125,7 @@ public class GameScreen extends ScreenAdapter {
         batch.begin();
         platformGenerator.render(batch);
         player.render(batch);
+        enemyManager.render(batch);
         batch.end();
 
         gameTimer.render();

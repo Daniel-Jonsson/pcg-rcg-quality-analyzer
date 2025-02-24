@@ -1,12 +1,15 @@
 package com.mygdx.platformer.pcg;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.EnemyManager;
 import com.mygdx.platformer.utilities.AppConfig;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is responsible for procedurally generating the platforms in a level.
@@ -18,6 +21,8 @@ public class PlatformGenerator {
 
     private World world;
     private float lastPlatformX; // right edge of the last platform
+    private EnemyManager enemyManager;
+    private Random random = new Random();
 
     private float minGap = AppConfig.MIN_GAP;
     private float maxGap = AppConfig.MAX_GAP;
@@ -28,14 +33,18 @@ public class PlatformGenerator {
     private float maxYvariation = AppConfig.MAX_Y_VARIATION;
     private float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
 
+    private float spawnProbability = AppConfig.BASE_SPAWN_PROBABILITY;
+
     /**
      * Constructor for the PlatformGenerator class. This method initializes the game world instance reference,
      * and generates an initial starting platform.
      * @param gameWorld The Box2D physics world.
+     * @param enemyManager the EnemyManager instance.
      */
-    public PlatformGenerator(World gameWorld) {
+    public PlatformGenerator(World gameWorld, EnemyManager enemyManager) {
         this.world = gameWorld;
         platforms = new ArrayList<>();
+        this.enemyManager = enemyManager;
 
         float initialWidth = AppConfig.FIRST_PLATFORM_WIDTH;
         float initialX = AppConfig.FIRST_PLATFORM_X;
@@ -59,6 +68,11 @@ public class PlatformGenerator {
             Platform newPlatform = new Platform(world, newX, newY, width, platformHeight);
             platforms.add(newPlatform);
             lastPlatformX = newX + width / 2;
+
+            if (random.nextFloat() < spawnProbability) { // 50% chance
+                Vector2 enemySpawnPos = new Vector2(newX, newY + AppConfig.ENEMY_SPAWN_HEIGHT);
+                enemyManager.spawnEnemyAt(enemySpawnPos);
+            }
         }
 
         // dispose platforms when they move offscreen.
@@ -92,5 +106,9 @@ public class PlatformGenerator {
             platform.dispose();
         }
         platforms.clear();
+    }
+
+    public List<Platform> getPlatforms() {
+        return platforms;
     }
 }

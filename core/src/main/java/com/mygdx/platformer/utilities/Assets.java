@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public final class Assets {
 
-    private Assets() {}  // private constructor to prevent instantiation
+    private Assets() { }  // private constructor to prevent instantiation
 
     public static final AssetManager assetManager = new AssetManager();
 

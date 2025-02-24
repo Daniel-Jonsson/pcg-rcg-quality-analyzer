@@ -1,4 +1,4 @@
-package com.mygdx.platformer.player;
+package com.mygdx.platformer.characters.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -85,6 +85,10 @@ public class Player {
         fixtureDef.density = 1f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0f;
+
+        fixtureDef.filter.categoryBits = AppConfig.CATEGORY_PLAYER; // the collision category for the player
+        fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ENEMY; // this sets what the player will collide with
+
         body.createFixture(fixtureDef);
         shape.dispose();
 
@@ -109,7 +113,6 @@ public class Player {
 
         if (jumpRequested) {
             body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
-            isGrounded = false;
             jumpRequested = false;
             jumpHoldTime = 0;
         }

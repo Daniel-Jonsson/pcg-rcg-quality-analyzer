@@ -87,7 +87,7 @@ public class Player {
         fixtureDef.restitution = 0f;
 
         fixtureDef.filter.categoryBits = AppConfig.CATEGORY_PLAYER; // the collision category for the player
-        fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLATFORM; // this sets what the player will collide with
+        fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ENEMY; // this sets what the player will collide with
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -113,7 +113,6 @@ public class Player {
 
         if (jumpRequested) {
             body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
-            isGrounded = false;
             jumpRequested = false;
             jumpHoldTime = 0;
         }

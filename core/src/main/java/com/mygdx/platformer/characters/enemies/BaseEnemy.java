@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -32,22 +33,37 @@ public abstract class BaseEnemy {
 
 
         // Create Box2D body
+        this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE);
+
+        float playerWidth = AppConfig.PLAYER_WIDTH;
+        float playerHeight = AppConfig.PLAYER_HEIGHT;
+
+        sprite = new Sprite(texture);
+        sprite.setSize(playerWidth, playerHeight);
+
+        // physics body
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(position);
-        body = world.createBody(bodyDef);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef); // add player body to game world
 
+        // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(0.5f, 0.5f); // Half-width and half-height of enemy
+        shape.setAsBox(playerWidth * AppConfig.PLAYER_HITBOX_SCALE / 2, playerHeight * AppConfig.PLAYER_HITBOX_SCALE / 2);
 
+        // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
-        fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0f; // No bouncing
-
+        fixtureDef.friction = 1f;
+        fixtureDef.restitution = 0f;
         body.createFixture(fixtureDef);
         shape.dispose();
+
+        MassData massData = new MassData();
+        massData.mass = AppConfig.ENEMY_MASS;
+        body.setMassData(massData);
     }
 
     public void render(SpriteBatch batch) {

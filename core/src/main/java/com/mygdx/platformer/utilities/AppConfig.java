@@ -74,4 +74,8 @@ public final class AppConfig {
 
     public static final int BUTTON_WIDTH = 250;
     public static final int BUTTON_HEIGHT = 50;
+
+    /* ENEMIES */
+
+    public static final float ENEMY_MASS = 100f;
 }

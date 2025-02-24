@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Assets;
 
 /**
  * This class represents the player character in the game.
@@ -59,7 +60,7 @@ public class Player {
      * @param y Starting y-coordinate where the player spawns.
      */
     public Player(World world, final float x, final float y) {
-        texture = new Texture("player.png");
+        this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE);
 
         float playerWidth = AppConfig.PLAYER_WIDTH;
         float playerHeight = AppConfig.PLAYER_HEIGHT;
@@ -116,7 +117,6 @@ public class Player {
         if (jumpHolding && jumpHoldTime < AppConfig.MAX_JUMP_HOLD_TIME && body.getLinearVelocity().y > 0) {
             body.applyForce(new Vector2(0, AppConfig.JUMP_HOLD_FORCE), body.getWorldCenter(), true);
             jumpHoldTime += deltaTime;
-            System.out.println(jumpHoldTime);
         } else {
             jumpHolding = false;
         }

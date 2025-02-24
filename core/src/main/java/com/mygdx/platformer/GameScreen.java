@@ -49,6 +49,7 @@ public class GameScreen extends ScreenAdapter {
     /** Manages procedural platform generation. */
     private PlatformGenerator platformGenerator;
 
+
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
      * game instance.
@@ -56,6 +57,7 @@ public class GameScreen extends ScreenAdapter {
      */
    public GameScreen(final PlatformerGame g) {
        this.game = g; // reference main class to enable switching to another screen
+
 
         //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
    }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.utilities.Assets;
 
 /**
  * This class represents a platform in the game world. It uses a
@@ -36,7 +37,7 @@ public class Platform {
      * @param height The height of the platform in world units.
      */
     public Platform(World world, float x, float y, float width, float height) {
-        texture = new Texture("platform.png");
+        texture = Assets.assetManager.get(Assets.PLATFORM_TEXTURE, Texture.class);
         sprite = new Sprite(texture);
         sprite.setSize(width, height);
 

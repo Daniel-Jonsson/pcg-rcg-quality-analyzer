@@ -10,10 +10,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.PlatformerGame;
 
+/**
+ * Represents the Game Over overlay that appears when the player dies.
+ * This overlay displays the survival time and provides options to return to
+ * the main menu or quit the game.
+ *
+ * @author Daniel Jönsson, Robert Kullman
+ */
 public class GameOverOverlay {
     private Stage stage;
     private boolean isActive = false;
 
+    /**
+     * Creates a new Game Over overlay
+     * @param game The main game instance, used for switching screens.
+     * @param survivalTime The time the player survived before dying.
+     */
     public GameOverOverlay(final PlatformerGame game,
                            float survivalTime) {
         stage = new Stage(new ScreenViewport());
@@ -21,7 +33,6 @@ public class GameOverOverlay {
 
         Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
-        // UI Components
         Label titleLabel = new Label("Game Over", skin);
         Label timeLabel = new Label("Survival Time: " + String.format("%.2f seconds", survivalTime), skin);
 
@@ -52,14 +63,23 @@ public class GameOverOverlay {
         stage.addActor(table);
     }
 
+    /**
+     * Activates the overlay, making it visible.
+     */
     public void show() {
         isActive = true;
     }
 
+    /**
+     * Hides the overlay, making it inactive.
+     */
     public void hide() {
         isActive = false;
     }
 
+    /**
+     * Renders the overlay if it is active.
+     */
     public void render() {
         if (isActive) {
             stage.act();
@@ -67,6 +87,9 @@ public class GameOverOverlay {
         }
     }
 
+    /**
+     * Disposes of resources when the overlay is no longer needed.
+     */
     public void dispose() {
         stage.dispose();
     }

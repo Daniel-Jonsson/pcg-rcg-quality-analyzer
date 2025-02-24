@@ -16,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.platformer.pcg.PlatformGenerator;
-import com.mygdx.platformer.player.Player;
+import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
 
 /**

@@ -1,4 +1,4 @@
-package com.mygdx.platformer.player;
+package com.mygdx.platformer.characters.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

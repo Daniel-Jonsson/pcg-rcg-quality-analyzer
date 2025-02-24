@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.PlatformerGame;
+import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * Represents the Game Over overlay that appears when the player dies.
@@ -33,10 +34,11 @@ public class GameOverOverlay {
 
         Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
-        Label titleLabel = new Label("Game Over", skin);
-        Label timeLabel = new Label("Survival Time: " + String.format("%.2f seconds", survivalTime), skin);
+        Label titleLabel = new Label(AppConfig.GAME_OVER, skin);
+        Label timeLabel = new Label(AppConfig.SURVIVAL_TIME + String.format("%.2f seconds",
+            survivalTime), skin);
 
-        TextButton restartButton = new TextButton("Main Menu", skin);
+        TextButton restartButton = new TextButton(AppConfig.MAIN_MENU, skin);
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
@@ -44,7 +46,7 @@ public class GameOverOverlay {
             }
         });
 
-        TextButton quitButton = new TextButton("Quit", skin);
+        TextButton quitButton = new TextButton(AppConfig.QUIT, skin);
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {

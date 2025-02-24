@@ -1,5 +1,6 @@
 package com.mygdx.platformer.utilities;
 
+
 public final class AppConfig {
 
     private AppConfig() { }  // private constructor prevents instantiation
@@ -74,12 +75,29 @@ public final class AppConfig {
 
     public static final int BUTTON_WIDTH = 250;
     public static final int BUTTON_HEIGHT = 50;
+    public static final int TIMER_PADDING = 20;
+
+    public static final int START_SCREEN_TOP_PADDING = 50;
+    public static final int TITLE_BOTTOM_PADDING = 100;
+    public static final int BUTTON_BOTTOM_PADDING = 20;
 
     /* ENEMIES */
+
+    public static final float BASE_SPAWN_PROBABILITY = 0.5f;
+    public static final float ENEMY_SPAWN_HEIGHT = 0.5f;
 
     public static final float ENEMY_MASS = 100f;
 
     public static final short CATEGORY_PLAYER = 0x0001;   // 0001
     public static final short CATEGORY_ENEMY = 0x0002;    // 0010
     public static final short CATEGORY_PLATFORM = 0x0004; // 0100
+
+    public static final int GOBLIN_ATTACK_POWER = 15;
+    public static final int GOBLIN_HEALTH = 30;
+    public static final float GOBLIN_SPEED = 2.5f;
+
+    public static final int NECROMANCER_ATTACK_POWER = 20;
+    public static final int NECROMANCER_HEALTH = 20;
+    public static final float NECROMANCER_SPEED = 2f;
+
 }

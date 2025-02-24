@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.platformer.utilities.AppConfig;
 
 public class GameTimer {
     private float elapsedTime;
@@ -27,7 +28,7 @@ public class GameTimer {
         Table table = new Table();
         table.top().right();
         table.setFillParent(true);
-        table.add(timerLabel).pad(20);
+        table.add(timerLabel).pad(AppConfig.TIMER_PADDING);
 
         stage.addActor(table);
     }

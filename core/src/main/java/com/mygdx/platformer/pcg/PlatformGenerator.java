@@ -33,12 +33,13 @@ public class PlatformGenerator {
     private float maxYvariation = AppConfig.MAX_Y_VARIATION;
     private float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
 
-    private float spawnProbability = 0.5f;
+    private float spawnProbability = AppConfig.BASE_SPAWN_PROBABILITY;
 
     /**
      * Constructor for the PlatformGenerator class. This method initializes the game world instance reference,
      * and generates an initial starting platform.
      * @param gameWorld The Box2D physics world.
+     * @param enemyManager the EnemyManager instance.
      */
     public PlatformGenerator(World gameWorld, EnemyManager enemyManager) {
         this.world = gameWorld;
@@ -69,7 +70,7 @@ public class PlatformGenerator {
             lastPlatformX = newX + width / 2;
 
             if (random.nextFloat() < spawnProbability) { // 50% chance
-                Vector2 enemySpawnPos = new Vector2(newX, newY + 1.5f);
+                Vector2 enemySpawnPos = new Vector2(newX, newY + AppConfig.ENEMY_SPAWN_HEIGHT);
                 enemyManager.spawnEnemyAt(enemySpawnPos);
             }
         }

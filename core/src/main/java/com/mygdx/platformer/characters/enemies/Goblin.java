@@ -10,7 +10,7 @@ import com.mygdx.platformer.utilities.Assets;
 public class Goblin extends BaseEnemy {
 
     public Goblin(World world, Vector2 position) {
-        super(world, position, 50, 10, 2.5f);
+        super(world, position, AppConfig.GOBLIN_HEALTH, AppConfig.GOBLIN_ATTACK_POWER, AppConfig.GOBLIN_SPEED);
 
         this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE, Texture.class);
         this.sprite = new Sprite(texture);

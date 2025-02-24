@@ -16,7 +16,7 @@ public class EnemyManager {
     private List<BaseEnemy> enemies;
     private Random random;
 
-    public EnemyManager (World world) {
+    public EnemyManager(World world) {
         this.world = world;
         this.enemies = new ArrayList<>();
         this.random = new Random();

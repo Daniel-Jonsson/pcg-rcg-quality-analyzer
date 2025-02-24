@@ -61,14 +61,14 @@ public class StartScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
 
-        table.top().padTop(50);
+        table.top().padTop(AppConfig.START_SCREEN_TOP_PADDING);
 
-        table.add(titleLabel).padBottom(100).row();
+        table.add(titleLabel).padBottom(AppConfig.TITLE_BOTTOM_PADDING).row();
 
         table.add(startButton)
             .width(AppConfig.BUTTON_WIDTH)
             .height(AppConfig.BUTTON_HEIGHT)
-            .padBottom(20)
+            .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
             .row();
         table.add(quitButton)
             .width(AppConfig.BUTTON_WIDTH)

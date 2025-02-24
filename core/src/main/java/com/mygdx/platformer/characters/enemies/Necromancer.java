@@ -10,7 +10,7 @@ import com.mygdx.platformer.utilities.Assets;
 public class Necromancer extends BaseEnemy {
 
     public Necromancer(World world, Vector2 position) {
-        super(world, position, 30, 15, 2f);
+        super(world, position, AppConfig.NECROMANCER_HEALTH, AppConfig.NECROMANCER_ATTACK_POWER, AppConfig.NECROMANCER_SPEED);
 
         this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE, Texture.class);
         this.sprite = new Sprite(texture);

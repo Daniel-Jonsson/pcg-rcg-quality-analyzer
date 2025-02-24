@@ -266,10 +266,10 @@ public class GameScreen extends ScreenAdapter {
             }
 
             @Override
-            public void preSolve(final Contact contact, final Manifold manifold) {}
+            public void preSolve(final Contact contact, final Manifold manifold) { }
 
             @Override
-            public void postSolve(final Contact contact, final ContactImpulse contactImpulse) {}
+            public void postSolve(final Contact contact, final ContactImpulse contactImpulse) { }
         });
     }
 

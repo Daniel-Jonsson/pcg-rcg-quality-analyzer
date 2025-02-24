@@ -78,4 +78,8 @@ public final class AppConfig {
     /* ENEMIES */
 
     public static final float ENEMY_MASS = 100f;
+
+    public static final short CATEGORY_PLAYER = 0x0001;   // 0001
+    public static final short CATEGORY_ENEMY = 0x0002;    // 0010
+    public static final short CATEGORY_PLATFORM = 0x0004; // 0100
 }

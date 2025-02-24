@@ -58,8 +58,15 @@ public abstract class BaseEnemy {
         fixtureDef.density = 1f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0f;
+
+        // Collision filtering
+        fixtureDef.filter.categoryBits = AppConfig.CATEGORY_ENEMY;
+        fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLAYER | AppConfig.CATEGORY_PLATFORM;
+
         body.createFixture(fixtureDef);
         shape.dispose();
+
+
 
         MassData massData = new MassData();
         massData.mass = AppConfig.ENEMY_MASS;

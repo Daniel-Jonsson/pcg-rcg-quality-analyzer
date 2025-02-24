@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
 /**
@@ -55,8 +56,13 @@ public class Platform {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.restitution = 0f;
+        fixtureDef.filter.categoryBits = AppConfig.CATEGORY_PLATFORM;
+        fixtureDef.filter.maskBits = AppConfig.CATEGORY_ENEMY | AppConfig.CATEGORY_PLAYER;
+
         body.createFixture(fixtureDef);
         shape.dispose();
+
+
     }
 
     /**

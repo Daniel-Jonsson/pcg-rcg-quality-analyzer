@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -239,8 +240,13 @@ public class GameScreen extends ScreenAdapter {
                 Fixture a = contact.getFixtureA();
                 Fixture b = contact.getFixtureB();
 
-                if (a.getBody() == player.getBody() || b.getBody() == player.getBody()) {
-                    player.setGrounded(true);
+                Body playerBody = player.getBody();
+
+                if (a.getBody() == playerBody || b.getBody() == playerBody) {
+                    if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM ||
+                        b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM) {
+                        player.setGrounded(true);
+                    }
                 }
             }
 
@@ -249,16 +255,22 @@ public class GameScreen extends ScreenAdapter {
                 Fixture a = contact.getFixtureA();
                 Fixture b = contact.getFixtureB();
 
-                if (a.getBody() == player.getBody() || b.getBody() == player.getBody()) {
-                    player.setGrounded(false);
+                Body playerBody = player.getBody();
+
+                if (a.getBody() == playerBody || b.getBody() == playerBody) {
+                    if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM ||
+                        b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM) {
+                        player.setGrounded(false);
+                    }
                 }
             }
 
             @Override
-            public void preSolve(final Contact contact, final Manifold manifold) { }
+            public void preSolve(final Contact contact, final Manifold manifold) {}
 
             @Override
-            public void postSolve(final Contact contact, final ContactImpulse contactImpulse) { }
+            public void postSolve(final Contact contact, final ContactImpulse contactImpulse) {}
         });
     }
+
 }

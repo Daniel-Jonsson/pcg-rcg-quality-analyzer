@@ -1,4 +1,4 @@
-package com.mygdx.platformer;
+package com.mygdx.platformer.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.platformer.GameTimer;
+import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.pcg.PlatformGenerator;
 import com.mygdx.platformer.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -43,11 +45,15 @@ public class GameScreen extends ScreenAdapter {
     /** The player character. */
     private Player player;
 
+    private GameOverOverlay gameOverOverlay;
+
     /** Tracks run time, for physics updates. */
     private float runTime; // tracks how long the game has run
 
     /** Manages procedural platform generation. */
     private PlatformGenerator platformGenerator;
+
+    private boolean isGameOver = false;
 
     GameTimer gameTimer;
 
@@ -84,6 +90,7 @@ public class GameScreen extends ScreenAdapter {
         platformGenerator = new PlatformGenerator(world);
 
         player = new Player(world, AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
+        gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 
         // createGround();
         initCollisionListener();
@@ -97,33 +104,33 @@ public class GameScreen extends ScreenAdapter {
      */
     @Override
     public void render(final float deltaTime) {
-        player.handleInput();
-        gameTimer.update(deltaTime);
+        if (!isGameOver) {
+            checkGameOver();
+            player.handleInput();
+            gameTimer.update(deltaTime);
+            camera.position.x += 2f * deltaTime;
+            camera.update();
+            input();
+            logic(deltaTime);
+            platformGenerator.update(camera.position.x, AppConfig.SCREEN_WIDTH);
+            doPhysicsStep(deltaTime);
+        }
 
-        camera.position.x += 2f * deltaTime; // example fixed scroll speed (adjust as needed)
-        camera.update();
-
-        input();
-        logic(deltaTime);
-
-        platformGenerator.update(camera.position.x, AppConfig.SCREEN_WIDTH);
-
-        // This may not be necessary if we choose to use a background image of some kind
-        // clear screen
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        // render objects
         batch.begin();
         platformGenerator.render(batch);
         player.render(batch);
         batch.end();
 
         gameTimer.render();
-        // physics step
-        doPhysicsStep(deltaTime);
+
+        if (isGameOver) {
+            gameOverOverlay.render();
+        }
     }
 
     /**
@@ -141,6 +148,14 @@ public class GameScreen extends ScreenAdapter {
             player.update(AppConfig.TIME_STEP);
             world.step(AppConfig.TIME_STEP, AppConfig.VELOCITY_ITERATIONS, AppConfig.POSITION_ITERATIONS);
             runTime -= AppConfig.TIME_STEP;
+        }
+    }
+
+    private void checkGameOver() {
+        if (player.getBody().getPosition().y < 0) {
+            isGameOver = true;
+            gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
+            gameOverOverlay.show();
         }
     }
 
@@ -204,6 +219,7 @@ public class GameScreen extends ScreenAdapter {
         world.dispose();
         player.dispose();
         platformGenerator.dispose();
+        gameOverOverlay.dispose();
     }
 
 //    private void createGround() {

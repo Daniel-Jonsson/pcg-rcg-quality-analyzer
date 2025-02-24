@@ -1,4 +1,4 @@
 package com.mygdx.platformer.characters.enemies;
 
-public class BaseEnemy {
+public abstract class BaseEnemy {
 }

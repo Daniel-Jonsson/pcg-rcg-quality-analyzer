@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
@@ -50,6 +51,9 @@ public class Player {
 
     private boolean wasJumpKeyPressed = false;
     private float jumpHoldTime = 0;
+    private AttackManager attackManager;
+
+    private boolean isFacingRight = true;
 
 
 
@@ -59,9 +63,9 @@ public class Player {
      * @param x Starting x-coordinate where the player spawns.
      * @param y Starting y-coordinate where the player spawns.
      */
-    public Player(World world, final float x, final float y) {
+    public Player(World world, final float x, final float y, AttackManager manager) {
+        this.attackManager = manager;
         this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE);
-
         float playerWidth = AppConfig.PLAYER_WIDTH;
         float playerHeight = AppConfig.PLAYER_HEIGHT;
 
@@ -138,8 +142,12 @@ public class Player {
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             moveDirection = -moveSpeed;
+            isFacingRight = false;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             moveDirection = moveSpeed;
+            isFacingRight = true;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            attackManager.spawnAttackAt(body.getPosition(), isFacingRight);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {

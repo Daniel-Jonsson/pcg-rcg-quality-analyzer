@@ -16,8 +16,10 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.platformer.EnemyManager;
 import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
+import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.pcg.PlatformGenerator;
 import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -59,6 +61,7 @@ public class GameScreen extends ScreenAdapter {
     GameTimer gameTimer;
 
     EnemyManager enemyManager;
+    AttackManager attackManager;
 
 
     /**
@@ -82,6 +85,7 @@ public class GameScreen extends ScreenAdapter {
         world = new World(new Vector2(0, AppConfig.GRAVITY), true); // init world and set y gravity to -10
 
         this.enemyManager = new EnemyManager(world);
+        this.attackManager = new AttackManager(world);
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -96,7 +100,8 @@ public class GameScreen extends ScreenAdapter {
         platformGenerator = new PlatformGenerator(world, enemyManager);
 
 
-        player = new Player(world, AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
+        player = new Player(world, AppConfig.PLAYER_SPAWN_X,
+            AppConfig.PLAYER_SPAWN_Y, attackManager);
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 
         // createGround();
@@ -121,6 +126,8 @@ public class GameScreen extends ScreenAdapter {
             logic(deltaTime);
             platformGenerator.update(camera.position.x, AppConfig.SCREEN_WIDTH);
             doPhysicsStep(deltaTime);
+            attackManager.update(deltaTime, camera.position.x,
+                AppConfig.SCREEN_WIDTH);
         }
 
         ScreenUtils.clear(Color.BLACK);
@@ -132,6 +139,7 @@ public class GameScreen extends ScreenAdapter {
         platformGenerator.render(batch);
         player.render(batch);
         enemyManager.render(batch);
+        attackManager.render(batch);
         batch.end();
 
         gameTimer.render();

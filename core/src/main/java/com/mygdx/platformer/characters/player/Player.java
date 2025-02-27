@@ -60,7 +60,7 @@ public class Player {
      * @param y Starting y-coordinate where the player spawns.
      */
     public Player(World world, final float x, final float y) {
-        this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE);
+        this.texture = Assets.assetManager.get(Assets.PLAYER_IDLE);
 
         float playerWidth = AppConfig.PLAYER_WIDTH;
         float playerHeight = AppConfig.PLAYER_HEIGHT;

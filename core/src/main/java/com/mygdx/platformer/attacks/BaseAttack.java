@@ -19,7 +19,7 @@ public abstract class BaseAttack {
         this.y = y;
         this.sprite = new Sprite(texture);
 
-        sprite.setSize(0.3f, 0.2f);
+        sprite.setSize(0.6f, 0.3f);
         sprite.setPosition(x, y);
     }
 
@@ -30,6 +30,12 @@ public abstract class BaseAttack {
     public void update(float deltaTime, float cameraX, float viewPortWidth) {
         x += speed * deltaTime;
         sprite.setPosition(x, y);
+
+        if (speed < 0 && !sprite.isFlipX()) {
+            sprite.flip(true, false);
+        } else if (speed > 0 && sprite.isFlipX()) {
+            sprite.flip(true, false);
+        }
 
         float rightEdge = cameraX + viewPortWidth / 2;
         float leftEdge = cameraX - viewPortWidth / 2;

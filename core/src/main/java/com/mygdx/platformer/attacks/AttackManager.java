@@ -15,7 +15,7 @@ public class AttackManager {
 
     public AttackManager(World world) {
         this.attacks = new ArrayList<>();
-        this.orbTexture = new Texture(Assets.PLAYER_TEXTURE);
+        this.orbTexture = new Texture(Assets.THROWING_DAGGER_TEXTURE);
     }
 
     public void spawnAttackAt(Vector2 position, boolean facingRight) {

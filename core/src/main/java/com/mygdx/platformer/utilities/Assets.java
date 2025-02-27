@@ -11,6 +11,7 @@ public final class Assets {
 
     public static final String PLAYER_TEXTURE = "textures/player.png";
     public static final String PLATFORM_TEXTURE = "textures/platform.png";
+    public static final String THROWING_DAGGER_TEXTURE = "textures/throwing_dagger.png";
 
     public static void load() {
         assetManager.load(PLAYER_TEXTURE, Texture.class);

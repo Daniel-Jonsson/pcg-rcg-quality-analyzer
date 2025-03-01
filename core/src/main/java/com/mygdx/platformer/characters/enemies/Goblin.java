@@ -12,7 +12,7 @@ public class Goblin extends BaseEnemy {
     public Goblin(World world, Vector2 position) {
         super(world, position, AppConfig.GOBLIN_HEALTH, AppConfig.GOBLIN_ATTACK_POWER, AppConfig.GOBLIN_SPEED);
 
-        this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE, Texture.class);
+        this.texture = Assets.assetManager.get(Assets.GOBLIN_IDLE, Texture.class);
         this.sprite = new Sprite(texture);
         sprite.setSize(AppConfig.PLAYER_WIDTH, AppConfig.PLAYER_HEIGHT);
     }

@@ -52,4 +52,12 @@ public abstract class BaseAttack {
     public boolean shouldRemove() {
         return shouldRemove;
     }
+
+    public void setShouldRemove(boolean shouldRemove) {
+        this.shouldRemove = shouldRemove;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
 }

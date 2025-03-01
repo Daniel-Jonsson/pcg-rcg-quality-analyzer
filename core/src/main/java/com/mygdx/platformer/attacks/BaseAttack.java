@@ -3,6 +3,9 @@ package com.mygdx.platformer.attacks;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.platformer.utilities.AppConfig;
 
 public abstract class BaseAttack {
     protected int damage;
@@ -10,9 +13,12 @@ public abstract class BaseAttack {
     protected float x, y;
     protected Sprite sprite;
     protected boolean shouldRemove;
+    protected final World world;
+    protected final Body body;
 
-    public BaseAttack(int damage, float speed, float x, float y,
+    public BaseAttack(World world, int damage, float speed, float x, float y,
                       Texture texture) {
+        this.world = world;
         this.damage = damage;
         this.speed = speed;
         this.x = x;
@@ -21,26 +27,38 @@ public abstract class BaseAttack {
 
         sprite.setSize(0.6f, 0.3f);
         sprite.setPosition(x, y);
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.position.set(x, y);
+        this.body = world.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(sprite.getWidth() / 2, sprite.getHeight() / 2);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
+        fixtureDef.filter.categoryBits = AppConfig.CATEGORY_ATTACK;
+        fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ENEMY;
+
+        body.createFixture(fixtureDef);
+        shape.dispose();
+
+        body.setLinearVelocity(speed, 0);
     }
 
-    public BaseAttack(float x, float y, Texture texture) {
-        this(20, 25, x, y, texture);
+    public BaseAttack(World world, float x, float y, Texture texture) {
+        this(world,20, 25, x, y, texture);
     }
 
-    public void update(float deltaTime, float cameraX, float viewPortWidth) {
-        x += speed * deltaTime;
-        sprite.setPosition(x, y);
-
-        if (speed < 0 && !sprite.isFlipX()) {
-            sprite.flip(true, false);
-        } else if (speed > 0 && sprite.isFlipX()) {
-            sprite.flip(true, false);
-        }
+    public void update(float cameraX, float viewPortWidth) {
+        Vector2 pos = body.getPosition();
+        sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
 
         float rightEdge = cameraX + viewPortWidth / 2;
         float leftEdge = cameraX - viewPortWidth / 2;
-
-        if (x > rightEdge + sprite.getWidth() || x < leftEdge - sprite.getWidth()) {
+        if (pos.x > rightEdge + sprite.getWidth() || pos.x < leftEdge - sprite.getWidth()) {
             shouldRemove = true;
         }
     }

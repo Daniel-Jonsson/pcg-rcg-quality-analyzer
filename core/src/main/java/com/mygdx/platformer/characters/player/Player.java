@@ -53,7 +53,6 @@ public class Player {
     private float jumpHoldTime = 0;
     private AttackManager attackManager;
 
-    private boolean isFacingRight = true;
 
 
 
@@ -142,12 +141,10 @@ public class Player {
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             moveDirection = -moveSpeed;
-            isFacingRight = false;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             moveDirection = moveSpeed;
-            isFacingRight = true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            attackManager.spawnAttackAt(body.getPosition(), isFacingRight);
+            attackManager.spawnAttackAt(body.getPosition());
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {

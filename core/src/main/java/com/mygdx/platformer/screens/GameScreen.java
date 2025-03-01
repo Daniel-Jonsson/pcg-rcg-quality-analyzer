@@ -127,7 +127,7 @@ public class GameScreen extends ScreenAdapter {
             logic(deltaTime);
             platformGenerator.update(camera.position.x, AppConfig.SCREEN_WIDTH);
             doPhysicsStep(deltaTime);
-            attackManager.update(deltaTime, camera.position.x,
+            attackManager.update(camera.position.x,
                 AppConfig.SCREEN_WIDTH);
         }
 

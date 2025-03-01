@@ -61,7 +61,8 @@ public abstract class BaseEnemy {
 
         // Collision filtering
         fixtureDef.filter.categoryBits = AppConfig.CATEGORY_ENEMY;
-        fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLAYER | AppConfig.CATEGORY_PLATFORM;
+        fixtureDef.filter.maskBits =
+            AppConfig.CATEGORY_PLAYER | AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ATTACK;
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -79,5 +80,15 @@ public abstract class BaseEnemy {
                 body.getPosition().y - sprite.getHeight() / 2);
             sprite.draw(batch);
         }
+    }
+
+    public void update(float delta) {
+        if (health <= 0) {
+
+        }
+    }
+
+    public void takeDamage(int damage) {
+        health -= damage;
     }
 }

@@ -27,14 +27,15 @@ public class AttackManager {
         System.out.println("Spawned orb at " + position);
     }
 
-    public void update(float deltaTime, float cameraX, float viewPortWidth) {
+    public void update(float cameraX, float viewPortWidth) {
         Iterator<BaseAttack> iterator = attacks.iterator();
         while (iterator.hasNext()) {
             BaseAttack attack = iterator.next();
-            attack.update(deltaTime, cameraX, viewPortWidth);
+            attack.update(cameraX, viewPortWidth);
 
             if (attack.shouldRemove()) {
                 iterator.remove();
+                world.destroyBody(attack.body);
             }
         }
     }

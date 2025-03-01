@@ -57,11 +57,12 @@ public class Platform {
         fixtureDef.shape = shape;
         fixtureDef.restitution = 0f;
         fixtureDef.filter.categoryBits = AppConfig.CATEGORY_PLATFORM;
-        fixtureDef.filter.maskBits = AppConfig.CATEGORY_ENEMY | AppConfig.CATEGORY_PLAYER;
+        fixtureDef.filter.maskBits =
+            AppConfig.CATEGORY_ENEMY | AppConfig.CATEGORY_PLAYER | AppConfig.CATEGORY_ATTACK;
 
         body.createFixture(fixtureDef);
         shape.dispose();
-
+        body.setUserData(this);
 
     }
 

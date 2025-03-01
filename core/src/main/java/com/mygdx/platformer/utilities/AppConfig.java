@@ -105,4 +105,11 @@ public final class AppConfig {
     public static final String MAIN_MENU = "Main Menu";
     public static final String SURVIVAL_TIME = "Survival Time: ";
     public static final String GAME_OVER = "Game Over";
+
+
+    /* Attack */
+    public static final float ATTACK_SPRITE_HEIGHT = 0.3f;
+    public static final float ATTACK_SPRITE_WIDTH = 0.6f;
+    public static final int BASE_ATTACK_DEFAULT_DMG = 20;
+    public static final int BASE_ATTACK_DEFAULT_SPEED = 25;
 }

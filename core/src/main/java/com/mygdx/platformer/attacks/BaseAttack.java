@@ -25,7 +25,7 @@ public abstract class BaseAttack {
         this.y = y;
         this.sprite = new Sprite(texture);
 
-        sprite.setSize(0.6f, 0.3f);
+        sprite.setSize(AppConfig.ATTACK_SPRITE_WIDTH, AppConfig.ATTACK_SPRITE_HEIGHT);
         sprite.setPosition(x, y);
 
         BodyDef bodyDef = new BodyDef();
@@ -49,7 +49,9 @@ public abstract class BaseAttack {
     }
 
     public BaseAttack(World world, float x, float y, Texture texture) {
-        this(world,20, 25, x, y, texture);
+        this(world,AppConfig.BASE_ATTACK_DEFAULT_DMG,
+            AppConfig.BASE_ATTACK_DEFAULT_SPEED, x, y,
+            texture);
     }
 
     public void update(float cameraX, float viewPortWidth) {
@@ -73,9 +75,5 @@ public abstract class BaseAttack {
 
     public void setShouldRemove(boolean shouldRemove) {
         this.shouldRemove = shouldRemove;
-    }
-
-    public int getDamage() {
-        return damage;
     }
 }

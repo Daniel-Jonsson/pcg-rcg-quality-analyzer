@@ -90,6 +90,7 @@ public final class AppConfig {
     public static final short CATEGORY_PLAYER = 0x0001;   // 0001
     public static final short CATEGORY_ENEMY = 0x0002;    // 0010
     public static final short CATEGORY_PLATFORM = 0x0004; // 0100
+    public static final short CATEGORY_ATTACK = 0x0008;   // 1000
 
     public static final int GOBLIN_ATTACK_POWER = 15;
     public static final int GOBLIN_HEALTH = 30;
@@ -104,4 +105,11 @@ public final class AppConfig {
     public static final String MAIN_MENU = "Main Menu";
     public static final String SURVIVAL_TIME = "Survival Time: ";
     public static final String GAME_OVER = "Game Over";
+
+
+    /* Attack */
+    public static final float ATTACK_SPRITE_HEIGHT = 0.3f;
+    public static final float ATTACK_SPRITE_WIDTH = 0.6f;
+    public static final int BASE_ATTACK_DEFAULT_DMG = 20;
+    public static final int BASE_ATTACK_DEFAULT_SPEED = 25;
 }

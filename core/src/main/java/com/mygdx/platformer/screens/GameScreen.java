@@ -20,6 +20,7 @@ import com.mygdx.platformer.EnemyManager;
 import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.attacks.AttackManager;
+import com.mygdx.platformer.attacks.BaseAttack;
 import com.mygdx.platformer.pcg.PlatformGenerator;
 import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -263,6 +264,8 @@ public class GameScreen extends ScreenAdapter {
             public void beginContact(Contact contact) {
                 Fixture a = contact.getFixtureA();
                 Fixture b = contact.getFixtureB();
+                Object aUserData = a.getBody().getUserData();
+                Object bUserData = b.getBody().getUserData();
 
                 Body playerBody = player.getBody();
 
@@ -271,6 +274,22 @@ public class GameScreen extends ScreenAdapter {
                         b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM) {
                         player.setGrounded(true);
                     }
+                }
+
+                // Attack -> Enemy collision
+                if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK &&
+                    b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) ||
+                    (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK &&
+                        a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)) {
+
+                    if (aUserData instanceof BaseAttack || bUserData instanceof BaseAttack) {
+                        BaseAttack attack =
+                            (aUserData instanceof BaseAttack) ?
+                                (BaseAttack) aUserData : (BaseAttack) bUserData;
+
+                        attack.setShouldRemove(true);
+                    }
+                    // TODO: Apply damage logic to the enemy
                 }
             }
 

@@ -72,9 +72,9 @@ public class Player {
         playerAtlas = Assets.getPlayerAtlas();
 
         idleAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
-        walkAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
+        walkAnimation = new Animation<>(0.15f, playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
         jumpAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
-        attackAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
+        attackAnimation = new Animation<>(0.15f, playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
 
         currentFrame = idleAnimation.getKeyFrame(0);
 
@@ -115,10 +115,12 @@ public class Player {
      */
     public void render(SpriteBatch batch) {
         boolean flip = !facingRight;
+        int offsetModifier = flip ? -1 : 1;
+
         batch.draw(currentFrame,
-            body.getPosition().x - AppConfig.PLAYER_WIDTH / 2,
-            body.getPosition().y - AppConfig.PLAYER_HEIGHT / 2,
-            AppConfig.PLAYER_WIDTH * (flip ? -1 : 1), AppConfig.PLAYER_HEIGHT);
+            body.getPosition().x - AppConfig.PLAYER_WIDTH * offsetModifier,
+            body.getPosition().y - 0.2f,
+            AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * (flip ? -1 : 1), AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE);
     }
 
     /**
@@ -165,8 +167,10 @@ public class Player {
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             moveDirection = -moveSpeed;
+            facingRight = false;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             moveDirection = moveSpeed;
+            facingRight = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             attackManager.spawnAttackAt(body.getPosition());

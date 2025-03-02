@@ -2,22 +2,33 @@ package com.mygdx.platformer.utilities;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public final class Assets {
 
-    private Assets() { }  // private constructor to prevent instantiation
+    private Assets() { }  // Private constructor to prevent instantiation
 
     public static final AssetManager assetManager = new AssetManager();
 
+    public static final String PLAYER_ATLAS = "atlas/player_sprites.atlas";
     public static final String PLAYER_TEXTURE = "textures/player.png";
-    public static final String PLATFORM_TEXTURE = "textures/platform.png";
     public static final String THROWING_DAGGER_TEXTURE = "textures/throwing_dagger.png";
+    public static final String GOBLIN_IDLE = "textures/goblin_idle/goblin_idle.png";
+    public static final String PLATFORM_TEXTURE = "textures/platform.png";
 
     public static void load() {
+        assetManager.load(PLAYER_ATLAS, TextureAtlas.class);
         assetManager.load(PLAYER_TEXTURE, Texture.class);
+        assetManager.load(THROWING_DAGGER_TEXTURE, Texture.class);
+        assetManager.load(GOBLIN_IDLE, Texture.class);
         assetManager.load(PLATFORM_TEXTURE, Texture.class);
+
         assetManager.update();
-        assetManager.finishLoading();  // block to make sure the manager has finished loading
+        assetManager.finishLoading();  // Block to ensure assets are loaded
+    }
+
+    public static TextureAtlas getPlayerAtlas() {
+        return assetManager.get(PLAYER_ATLAS, TextureAtlas.class);
     }
 
     public static void dispose() {

@@ -2,19 +2,26 @@ package com.mygdx.platformer.utilities;
 
 public final class AppConfig {
 
-    private AppConfig() { }  // private constructor prevents instantiation
+    private AppConfig() {
+    }  // private constructor prevents instantiation
 
-    /** Pixels per meter. **/
+    /**
+     * Pixels per meter.
+     **/
     public static final float PPM = 50f;
 
     public static final int SCREEN_WIDTH_PIXELS = 1280;
 
     public static final int SCREEN_HEIGHT_PIXELS = 720;
 
-    /** The default screen width. **/
+    /**
+     * The default screen width.
+     **/
     public static final float SCREEN_WIDTH = SCREEN_WIDTH_PIXELS / PPM;
 
-    /** The default screen height. **/
+    /**
+     * The default screen height.
+     **/
     public static final float SCREEN_HEIGHT = SCREEN_HEIGHT_PIXELS / PPM;
 
     public static final float TIME_STEP = 1 / 60f;
@@ -41,11 +48,14 @@ public final class AppConfig {
 
     public static final float JUMP_HOLD_FORCE = 25f;
 
-    public static final float PLAYER_WIDTH = 0.5f;
+    public static final float PLAYER_SCALE = 1.8f;
+
+    public static final float PLAYER_WIDTH = 0.7f;
 
     public static final float PLAYER_HEIGHT = 0.7f;
 
-    public static final float PLAYER_HITBOX_SCALE = 0.9f;
+
+    public static final float PLAYER_HITBOX_SCALE = .6f;
 
     public static final float PLAYER_MASS = 0.35f;
 
@@ -108,8 +118,19 @@ public final class AppConfig {
 
 
     /* Attack */
+
     public static final float ATTACK_SPRITE_HEIGHT = 0.3f;
     public static final float ATTACK_SPRITE_WIDTH = 0.6f;
     public static final int BASE_ATTACK_DEFAULT_DMG = 20;
     public static final int BASE_ATTACK_DEFAULT_SPEED = 25;
+
+    /* Animation */
+
+    public static final float STANDARD_FRAME_DURATION = 0.1f;
+    public static final float WALK_FRAME_DURATION = 0.15f;
+    public static final float ATTACK_FRAME_DURATION = 0.3f;
+
+    public static final float PLAYER_Y_OFFSET = 0.2f;
+
+
 }

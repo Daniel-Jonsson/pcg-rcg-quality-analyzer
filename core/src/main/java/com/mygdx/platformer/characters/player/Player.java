@@ -2,9 +2,10 @@ package com.mygdx.platformer.characters.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -23,11 +24,6 @@ import com.mygdx.platformer.utilities.Assets;
  */
 public class Player {
 
-    /** The texture representing the player. */
-    private final Texture texture;
-
-    /** The sprite used for rendering the player. */
-    private final Sprite sprite;
 
     /** The Box2D physics body of the player. */
     private final Body body;
@@ -53,7 +49,15 @@ public class Player {
     private float jumpHoldTime = 0;
     private AttackManager attackManager;
 
+    private final Animation<TextureRegion> idleAnimation;
+    private final Animation<TextureRegion> walkAnimation;
+    private final Animation<TextureRegion> jumpAnimation;
+    private final Animation<TextureRegion> attackAnimation;
+    private float stateTime = 0f;
+    private boolean facingRight = true;
 
+    private TextureAtlas playerAtlas;
+    private TextureRegion currentFrame;
 
 
     /**
@@ -61,15 +65,21 @@ public class Player {
      * @param world The Box2D world.
      * @param x Starting x-coordinate where the player spawns.
      * @param y Starting y-coordinate where the player spawns.
+     * @param manager the AttackManager for spawning attacks.
      */
     public Player(World world, final float x, final float y, AttackManager manager) {
         this.attackManager = manager;
-        this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE);
-        float playerWidth = AppConfig.PLAYER_WIDTH;
-        float playerHeight = AppConfig.PLAYER_HEIGHT;
 
-        sprite = new Sprite(texture);
-        sprite.setSize(playerWidth, playerHeight);
+        playerAtlas = Assets.getPlayerAtlas();
+
+        idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION, playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
+        walkAnimation = new Animation<>(AppConfig.WALK_FRAME_DURATION, playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
+        jumpAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION, playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
+        attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION, playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
+
+        currentFrame = idleAnimation.getKeyFrame(0);
+
+
 
         // physics body
         BodyDef bodyDef = new BodyDef();
@@ -80,7 +90,7 @@ public class Player {
 
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(playerWidth * AppConfig.PLAYER_HITBOX_SCALE / 2, playerHeight * AppConfig.PLAYER_HITBOX_SCALE / 2);
+        shape.setAsBox(AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_HITBOX_SCALE / 2, AppConfig.PLATFORM_HEIGHT * AppConfig.PLAYER_HITBOX_SCALE / 2);
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -105,13 +115,22 @@ public class Player {
      * @param batch SpriteBatch for rendering.
      */
     public void render(SpriteBatch batch) {
-        sprite.draw(batch);
+        boolean flip = !facingRight;
+        int offsetModifier = flip ? -1 : 1;
+
+        batch.draw(currentFrame,
+            body.getPosition().x - AppConfig.PLAYER_WIDTH * offsetModifier,
+            body.getPosition().y - AppConfig.PLAYER_Y_OFFSET,
+            AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * offsetModifier, AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE);
     }
 
     /**
      * Updates the player state.
+     * @param deltaTime time since last frame.
      */
     public void update(float deltaTime) {
+        stateTime += deltaTime;
+
         body.setLinearVelocity(moveDirection, body.getLinearVelocity().y);
 
         if (jumpRequested) {
@@ -127,9 +146,18 @@ public class Player {
             jumpHolding = false;
         }
 
-        sprite.setPosition(
-            body.getPosition().x - sprite.getWidth() / 2,
-            body.getPosition().y - sprite.getHeight() / 2);
+        // Determine animation state
+        if (!isGrounded) {
+            currentFrame = jumpAnimation.getKeyFrame(stateTime);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            currentFrame = attackAnimation.getKeyFrame(stateTime);
+        } else if (moveDirection != 0) {
+            currentFrame = walkAnimation.getKeyFrame(stateTime);
+        }
+        else {
+            currentFrame = idleAnimation.getKeyFrame(stateTime);
+        }
+
     }
 
 
@@ -141,10 +169,13 @@ public class Player {
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             moveDirection = -moveSpeed;
+            facingRight = false;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             moveDirection = moveSpeed;
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            attackManager.spawnAttackAt(body.getPosition());
+            facingRight = true;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            attackManager.spawnAttackAt(new Vector2(body.getPosition().x, body.getPosition().y + (AppConfig.PLAYER_HEIGHT / 2) * AppConfig.PLAYER_SCALE - AppConfig.PLAYER_Y_OFFSET));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {
@@ -163,7 +194,7 @@ public class Player {
      * Disposes the player texture to free resources.
      */
     public void dispose() {
-        texture.dispose();
+        playerAtlas.dispose();
     }
 
     /**

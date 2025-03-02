@@ -1,0 +1,55 @@
+
+necromancer_sprites.png
+size: 1024, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+necromancer_attack
+  rotate: false
+  xy: 2, 254
+  size: 232, 250
+  orig: 232, 250
+  offset: 0, 0
+  index: 1
+necromancer_attack
+  rotate: false
+  xy: 2, 254
+  size: 232, 250
+  orig: 232, 250
+  offset: 0, 0
+  index: 3
+necromancer_attack
+  rotate: false
+  xy: 2, 2
+  size: 232, 250
+  orig: 232, 250
+  offset: 0, 0
+  index: 2
+necromancer_idle
+  rotate: false
+  xy: 236, 254
+  size: 232, 250
+  orig: 232, 250
+  offset: 0, 0
+  index: 1
+necromancer_idle
+  rotate: false
+  xy: 236, 2
+  size: 232, 250
+  orig: 232, 250
+  offset: 0, 0
+  index: 2
+necromancer_idle
+  rotate: false
+  xy: 470, 254
+  size: 232, 250
+  orig: 232, 250
+  offset: 0, 0
+  index: 3
+necromancer_idle
+  rotate: false
+  xy: 470, 2
+  size: 232, 250
+  orig: 232, 250
+  offset: 0, 0
+  index: 4

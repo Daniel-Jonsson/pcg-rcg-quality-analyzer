@@ -55,7 +55,8 @@ public final class AppConfig {
     public static final float PLAYER_HEIGHT = 0.7f;
 
 
-    public static final float PLAYER_HITBOX_SCALE = .9f;
+    public static final float PLAYER_HITBOX_SIZE_X = .3f;
+    public static final float PLAYER_HITBOX_SIZE_Y = .65f;
 
     public static final float PLAYER_MASS = 0.35f;
 
@@ -108,7 +109,8 @@ public final class AppConfig {
     public static final float GOBLIN_SCALE = 1.5f;
     public static final float GOBLIN_WIDTH = 0.5f;
     public static final float GOBLIN_HEIGHT = 0.5f;
-    public static final float GOBLIN_HITBOX_SCALE = 0.5f;
+    public static final float GOBLIN_HITBOX_SIZE_X = 0.2f;
+    public static final float GOBLIN_HITBOX_SIZE_Y = 0.3f;
 
 
 
@@ -118,7 +120,8 @@ public final class AppConfig {
     public static final float NECROMANCER_SCALE = 3f;
     public static final float NECROMANCER_WIDTH = 0.5f;
     public static final float NECROMANCER_HEIGHT = 0.5f;
-    public static final float NECROMANCER_HITBOX_SCALE = 0.5f;
+    public static final float NECROMANCER_HITBOX_SIZE_X = 0.4f;
+    public static final float NECROMANCER_HITBOX_SIZE_Y = .65f;
 
     public static final String QUIT = "Quit";
     public static final String MAIN_MENU = "Main Menu";

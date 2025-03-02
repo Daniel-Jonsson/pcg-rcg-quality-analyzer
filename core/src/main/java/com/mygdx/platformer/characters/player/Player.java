@@ -90,7 +90,7 @@ public class Player {
 
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_HITBOX_SCALE / 2, AppConfig.PLATFORM_HEIGHT * AppConfig.PLAYER_HITBOX_SCALE / 2);
+        shape.setAsBox(AppConfig.PLAYER_HITBOX_SIZE_X, AppConfig.PLAYER_HITBOX_SIZE_Y);
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -120,7 +120,7 @@ public class Player {
 
         batch.draw(currentFrame,
             body.getPosition().x - AppConfig.PLAYER_WIDTH * offsetModifier,
-            body.getPosition().y - AppConfig.CHARACTER_Y_OFFSET,
+            body.getPosition().y - AppConfig.PLAYER_HITBOX_SIZE_Y,
             AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * offsetModifier,
             AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE
         );

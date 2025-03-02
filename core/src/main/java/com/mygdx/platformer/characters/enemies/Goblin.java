@@ -52,7 +52,7 @@ public class Goblin extends BaseEnemy {
 
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(AppConfig.GOBLIN_WIDTH * AppConfig.GOBLIN_HITBOX_SCALE , AppConfig.GOBLIN_HEIGHT * AppConfig.GOBLIN_HITBOX_SCALE);
+        shape.setAsBox(AppConfig.GOBLIN_HITBOX_SIZE_X , AppConfig.GOBLIN_HITBOX_SIZE_Y);
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -82,7 +82,7 @@ public class Goblin extends BaseEnemy {
         batch.draw(
             currentFrame,
             body.getPosition().x - AppConfig.GOBLIN_WIDTH * offsetModifier ,
-            body.getPosition().y - AppConfig.CHARACTER_Y_OFFSET,
+            body.getPosition().y - AppConfig.GOBLIN_HITBOX_SIZE_Y,
             AppConfig.GOBLIN_WIDTH * AppConfig.GOBLIN_SCALE * offsetModifier,
             AppConfig.GOBLIN_HEIGHT * AppConfig.GOBLIN_SCALE
         );

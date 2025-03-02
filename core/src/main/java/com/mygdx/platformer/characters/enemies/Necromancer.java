@@ -52,7 +52,7 @@ public class Necromancer extends BaseEnemy {
 
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(AppConfig.NECROMANCER_WIDTH * AppConfig.NECROMANCER_HITBOX_SCALE , AppConfig.NECROMANCER_HEIGHT * AppConfig.NECROMANCER_HITBOX_SCALE);
+        shape.setAsBox(AppConfig.NECROMANCER_HITBOX_SIZE_X , AppConfig.NECROMANCER_HITBOX_SIZE_Y);
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -82,7 +82,7 @@ public class Necromancer extends BaseEnemy {
         batch.draw(
             currentFrame,
             body.getPosition().x - AppConfig.NECROMANCER_WIDTH * offsetModifier ,
-            body.getPosition().y - AppConfig.CHARACTER_Y_OFFSET,
+            body.getPosition().y - AppConfig.NECROMANCER_HITBOX_SIZE_Y,
             AppConfig.NECROMANCER_WIDTH * AppConfig.NECROMANCER_SCALE * offsetModifier,
             AppConfig.NECROMANCER_HEIGHT * AppConfig.NECROMANCER_SCALE
         );

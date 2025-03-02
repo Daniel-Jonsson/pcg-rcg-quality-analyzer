@@ -55,7 +55,7 @@ public final class AppConfig {
     public static final float PLAYER_HEIGHT = 0.7f;
 
 
-    public static final float PLAYER_HITBOX_SCALE = .6f;
+    public static final float PLAYER_HITBOX_SCALE = .9f;
 
     public static final float PLAYER_MASS = 0.35f;
 
@@ -104,12 +104,21 @@ public final class AppConfig {
 
     public static final int GOBLIN_ATTACK_POWER = 15;
     public static final int GOBLIN_HEALTH = 30;
-    public static final float GOBLIN_SPEED = 2.5f;
+    public static final float GOBLIN_SPEED = 1f;
+    public static final float GOBLIN_SCALE = 1.5f;
+    public static final float GOBLIN_WIDTH = 0.5f;
+    public static final float GOBLIN_HEIGHT = 0.5f;
+    public static final float GOBLIN_HITBOX_SCALE = 0.5f;
+
+
 
     public static final int NECROMANCER_ATTACK_POWER = 20;
     public static final int NECROMANCER_HEALTH = 20;
-    public static final float NECROMANCER_SPEED = 2f;
-
+    public static final float NECROMANCER_SPEED = 1f;
+    public static final float NECROMANCER_SCALE = 1.5f;
+    public static final float NECROMANCER_WIDTH = 0.5f;
+    public static final float NECROMANCER_HEIGHT = 0.5f;
+    public static final float NECROMANCER_HITBOX_SCALE = 0.5f;
 
     public static final String QUIT = "Quit";
     public static final String MAIN_MENU = "Main Menu";
@@ -130,7 +139,7 @@ public final class AppConfig {
     public static final float WALK_FRAME_DURATION = 0.15f;
     public static final float ATTACK_FRAME_DURATION = 0.3f;
 
-    public static final float PLAYER_Y_OFFSET = 0.2f;
+    public static final float CHARACTER_Y_OFFSET = 0.3f;
 
 
 }

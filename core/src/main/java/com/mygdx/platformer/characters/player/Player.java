@@ -120,8 +120,10 @@ public class Player {
 
         batch.draw(currentFrame,
             body.getPosition().x - AppConfig.PLAYER_WIDTH * offsetModifier,
-            body.getPosition().y - AppConfig.PLAYER_Y_OFFSET,
-            AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * offsetModifier, AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE);
+            body.getPosition().y - AppConfig.CHARACTER_Y_OFFSET,
+            AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * offsetModifier,
+            AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE
+        );
     }
 
     /**
@@ -175,7 +177,7 @@ public class Player {
             facingRight = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            attackManager.spawnAttackAt(new Vector2(body.getPosition().x, body.getPosition().y + (AppConfig.PLAYER_HEIGHT / 2) * AppConfig.PLAYER_SCALE - AppConfig.PLAYER_Y_OFFSET));
+            attackManager.spawnAttackAt(new Vector2(body.getPosition().x, body.getPosition().y + (AppConfig.PLAYER_HEIGHT / 2) * AppConfig.PLAYER_SCALE - AppConfig.CHARACTER_Y_OFFSET));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {

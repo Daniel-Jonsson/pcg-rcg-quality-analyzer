@@ -114,8 +114,8 @@ public final class AppConfig {
 
     public static final int NECROMANCER_ATTACK_POWER = 20;
     public static final int NECROMANCER_HEALTH = 20;
-    public static final float NECROMANCER_SPEED = 1f;
-    public static final float NECROMANCER_SCALE = 1.5f;
+    public static final float NECROMANCER_SPEED = .5f;
+    public static final float NECROMANCER_SCALE = 3f;
     public static final float NECROMANCER_WIDTH = 0.5f;
     public static final float NECROMANCER_HEIGHT = 0.5f;
     public static final float NECROMANCER_HITBOX_SCALE = 0.5f;

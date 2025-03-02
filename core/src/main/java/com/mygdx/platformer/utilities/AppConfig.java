@@ -110,7 +110,7 @@ public final class AppConfig {
     public static final float GOBLIN_WIDTH = 0.5f;
     public static final float GOBLIN_HEIGHT = 0.5f;
     public static final float GOBLIN_HITBOX_SIZE_X = 0.2f;
-    public static final float GOBLIN_HITBOX_SIZE_Y = 0.3f;
+    public static final float GOBLIN_HITBOX_SIZE_Y = 0.4f;
 
 
 

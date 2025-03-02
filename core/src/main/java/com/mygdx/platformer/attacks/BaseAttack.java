@@ -66,6 +66,9 @@ public abstract class BaseAttack {
     }
 
     public void render(SpriteBatch batch) {
+        if(speed < 0) {
+            sprite.setFlip(true, false);
+        }
         sprite.draw(batch);
     }
 

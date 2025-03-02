@@ -21,8 +21,8 @@ public class AttackManager {
         this.orbTexture = new Texture(Assets.THROWING_DAGGER_TEXTURE);
     }
 
-    public void spawnAttackAt(Vector2 position) {
-        OrbAttack orbAttack = new OrbAttack(world, position.x, position.y, orbTexture);
+    public void spawnAttackAt(Vector2 position, int directionModifier) {
+        OrbAttack orbAttack = new OrbAttack(world, position.x, position.y, orbTexture, directionModifier);
         attacks.add(orbAttack);
         System.out.println("Spawned orb at " + position);
     }

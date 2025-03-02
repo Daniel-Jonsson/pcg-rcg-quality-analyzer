@@ -2,9 +2,7 @@ package com.mygdx.platformer.characters.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -71,7 +69,7 @@ public class Player {
     public Player(World world, final float x, final float y, AttackManager manager) {
         this.attackManager = manager;
 
-        playerAtlas = new TextureAtlas(Gdx.files.internal("atlas/player_sprites.atlas"));
+        playerAtlas = Assets.getPlayerAtlas();
 
         idleAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
         walkAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
@@ -142,6 +140,15 @@ public class Player {
             jumpHoldTime += deltaTime;
         } else {
             jumpHolding = false;
+        }
+
+        // Determine animation state
+        if (!isGrounded) {
+            currentFrame = jumpAnimation.getKeyFrame(stateTime);
+        } else if (moveDirection != 0) {
+            currentFrame = walkAnimation.getKeyFrame(stateTime);
+        } else {
+            currentFrame = idleAnimation.getKeyFrame(stateTime);
         }
 
     }

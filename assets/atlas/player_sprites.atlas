@@ -4,26 +4,26 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-player_attack1
+player_attack
   rotate: false
   xy: 2, 2
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
-  index: -1
+  index: 1
 
 player_sprites2.png
 size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-player_attack2
+player_attack
   rotate: false
   xy: 2, 2
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
-  index: -1
+  index: 2
 
 player_sprites3.png
 size: 1024, 1024

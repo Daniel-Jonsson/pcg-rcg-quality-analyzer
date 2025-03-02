@@ -145,9 +145,12 @@ public class Player {
         // Determine animation state
         if (!isGrounded) {
             currentFrame = jumpAnimation.getKeyFrame(stateTime);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            currentFrame = attackAnimation.getKeyFrame(stateTime);
         } else if (moveDirection != 0) {
             currentFrame = walkAnimation.getKeyFrame(stateTime);
-        } else {
+        }
+        else {
             currentFrame = idleAnimation.getKeyFrame(stateTime);
         }
 
@@ -164,7 +167,8 @@ public class Player {
             moveDirection = -moveSpeed;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             moveDirection = moveSpeed;
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             attackManager.spawnAttackAt(body.getPosition());
         }
 

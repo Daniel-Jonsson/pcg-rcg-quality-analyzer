@@ -49,10 +49,10 @@ public class Player {
     private float jumpHoldTime = 0;
     private AttackManager attackManager;
 
-    private Animation<TextureRegion> idleAnimation;
-    private Animation<TextureRegion> walkAnimation;
-    private Animation<TextureRegion> jumpAnimation;
-    private Animation<TextureRegion> attackAnimation;
+    private final Animation<TextureRegion> idleAnimation;
+    private final Animation<TextureRegion> walkAnimation;
+    private final Animation<TextureRegion> jumpAnimation;
+    private final Animation<TextureRegion> attackAnimation;
     private float stateTime = 0f;
     private boolean facingRight = true;
 
@@ -65,16 +65,17 @@ public class Player {
      * @param world The Box2D world.
      * @param x Starting x-coordinate where the player spawns.
      * @param y Starting y-coordinate where the player spawns.
+     * @param manager the AttackManager for spawning attacks.
      */
     public Player(World world, final float x, final float y, AttackManager manager) {
         this.attackManager = manager;
 
         playerAtlas = Assets.getPlayerAtlas();
 
-        idleAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
-        walkAnimation = new Animation<>(0.15f, playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
-        jumpAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
-        attackAnimation = new Animation<>(0.15f, playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
+        idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION, playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
+        walkAnimation = new Animation<>(AppConfig.WALK_FRAME_DURATION, playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
+        jumpAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION, playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
+        attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION, playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
 
         currentFrame = idleAnimation.getKeyFrame(0);
 
@@ -119,12 +120,13 @@ public class Player {
 
         batch.draw(currentFrame,
             body.getPosition().x - AppConfig.PLAYER_WIDTH * offsetModifier,
-            body.getPosition().y - 0.2f,
-            AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * (flip ? -1 : 1), AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE);
+            body.getPosition().y - AppConfig.PLAYER_Y_OFFSET,
+            AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * offsetModifier, AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE);
     }
 
     /**
      * Updates the player state.
+     * @param deltaTime time since last frame.
      */
     public void update(float deltaTime) {
         stateTime += deltaTime;

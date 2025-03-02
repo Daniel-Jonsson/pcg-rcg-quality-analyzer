@@ -137,7 +137,7 @@ public final class AppConfig {
 
     public static final float STANDARD_FRAME_DURATION = 0.1f;
     public static final float WALK_FRAME_DURATION = 0.15f;
-    public static final float ATTACK_FRAME_DURATION = 0.3f;
+    public static final float ATTACK_FRAME_DURATION = 0.1f;
 
     public static final float CHARACTER_Y_OFFSET = 0.3f;
 

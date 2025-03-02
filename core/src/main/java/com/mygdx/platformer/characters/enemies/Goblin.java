@@ -39,7 +39,7 @@ public class Goblin extends BaseEnemy {
 
         idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION, textureAtlas.findRegions("goblin_idle"), Animation.PlayMode.LOOP);
         walkAnimation = new Animation<>(AppConfig.WALK_FRAME_DURATION, textureAtlas.findRegions("goblin_walk"), Animation.PlayMode.LOOP);
-        attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION, textureAtlas.findRegions("goblin_attack"), Animation.PlayMode.NORMAL);
+        attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION, textureAtlas.findRegions("goblin_attack"), Animation.PlayMode.LOOP);
 
         currentFrame = idleAnimation.getKeyFrame(0);
 
@@ -102,8 +102,10 @@ public class Goblin extends BaseEnemy {
         body.setLinearVelocity(moveDirection * AppConfig.GOBLIN_SPEED, body.getLinearVelocity().y);
 
         if (Math.abs(body.getLinearVelocity().x) > 0.1f) {
+
             currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         } else {
+            ;
             currentFrame = idleAnimation.getKeyFrame(stateTime, true);
         }
     }

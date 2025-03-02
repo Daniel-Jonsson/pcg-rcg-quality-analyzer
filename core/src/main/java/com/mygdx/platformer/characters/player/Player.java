@@ -26,11 +26,6 @@ import com.mygdx.platformer.utilities.Assets;
  */
 public class Player {
 
-    /** The texture representing the player. */
-    private final Texture texture;
-
-    /** The sprite used for rendering the player. */
-    private final Sprite sprite;
 
     /** The Box2D physics body of the player. */
     private final Body body;
@@ -57,7 +52,7 @@ public class Player {
     private AttackManager attackManager;
 
     private Animation<TextureRegion> idleAnimation;
-    private Animation<TextureRegion> runAnimation;
+    private Animation<TextureRegion> walkAnimation;
     private Animation<TextureRegion> jumpAnimation;
     private Animation<TextureRegion> attackAnimation;
     private float stateTime = 0f;
@@ -79,16 +74,13 @@ public class Player {
         playerAtlas = new TextureAtlas(Gdx.files.internal("atlas/player_sprites.atlas"));
 
         idleAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
+        walkAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
+        jumpAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
+        attackAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
+
+        currentFrame = idleAnimation.getKeyFrame(0);
 
 
-
-
-        this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE);
-        float playerWidth = AppConfig.PLAYER_WIDTH;
-        float playerHeight = AppConfig.PLAYER_HEIGHT;
-
-        sprite = new Sprite(texture);
-        sprite.setSize(playerWidth, playerHeight);
 
         // physics body
         BodyDef bodyDef = new BodyDef();
@@ -99,7 +91,7 @@ public class Player {
 
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(playerWidth * AppConfig.PLAYER_HITBOX_SCALE / 2, playerHeight * AppConfig.PLAYER_HITBOX_SCALE / 2);
+        shape.setAsBox(AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_HITBOX_SCALE / 2, AppConfig.PLATFORM_HEIGHT * AppConfig.PLAYER_HITBOX_SCALE / 2);
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -124,13 +116,19 @@ public class Player {
      * @param batch SpriteBatch for rendering.
      */
     public void render(SpriteBatch batch) {
-        sprite.draw(batch);
+        boolean flip = !facingRight;
+        batch.draw(currentFrame,
+            body.getPosition().x - AppConfig.PLAYER_WIDTH / 2,
+            body.getPosition().y - AppConfig.PLAYER_HEIGHT / 2,
+            AppConfig.PLAYER_WIDTH * (flip ? -1 : 1), AppConfig.PLAYER_HEIGHT);
     }
 
     /**
      * Updates the player state.
      */
     public void update(float deltaTime) {
+        stateTime += deltaTime;
+
         body.setLinearVelocity(moveDirection, body.getLinearVelocity().y);
 
         if (jumpRequested) {
@@ -146,9 +144,6 @@ public class Player {
             jumpHolding = false;
         }
 
-        sprite.setPosition(
-            body.getPosition().x - sprite.getWidth() / 2,
-            body.getPosition().y - sprite.getHeight() / 2);
     }
 
 
@@ -182,7 +177,7 @@ public class Player {
      * Disposes the player texture to free resources.
      */
     public void dispose() {
-        texture.dispose();
+        playerAtlas.dispose();
     }
 
     /**

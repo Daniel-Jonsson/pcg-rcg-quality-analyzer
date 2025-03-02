@@ -175,7 +175,7 @@ public class Player {
             facingRight = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            attackManager.spawnAttackAt(body.getPosition());
+            attackManager.spawnAttackAt(new Vector2(body.getPosition().x, body.getPosition().y + (AppConfig.PLAYER_HEIGHT / 2) * AppConfig.PLAYER_SCALE - AppConfig.PLAYER_Y_OFFSET));
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {

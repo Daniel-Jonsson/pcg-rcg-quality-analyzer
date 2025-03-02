@@ -3,8 +3,11 @@ package com.mygdx.platformer.characters.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -53,7 +56,15 @@ public class Player {
     private float jumpHoldTime = 0;
     private AttackManager attackManager;
 
+    private Animation<TextureRegion> idleAnimation;
+    private Animation<TextureRegion> runAnimation;
+    private Animation<TextureRegion> jumpAnimation;
+    private Animation<TextureRegion> attackAnimation;
+    private float stateTime = 0f;
+    private boolean facingRight = true;
 
+    private TextureAtlas playerAtlas;
+    private TextureRegion currentFrame;
 
 
     /**
@@ -64,6 +75,14 @@ public class Player {
      */
     public Player(World world, final float x, final float y, AttackManager manager) {
         this.attackManager = manager;
+
+        playerAtlas = new TextureAtlas(Gdx.files.internal("atlas/player_sprites.atlas"));
+
+        idleAnimation = new Animation<>(0.1f, playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
+
+
+
+
         this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE);
         float playerWidth = AppConfig.PLAYER_WIDTH;
         float playerHeight = AppConfig.PLAYER_HEIGHT;

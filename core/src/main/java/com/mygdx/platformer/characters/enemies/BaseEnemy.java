@@ -3,9 +3,12 @@ package com.mygdx.platformer.characters.enemies;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.platformer.utilities.AppConfig;
+
+import java.util.Iterator;
 
 public abstract class BaseEnemy {
 
@@ -16,6 +19,18 @@ public abstract class BaseEnemy {
     protected boolean isOnGround;
     protected Sprite sprite;
     protected Texture texture;
+    private boolean isDead;
+
+    private float moveDirection = 1; // 1 = right, -1 = left (temporary for movement testing)
+    private float moveTime = 0; // Tracks how long the enemy has moved in one direction, temporary for testing purposes
+    protected final float switchTime = 1f; // Time before switching direction,
+    // temporary for testing purposes.
+    protected boolean facingRight = true;
+
+    protected TextureRegion currentFrame;
+
+
+    protected float stateTime = 0f;
 
     public BaseEnemy(World world, Vector2 position, int health, int attackPower, float speed) {
 
@@ -56,6 +71,7 @@ public abstract class BaseEnemy {
         MassData massData = new MassData();
         massData.mass = AppConfig.ENEMY_MASS;
         body.setMassData(massData);
+        body.setUserData(this);
     }
 
     public void render(SpriteBatch batch) {
@@ -66,12 +82,29 @@ public abstract class BaseEnemy {
         }
     }
 
-    public void update(float delta) {
+    public void update(float deltaTime) {
+        stateTime += deltaTime;
+        moveTime += deltaTime;
 
+        if (moveTime >= switchTime) {
+            moveDirection *= -1;
+            moveTime = 0; // Reset movement timer
+            facingRight = moveDirection > 0;
+        }
+
+        body.setLinearVelocity(moveDirection * speed, body.getLinearVelocity().y);
     }
 
     public void takeDamage(int damage) {
         health -= damage;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public Body getBody() {
+        return body;
     }
 
     protected abstract void setupAnimations();

@@ -15,15 +15,6 @@ public class Goblin extends BaseEnemy {
     private Animation<TextureRegion> walkAnimation;
     private Animation<TextureRegion> attackAnimation;
 
-    private float moveDirection = 1; // 1 = right, -1 = left (temporary for movement testing)
-    private float moveTime = 0; // Tracks how long the enemy has moved in one direction, temporary for testing purposes
-    private final float switchTime = 1f; // Time before switching direction, temporary for testing purposes.
-
-
-    private float stateTime = 0f;
-    private boolean facingRight = true;
-    private TextureRegion currentFrame;
-
     private TextureAtlas textureAtlas;
 
     public Goblin(World world, Vector2 position) {
@@ -50,17 +41,7 @@ public class Goblin extends BaseEnemy {
      */
     @Override
     public void update(float deltaTime) {
-        stateTime += deltaTime;
-        moveTime += deltaTime;
-
-        if (moveTime >= switchTime) {
-            moveDirection *= -1;
-            moveTime = 0; // Reset movement timer
-            facingRight = moveDirection > 0;
-        }
-
-        body.setLinearVelocity(moveDirection * AppConfig.GOBLIN_SPEED, body.getLinearVelocity().y);
-
+        super.update(deltaTime);
         if (Math.abs(body.getLinearVelocity().x) > 0.1f) {
             currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         } else {

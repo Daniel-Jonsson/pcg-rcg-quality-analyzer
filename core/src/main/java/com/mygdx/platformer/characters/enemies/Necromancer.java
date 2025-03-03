@@ -14,15 +14,6 @@ public class Necromancer extends BaseEnemy {
     private Animation<TextureRegion> idleAnimation;
     private Animation<TextureRegion> attackAnimation;
 
-    private float moveDirection = 1; // 1 = right, -1 = left (temporary for movement testing)
-    private float moveTime = 0; // Tracks how long the enemy has moved in one direction, temporary for testing purposes
-    private final float switchTime = 2f; // Time before switching direction, temporary for testing purposes.
-
-
-    private float stateTime = 0f;
-    private boolean facingRight = true;
-    private TextureRegion currentFrame;
-
     private TextureAtlas textureAtlas;
 
     public Necromancer(World world, Vector2 position) {
@@ -46,17 +37,7 @@ public class Necromancer extends BaseEnemy {
 
     @Override
     public void update(float deltaTime) {
-        stateTime += deltaTime;
-        moveTime += deltaTime;
-
-        if (moveTime >= switchTime) {
-            moveDirection *= -1;
-            moveTime = 0;
-            facingRight = moveDirection > 0;
-        }
-
-        body.setLinearVelocity(moveDirection * AppConfig.NECROMANCER_SPEED, body.getLinearVelocity().y);
-
+        super.update(deltaTime);
         currentFrame = idleAnimation.getKeyFrame(stateTime);
     }
 

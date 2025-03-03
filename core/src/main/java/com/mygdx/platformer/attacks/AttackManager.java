@@ -10,23 +10,52 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * The {@code AttackManager} manages all active attacks in the game. It is
+ * responsible for spawning, updating, rendering, and removing attacks
+ *
+ * @author Daniel Jönsson, Robert Kullman
+ */
 public class AttackManager {
     private final List<BaseAttack> attacks;
     private final Texture orbTexture;
     private final World world;
 
+    /**
+     * Constructs an instance of {@code AttackManager}, responsible for
+     * handling attacks within the given world.
+     *
+     * @param world The Box2D world where attacks will be spawned and managed.
+     */
     public AttackManager(World world) {
         this.world = world;
         this.attacks = new ArrayList<>();
         this.orbTexture = new Texture(Assets.THROWING_DAGGER_TEXTURE);
     }
 
+    /**
+     * Spawns an attack at the given position with a specified direction.
+     *
+     * @param position The position where the attack should be created.
+     * @param directionModifier The direction in which the attack moves (e.g
+     *                          ., -1 for left, 1 for right).
+     */
     public void spawnAttackAt(Vector2 position, int directionModifier) {
         OrbAttack orbAttack = new OrbAttack(world, position.x, position.y, orbTexture, directionModifier);
         attacks.add(orbAttack);
         System.out.println("Spawned orb at " + position);
     }
 
+    /**
+     * Updates all active attacks, removing any that should be destroyed. In
+     * this case it is if they either 1) Hit a target or 2) Is outside current
+     * viewport.
+     *
+     * @param cameraX The current X-position of the camera, used for destroying
+     *                off-screen attacks.
+     * @param viewPortWidth The width of the viewport, used to determine
+     *                      visibility of attacks.
+     */
     public void update(float cameraX, float viewPortWidth) {
         Iterator<BaseAttack> iterator = attacks.iterator();
         while (iterator.hasNext()) {
@@ -40,6 +69,11 @@ public class AttackManager {
         }
     }
 
+    /**
+     * Renders all active attacks using the provided sprite batch.
+     *
+     * @param batch The sprite batch used for rendering attacks.
+     */
     public void render(SpriteBatch batch) {
         for (BaseAttack attack : attacks) {
             attack.render(batch);

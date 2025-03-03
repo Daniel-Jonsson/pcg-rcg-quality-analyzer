@@ -41,22 +41,48 @@ public class Player {
      * spacebar is being held down.*/
     private boolean isJumping = false;
 
+    /** Whether a jump request has been triggered. */
     private boolean jumpRequested = false;
+
+    /** Whether the jump button is currently being held down. */
     private boolean jumpHolding = false;
+
+    /** The player's movement direction (negative = left, positive = right, 0 =
+     * idle)
+     * . */
     private float moveDirection = 0;
 
+    /** Tracks whether the jump key was pressed in the last frame. */
     private boolean wasJumpKeyPressed = false;
+
+    /** Tracks how long the jump button has been held down. */
     private float jumpHoldTime = 0;
+
+    /** Manages the player's attacks. */
     private AttackManager attackManager;
 
+    /** Animation for the idle state. */
     private final Animation<TextureRegion> idleAnimation;
+
+    /** Animation for the walking state. */
     private final Animation<TextureRegion> walkAnimation;
+
+    /** Animation for the jumping state. */
     private final Animation<TextureRegion> jumpAnimation;
+
+    /** Animation for the attacking state. */
     private final Animation<TextureRegion> attackAnimation;
+
+    /** Tracks the elapsed time for animations. */
     private float stateTime = 0f;
+
+    /** Indicates whether the player is facing right. */
     private boolean facingRight = true;
 
+    /** The texture atlas containing the player's animations. */
     private TextureAtlas playerAtlas;
+
+    /** The current animation frame displayed for the player. */
     private TextureRegion currentFrame;
 
 

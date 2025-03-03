@@ -9,6 +9,14 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
+/**
+ * Represents a Goblin enemy in the game.
+ * The Goblin has animations for idle, walking, and attacking.
+ * It moves in a predefined pattern and updates its animation based on
+ * movement.
+ *
+ * @author Daniel Jönsson, Robert Kullman
+ */
 public class Goblin extends BaseEnemy {
 
     private Animation<TextureRegion> idleAnimation;
@@ -17,10 +25,22 @@ public class Goblin extends BaseEnemy {
 
     private TextureAtlas textureAtlas;
 
+    /**
+     * Creates a new Goblin enemy at the specified position in the game world.
+     *
+     * @param world The Box2D world where the goblin exists.
+     * @param position The initial position of the goblin.
+     */
     public Goblin(World world, Vector2 position) {
         super(world, position, AppConfig.GOBLIN_HEALTH, AppConfig.GOBLIN_ATTACK_POWER, AppConfig.GOBLIN_SPEED);
     }
 
+    /**
+     * Renders the goblin on the screen, ensuring it faces the correct
+     * direction.
+     *
+     * @param batch The sprite batch used for rendering.
+     */
     @Override
     public void render(SpriteBatch batch) {
         boolean flip = !facingRight;
@@ -36,8 +56,10 @@ public class Goblin extends BaseEnemy {
     }
 
     /**
-     * Temporary implementation for animation testing
-     * @param deltaTime
+     * Updates the goblin's behavior and animation state. The animation
+     * changes based on whether the goblin is moving or idle.
+     *
+     * @param deltaTime The time elapsed since the last update.
      */
     @Override
     public void update(float deltaTime) {
@@ -49,6 +71,10 @@ public class Goblin extends BaseEnemy {
         }
     }
 
+    /**
+     * Initializes the goblin's animations from the texture atlas. Sets up
+     * idle, walk, and attack animations.
+     */
     @Override
     protected void setupAnimations() {
         textureAtlas = Assets.getGoblinAtlas();
@@ -62,6 +88,12 @@ public class Goblin extends BaseEnemy {
         currentFrame = idleAnimation.getKeyFrame(0);
     }
 
+    /**
+     * Returns the size of the goblin's hitbox.
+     *
+     * @return A {@code Vector2} representing the width and height of the
+     * hitbox.
+     */
     @Override
     protected Vector2 getHitBoxSize() {
         return new Vector2(AppConfig.GOBLIN_HITBOX_SIZE_X, AppConfig.GOBLIN_HITBOX_SIZE_Y);

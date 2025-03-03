@@ -1,24 +1,18 @@
 package com.mygdx.platformer.characters.enemies;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.MassData;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
 public class Necromancer extends BaseEnemy {
 
-    private final Animation<TextureRegion> idleAnimation;
-    private final Animation<TextureRegion> attackAnimation;
+    private Animation<TextureRegion> idleAnimation;
+    private Animation<TextureRegion> attackAnimation;
 
     private float moveDirection = 1; // 1 = right, -1 = left (temporary for movement testing)
     private float moveTime = 0; // Tracks how long the enemy has moved in one direction, temporary for testing purposes
@@ -32,46 +26,8 @@ public class Necromancer extends BaseEnemy {
     private TextureAtlas textureAtlas;
 
     public Necromancer(World world, Vector2 position) {
-        super(world, position, AppConfig.NECROMANCER_HEALTH, AppConfig.NECROMANCER_ATTACK_POWER, AppConfig.NECROMANCER_SPEED);
-
-        textureAtlas = Assets.getNecromancerAtlas();
-
-
-
-        idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION, textureAtlas.findRegions("necromancer_idle"), Animation.PlayMode.LOOP);
-        attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION, textureAtlas.findRegions("necromancer_attack"), Animation.PlayMode.LOOP);
-
-        currentFrame = idleAnimation.getKeyFrame(0);
-
-        // physics body
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(position);
-        bodyDef.fixedRotation = true;
-        body = world.createBody(bodyDef); // add player body to game world
-
-        // collision box
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(AppConfig.NECROMANCER_HITBOX_SIZE_X, AppConfig.NECROMANCER_HITBOX_SIZE_Y);
-
-        // attach the polygon shape to the body
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        fixtureDef.friction = 1f;
-        fixtureDef.restitution = 0f;
-
-        // Collision filtering
-        fixtureDef.filter.categoryBits = AppConfig.CATEGORY_ENEMY;
-        fixtureDef.filter.maskBits =
-            AppConfig.CATEGORY_PLAYER | AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ATTACK;
-
-        body.createFixture(fixtureDef);
-        shape.dispose();
-
-        MassData massData = new MassData();
-        massData.mass = AppConfig.ENEMY_MASS;
-        body.setMassData(massData);
+        super(world, position, AppConfig.NECROMANCER_HEALTH,
+            AppConfig.NECROMANCER_ATTACK_POWER, AppConfig.NECROMANCER_SPEED);
     }
 
     @Override
@@ -102,5 +58,24 @@ public class Necromancer extends BaseEnemy {
         body.setLinearVelocity(moveDirection * AppConfig.NECROMANCER_SPEED, body.getLinearVelocity().y);
 
         currentFrame = idleAnimation.getKeyFrame(stateTime);
+    }
+
+    @Override
+    protected void setupAnimations() {
+        textureAtlas = Assets.getNecromancerAtlas();
+
+        idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
+            textureAtlas.findRegions("necromancer_idle"),
+            Animation.PlayMode.LOOP);
+        attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION,
+            textureAtlas.findRegions("necromancer_attack"),
+            Animation.PlayMode.LOOP);
+        currentFrame = idleAnimation.getKeyFrame(0);
+    }
+
+    @Override
+    protected Vector2 getHitBoxSize() {
+        return new Vector2(AppConfig.NECROMANCER_HITBOX_SIZE_X,
+            AppConfig.NECROMANCER_HITBOX_SIZE_Y);
     }
 }

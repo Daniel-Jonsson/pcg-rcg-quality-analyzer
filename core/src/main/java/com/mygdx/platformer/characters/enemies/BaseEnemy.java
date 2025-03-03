@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.platformer.utilities.AppConfig;
 
 public abstract class BaseEnemy {
 
@@ -24,8 +24,38 @@ public abstract class BaseEnemy {
         this.speed = speed;
         this.isOnGround = false;
 
+        setupPhysics(world, position);
+        setupAnimations();
+    }
 
 
+    private void setupPhysics(World world, Vector2 position) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(position);
+        bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        Vector2 hitBox = getHitBoxSize();
+        shape.setAsBox(hitBox.x, hitBox.y);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        fixtureDef.friction = 1f;
+        fixtureDef.restitution = 0f;
+
+        fixtureDef.filter.categoryBits = AppConfig.CATEGORY_ENEMY;
+        fixtureDef.filter.maskBits =
+            AppConfig.CATEGORY_PLAYER | AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ATTACK;
+
+        body.createFixture(fixtureDef);
+        shape.dispose();
+
+        MassData massData = new MassData();
+        massData.mass = AppConfig.ENEMY_MASS;
+        body.setMassData(massData);
     }
 
     public void render(SpriteBatch batch) {
@@ -43,4 +73,7 @@ public abstract class BaseEnemy {
     public void takeDamage(int damage) {
         health -= damage;
     }
+
+    protected abstract void setupAnimations();
+    protected abstract Vector2 getHitBoxSize();
 }

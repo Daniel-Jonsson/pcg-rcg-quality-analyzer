@@ -76,6 +76,10 @@ public final class AppConfig {
 
     public static final float PLATFORM_BASE_Y_POSITION = 2.5f;
 
+    public static final float PLATFORM_MIDDLE_SEGMENT_WIDTH = 0.5f;
+
+    public static final float BASE_Y = 2.5f;
+
     public static final float MAX_Y_VARIATION = 0.5f;
 
     public static final float RIGHT_OFFSCREEN_MARGIN = 2.0f;

@@ -15,6 +15,9 @@ public final class Assets {
     public static final String THROWING_DAGGER_TEXTURE = "textures/throwing_dagger.png";
     public static final String GOBLIN_IDLE = "textures/goblin_idle/goblin_idle.png";
     public static final String PLATFORM_TEXTURE = "textures/platform.png";
+    public static final String PLATFORM_START = "textures/platform/platform_start.png";
+    public static final String PLATFORM_END = "textures/platform/platform_end.png";
+    public static final String PLATFORM_MIDDLE = "textures/platform/platform_middle.png";
 
     public static final String PLAYER_ATLAS = "atlas/player_sprites.atlas";
     public static final String GOBLIN_ATLAS = "atlas/goblin_sprites.atlas";
@@ -29,6 +32,10 @@ public final class Assets {
         assetManager.load(THROWING_DAGGER_TEXTURE, Texture.class);
         assetManager.load(GOBLIN_IDLE, Texture.class);
         assetManager.load(PLATFORM_TEXTURE, Texture.class);
+
+        assetManager.load(PLATFORM_START, Texture.class);
+        assetManager.load(PLATFORM_END, Texture.class);
+        assetManager.load(PLATFORM_MIDDLE, Texture.class);
 
         assetManager.update();
         assetManager.finishLoading();  // Block to ensure assets are loaded

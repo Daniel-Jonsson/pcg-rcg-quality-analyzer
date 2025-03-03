@@ -20,6 +20,13 @@ import com.mygdx.platformer.utilities.Assets;
  */
 public class Platform {
 
+    private Texture startTexture, middleTexture, endTexture;
+    private Sprite startSprite, middleSprite, endSprite;
+    private float segmentWidth;
+    private float segmentCount;
+
+    private float platformWidth;
+
     /** Texture used to render the platform. */
     private Texture texture;
 
@@ -39,9 +46,26 @@ public class Platform {
      * @param height The height of the platform in world units.
      */
     public Platform(World world, float x, float y, float width, float height) {
-        texture = Assets.assetManager.get(Assets.PLATFORM_TEXTURE, Texture.class);
+        texture = Assets.assetManager.get(Assets.PLATFORM_MIDDLE, Texture.class);
         sprite = new Sprite(texture);
         sprite.setSize(width, height);
+
+        platformWidth = width;
+        segmentWidth = AppConfig.PLATFORM_MIDDLE_SEGMENT_WIDTH;
+        segmentCount = width / segmentWidth;
+
+        // textures
+        startTexture = Assets.assetManager.get(Assets.PLATFORM_START, Texture.class);
+        middleTexture = Assets.assetManager.get(Assets.PLATFORM_MIDDLE, Texture.class);
+        endTexture = Assets.assetManager.get(Assets.PLATFORM_END, Texture.class);
+
+        startSprite = new Sprite(startTexture);
+        middleSprite = new Sprite(middleTexture);
+        endSprite = new Sprite(endTexture);
+
+        startSprite.setSize(.1f, AppConfig.PLATFORM_HEIGHT);
+        middleSprite.setSize(segmentWidth, AppConfig.PLATFORM_HEIGHT);
+        endSprite.setSize(.1f, AppConfig.PLATFORM_HEIGHT);
 
         // physics body
         BodyDef bodyDef = new BodyDef();
@@ -71,10 +95,23 @@ public class Platform {
      * @param batch SpriteBatch for rendering.
      */
     public void render(SpriteBatch batch) {
-        // Sync sprite position
-        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2,
+        // start segment
+        startSprite.setPosition(body.getPosition().x - platformWidth / 2 -0.05f,
+            body.getPosition().y - AppConfig.PLATFORM_HEIGHT / 2);
+
+        // middle segments
+        for (int i = 0; i < segmentCount; i++) {
+            middleSprite.setPosition((body.getPosition().x - platformWidth / 2) + (i * (segmentWidth)),
+                body.getPosition().y - AppConfig.PLATFORM_HEIGHT / 2);
+            middleSprite.draw(batch);
+        }
+
+        // end segment
+        endSprite.setPosition(body.getPosition().x + platformWidth / 2,
             body.getPosition().y - sprite.getHeight() / 2);
-        sprite.draw(batch);
+        startSprite.draw(batch);
+
+        endSprite.draw(batch);
     }
 
     /**

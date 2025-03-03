@@ -21,6 +21,7 @@ import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.attacks.BaseAttack;
+import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.pcg.PlatformGenerator;
 import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -129,6 +130,7 @@ public class GameScreen extends ScreenAdapter {
             doPhysicsStep(deltaTime);
             attackManager.update(camera.position.x,
                 AppConfig.SCREEN_WIDTH);
+            enemyManager.update(deltaTime);
         }
 
         ScreenUtils.clear(Color.BLACK);
@@ -288,8 +290,11 @@ public class GameScreen extends ScreenAdapter {
                                 (BaseAttack) aUserData : (BaseAttack) bUserData;
 
                         attack.setShouldRemove(true);
+                        BaseEnemy enemy = (aUserData instanceof BaseEnemy) ?
+                            (BaseEnemy) aUserData : (BaseEnemy) bUserData;
+
+                        enemy.takeDamage(attack.getDamage());
                     }
-                    // TODO: Apply damage logic to the enemy
                 }
             }
 

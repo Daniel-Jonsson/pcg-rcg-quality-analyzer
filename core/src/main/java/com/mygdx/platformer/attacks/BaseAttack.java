@@ -83,4 +83,8 @@ public abstract class BaseAttack {
     public void setShouldRemove(boolean shouldRemove) {
         this.shouldRemove = shouldRemove;
     }
+
+    public int getDamage() {
+        return damage;
+    }
 }

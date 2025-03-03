@@ -4,7 +4,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.utilities.AppConfig;
 
 public abstract class BaseAttack {
@@ -49,7 +53,7 @@ public abstract class BaseAttack {
     }
 
     public BaseAttack(World world, float x, float y, Texture texture) {
-        this(world,AppConfig.BASE_ATTACK_DEFAULT_DMG,
+        this(world, AppConfig.BASE_ATTACK_DEFAULT_DMG,
             AppConfig.BASE_ATTACK_DEFAULT_SPEED, x, y,
             texture);
     }
@@ -66,7 +70,7 @@ public abstract class BaseAttack {
     }
 
     public void render(SpriteBatch batch) {
-        if(speed < 0) {
+        if (speed < 0) {
             sprite.setFlip(true, false);
         }
         sprite.draw(batch);

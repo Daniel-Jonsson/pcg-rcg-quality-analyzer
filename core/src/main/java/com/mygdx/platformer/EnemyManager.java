@@ -26,7 +26,7 @@ public class EnemyManager {
 
     public void spawnEnemyAt(Vector2 position) {
 
-        if(random.nextBoolean()) {
+        if (random.nextBoolean()) {
             Goblin goblin = new Goblin(world, position);
             enemies.add(goblin);
         } else {

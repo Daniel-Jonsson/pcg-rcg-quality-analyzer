@@ -155,8 +155,7 @@ public class Player {
             currentFrame = attackAnimation.getKeyFrame(stateTime);
         } else if (moveDirection != 0) {
             currentFrame = walkAnimation.getKeyFrame(stateTime);
-        }
-        else {
+        } else {
             currentFrame = idleAnimation.getKeyFrame(stateTime);
         }
 
@@ -180,7 +179,7 @@ public class Player {
             int attackDirectionModifier = facingRight ? 1 : -1;
             attackManager.spawnAttackAt(
                 new Vector2(body.getPosition().x,
-                body.getPosition().y + AppConfig.PLAYER_HEIGHT / 3) ,
+                body.getPosition().y + AppConfig.PLAYER_Y_ATTACK_OFFSET),
                     attackDirectionModifier
                 );
         }

@@ -52,7 +52,7 @@ public class Goblin extends BaseEnemy {
 
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(AppConfig.GOBLIN_HITBOX_SIZE_X , AppConfig.GOBLIN_HITBOX_SIZE_Y);
+        shape.setAsBox(AppConfig.GOBLIN_HITBOX_SIZE_X, AppConfig.GOBLIN_HITBOX_SIZE_Y);
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -81,13 +81,17 @@ public class Goblin extends BaseEnemy {
 
         batch.draw(
             currentFrame,
-            body.getPosition().x - AppConfig.GOBLIN_WIDTH * offsetModifier ,
+            body.getPosition().x - AppConfig.GOBLIN_WIDTH * offsetModifier,
             body.getPosition().y - AppConfig.GOBLIN_HITBOX_SIZE_Y,
             AppConfig.GOBLIN_WIDTH * AppConfig.GOBLIN_SCALE * offsetModifier,
             AppConfig.GOBLIN_HEIGHT * AppConfig.GOBLIN_SCALE
         );
     }
 
+    /**
+     * Temporary implementation for animation testing
+     * @param deltaTime
+     */
     @Override
     public void update(float deltaTime) {
         stateTime += deltaTime;
@@ -105,7 +109,6 @@ public class Goblin extends BaseEnemy {
 
             currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         } else {
-            ;
             currentFrame = idleAnimation.getKeyFrame(stateTime, true);
         }
     }

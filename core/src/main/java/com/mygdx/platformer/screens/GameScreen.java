@@ -270,17 +270,17 @@ public class GameScreen extends ScreenAdapter {
                 Body playerBody = player.getBody();
 
                 if (a.getBody() == playerBody || b.getBody() == playerBody) {
-                    if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM ||
-                        b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM) {
+                    if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
+                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM) {
                         player.setGrounded(true);
                     }
                 }
 
                 // Attack -> Enemy collision
-                if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK &&
-                    b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) ||
-                    (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK &&
-                        a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)) {
+                if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
+                    && b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)
+                    || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
+                    && a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)) {
 
                     if (aUserData instanceof BaseAttack || bUserData instanceof BaseAttack) {
                         BaseAttack attack =

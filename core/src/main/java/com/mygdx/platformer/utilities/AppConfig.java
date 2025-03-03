@@ -54,6 +54,8 @@ public final class AppConfig {
 
     public static final float PLAYER_HEIGHT = 0.7f;
 
+    public static final float PLAYER_Y_ATTACK_OFFSET = PLAYER_HEIGHT / 3;
+
 
     public static final float PLAYER_HITBOX_SIZE_X = .3f;
     public static final float PLAYER_HITBOX_SIZE_Y = .65f;
@@ -72,7 +74,7 @@ public final class AppConfig {
 
     public static final float PLATFORM_HEIGHT = 0.5f;
 
-    public static final float BASE_Y = 2.5f;
+    public static final float PLATFORM_BASE_Y_POSITION = 2.5f;
 
     public static final float MAX_Y_VARIATION = 0.5f;
 
@@ -141,8 +143,6 @@ public final class AppConfig {
     public static final float STANDARD_FRAME_DURATION = 0.1f;
     public static final float WALK_FRAME_DURATION = 0.15f;
     public static final float ATTACK_FRAME_DURATION = 0.1f;
-
-    public static final float CHARACTER_Y_OFFSET = 0.3f;
 
 
 }

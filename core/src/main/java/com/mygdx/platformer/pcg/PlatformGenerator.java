@@ -107,8 +107,4 @@ public class PlatformGenerator {
         }
         platforms.clear();
     }
-
-    public List<Platform> getPlatforms() {
-        return platforms;
-    }
 }

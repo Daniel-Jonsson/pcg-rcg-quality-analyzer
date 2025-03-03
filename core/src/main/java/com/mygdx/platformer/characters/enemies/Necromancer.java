@@ -9,6 +9,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
+/**
+ * Represents a Necromancer enemy in the game.
+ * The Necromancer has idle and attack animations and follows a predefined movement pattern.
+ * It extends {@link BaseEnemy}, inheriting core enemy behaviors such as physics and health management.
+ *
+ * @author Daniel Jönsson, Robert Kullman
+ */
 public class Necromancer extends BaseEnemy {
 
     private Animation<TextureRegion> idleAnimation;
@@ -16,11 +23,23 @@ public class Necromancer extends BaseEnemy {
 
     private TextureAtlas textureAtlas;
 
+    /**
+     * Creates a new Necromancer enemy at the specified position in the game
+     * world.
+     *
+     * @param world The Box2D world where the necromancer exists.
+     * @param position The initial position of the necromancer.
+     */
     public Necromancer(World world, Vector2 position) {
         super(world, position, AppConfig.NECROMANCER_HEALTH,
             AppConfig.NECROMANCER_ATTACK_POWER, AppConfig.NECROMANCER_SPEED);
     }
 
+    /**
+     * Renders the necromancer on the screen, ensuring it faces the correct direction.
+     *
+     * @param batch The sprite batch used for rendering.
+     */
     @Override
     public void render(SpriteBatch batch) {
         boolean flip = !facingRight;
@@ -35,12 +54,22 @@ public class Necromancer extends BaseEnemy {
         );
     }
 
+    /**
+     * Updates the necromancer's state and animation. The animation updates
+     * based on the elapsed time.
+     *
+     * @param deltaTime The time elapsed since the last update.
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
         currentFrame = idleAnimation.getKeyFrame(stateTime);
     }
 
+    /**
+     * Initializes the necromancer's animations from the texture atlas. Sets
+     * up idle and attack animations.
+     */
     @Override
     protected void setupAnimations() {
         textureAtlas = Assets.getNecromancerAtlas();
@@ -54,6 +83,12 @@ public class Necromancer extends BaseEnemy {
         currentFrame = idleAnimation.getKeyFrame(0);
     }
 
+    /**
+     * Returns the size of the necromancer's hitbox.
+     *
+     * @return A {@code Vector2} representing the width and height of the
+     * hitbox.
+     */
     @Override
     protected Vector2 getHitBoxSize() {
         return new Vector2(AppConfig.NECROMANCER_HITBOX_SIZE_X,

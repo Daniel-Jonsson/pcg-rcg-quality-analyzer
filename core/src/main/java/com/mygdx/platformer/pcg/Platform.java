@@ -13,18 +13,27 @@ import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
 /**
- * This class represents a platform in the game world. It uses a
- * Box2D body for physics and a sprite for rendering.
+ * This class represents a platform in the game world and is composed of
+ * multiple segments (start, middle, and end). It uses a Box2D body for
+ * physics and a sprite for rendering.
  * @author Robert Kullman
  * @author Daniel Jönsson
  */
 public class Platform {
 
+    /** Texture for the start, middle, and end segment of the platform. */
     private Texture startTexture, middleTexture, endTexture;
+
+    /** Sprite for the start, middle, and end segment of the platform. */
     private Sprite startSprite, middleSprite, endSprite;
+
+    /** Width of each middle segment of the platform. */
     private float segmentWidth;
+
+    /** Number of middle segments forming the platform. */
     private float segmentCount;
 
+    /** Total width of the platform. */
     private float platformWidth;
 
     /** Texture used to render the platform. */
@@ -137,10 +146,6 @@ public class Platform {
      */
     public float getWidth() {
         return sprite.getWidth();
-    }
-
-    public Vector2 getPosition() {
-        return body.getPosition();
     }
 
 }

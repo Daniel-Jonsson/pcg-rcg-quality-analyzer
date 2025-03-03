@@ -4,14 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.MassData;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.platformer.utilities.AppConfig;
-import com.mygdx.platformer.utilities.Assets;
 
 public abstract class BaseEnemy {
 
@@ -30,44 +24,34 @@ public abstract class BaseEnemy {
         this.speed = speed;
         this.isOnGround = false;
 
+        setupPhysics(world, position);
+        setupAnimations();
+    }
 
 
-        // Create Box2D body
-        this.texture = Assets.assetManager.get(Assets.PLAYER_TEXTURE);
-
-        float playerWidth = AppConfig.PLAYER_WIDTH;
-        float playerHeight = AppConfig.PLAYER_HEIGHT;
-
-        sprite = new Sprite(texture);
-        sprite.setSize(playerWidth, playerHeight);
-
-        // physics body
+    private void setupPhysics(World world, Vector2 position) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(position);
         bodyDef.fixedRotation = true;
-        body = world.createBody(bodyDef); // add player body to game world
+        body = world.createBody(bodyDef);
 
-        // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(playerWidth * AppConfig.PLAYER_HITBOX_SCALE / 2, playerHeight * AppConfig.PLAYER_HITBOX_SCALE / 2);
+        Vector2 hitBox = getHitBoxSize();
+        shape.setAsBox(hitBox.x, hitBox.y);
 
-        // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0f;
 
-        // Collision filtering
         fixtureDef.filter.categoryBits = AppConfig.CATEGORY_ENEMY;
         fixtureDef.filter.maskBits =
             AppConfig.CATEGORY_PLAYER | AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ATTACK;
 
         body.createFixture(fixtureDef);
         shape.dispose();
-
-
 
         MassData massData = new MassData();
         massData.mass = AppConfig.ENEMY_MASS;
@@ -83,12 +67,13 @@ public abstract class BaseEnemy {
     }
 
     public void update(float delta) {
-        if (health <= 0) {
 
-        }
     }
 
     public void takeDamage(int damage) {
         health -= damage;
     }
+
+    protected abstract void setupAnimations();
+    protected abstract Vector2 getHitBoxSize();
 }

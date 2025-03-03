@@ -29,7 +29,7 @@ public class PlatformGenerator {
     private float minWidth = AppConfig.MIN_WIDTH;
     private float maxWidth = AppConfig.MAX_WIDTH;
     private float platformHeight = AppConfig.PLATFORM_HEIGHT;
-    private float baseY = AppConfig.BASE_Y;
+    private float baseY = AppConfig.PLATFORM_BASE_Y_POSITION;
     private float maxYvariation = AppConfig.MAX_Y_VARIATION;
     private float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
 

@@ -23,7 +23,7 @@ public class GameOverOverlay {
     private boolean isActive = false;
 
     /**
-     * Creates a new Game Over overlay
+     * Creates a new Game Over overlay.
      * @param game The main game instance, used for switching screens.
      * @param survivalTime The time the player survived before dying.
      */
@@ -57,10 +57,10 @@ public class GameOverOverlay {
         Table table = new Table();
         table.setFillParent(true);
         table.center();
-        table.add(titleLabel).padBottom(20).row();
-        table.add(timeLabel).padBottom(30).row();
-        table.add(restartButton).width(200).height(50).padBottom(10).row();
-        table.add(quitButton).width(200).height(50);
+        table.add(titleLabel).padBottom(AppConfig.TITLE_BOTTOM_PADDING).row();
+        table.add(timeLabel).padBottom(AppConfig.TIMER_PADDING).row();
+        table.add(restartButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT).padBottom(AppConfig.BUTTON_BOTTOM_PADDING).row();
+        table.add(quitButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT);
 
         stage.addActor(table);
     }

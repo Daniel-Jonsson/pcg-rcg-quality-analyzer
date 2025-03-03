@@ -54,8 +54,11 @@ public final class AppConfig {
 
     public static final float PLAYER_HEIGHT = 0.7f;
 
+    public static final float PLAYER_Y_ATTACK_OFFSET = PLAYER_HEIGHT / 3;
 
-    public static final float PLAYER_HITBOX_SCALE = .6f;
+
+    public static final float PLAYER_HITBOX_SIZE_X = .3f;
+    public static final float PLAYER_HITBOX_SIZE_Y = .65f;
 
     public static final float PLAYER_MASS = 0.35f;
 
@@ -71,7 +74,7 @@ public final class AppConfig {
 
     public static final float PLATFORM_HEIGHT = 0.5f;
 
-    public static final float BASE_Y = 2.5f;
+    public static final float PLATFORM_BASE_Y_POSITION = 2.5f;
 
     public static final float MAX_Y_VARIATION = 0.5f;
 
@@ -104,12 +107,23 @@ public final class AppConfig {
 
     public static final int GOBLIN_ATTACK_POWER = 15;
     public static final int GOBLIN_HEALTH = 30;
-    public static final float GOBLIN_SPEED = 2.5f;
+    public static final float GOBLIN_SPEED = 1f;
+    public static final float GOBLIN_SCALE = 1.5f;
+    public static final float GOBLIN_WIDTH = 0.5f;
+    public static final float GOBLIN_HEIGHT = 0.5f;
+    public static final float GOBLIN_HITBOX_SIZE_X = 0.2f;
+    public static final float GOBLIN_HITBOX_SIZE_Y = 0.4f;
+
+
 
     public static final int NECROMANCER_ATTACK_POWER = 20;
     public static final int NECROMANCER_HEALTH = 20;
-    public static final float NECROMANCER_SPEED = 2f;
-
+    public static final float NECROMANCER_SPEED = .5f;
+    public static final float NECROMANCER_SCALE = 3f;
+    public static final float NECROMANCER_WIDTH = 0.5f;
+    public static final float NECROMANCER_HEIGHT = 0.5f;
+    public static final float NECROMANCER_HITBOX_SIZE_X = 0.4f;
+    public static final float NECROMANCER_HITBOX_SIZE_Y = .65f;
 
     public static final String QUIT = "Quit";
     public static final String MAIN_MENU = "Main Menu";
@@ -128,9 +142,7 @@ public final class AppConfig {
 
     public static final float STANDARD_FRAME_DURATION = 0.1f;
     public static final float WALK_FRAME_DURATION = 0.15f;
-    public static final float ATTACK_FRAME_DURATION = 0.3f;
-
-    public static final float PLAYER_Y_OFFSET = 0.2f;
+    public static final float ATTACK_FRAME_DURATION = 0.1f;
 
 
 }

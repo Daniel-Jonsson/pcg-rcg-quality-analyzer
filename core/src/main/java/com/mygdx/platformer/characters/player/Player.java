@@ -90,7 +90,7 @@ public class Player {
 
         // collision box
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_HITBOX_SCALE / 2, AppConfig.PLATFORM_HEIGHT * AppConfig.PLAYER_HITBOX_SCALE / 2);
+        shape.setAsBox(AppConfig.PLAYER_HITBOX_SIZE_X, AppConfig.PLAYER_HITBOX_SIZE_Y);
 
         // attach the polygon shape to the body
         FixtureDef fixtureDef = new FixtureDef();
@@ -120,8 +120,10 @@ public class Player {
 
         batch.draw(currentFrame,
             body.getPosition().x - AppConfig.PLAYER_WIDTH * offsetModifier,
-            body.getPosition().y - AppConfig.PLAYER_Y_OFFSET,
-            AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * offsetModifier, AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE);
+            body.getPosition().y - AppConfig.PLAYER_HITBOX_SIZE_Y,
+            AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * offsetModifier,
+            AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE
+        );
     }
 
     /**
@@ -153,8 +155,7 @@ public class Player {
             currentFrame = attackAnimation.getKeyFrame(stateTime);
         } else if (moveDirection != 0) {
             currentFrame = walkAnimation.getKeyFrame(stateTime);
-        }
-        else {
+        } else {
             currentFrame = idleAnimation.getKeyFrame(stateTime);
         }
 
@@ -175,7 +176,12 @@ public class Player {
             facingRight = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            attackManager.spawnAttackAt(new Vector2(body.getPosition().x, body.getPosition().y + (AppConfig.PLAYER_HEIGHT / 2) * AppConfig.PLAYER_SCALE - AppConfig.PLAYER_Y_OFFSET));
+            int attackDirectionModifier = facingRight ? 1 : -1;
+            attackManager.spawnAttackAt(
+                new Vector2(body.getPosition().x,
+                body.getPosition().y + AppConfig.PLAYER_Y_ATTACK_OFFSET),
+                    attackDirectionModifier
+                );
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {

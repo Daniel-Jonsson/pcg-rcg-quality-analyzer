@@ -5,8 +5,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class OrbAttack extends BaseAttack {
 
-    public OrbAttack(World world, float x, float y, Texture texture) {
-        super(world, 20, 7, x, y, texture);
+    public OrbAttack(World world, float x, float y, Texture texture, int directionModifier) {
+        super(world, 20, 7 * directionModifier, x, y, texture);
         super.body.setUserData(this);
     }
 }

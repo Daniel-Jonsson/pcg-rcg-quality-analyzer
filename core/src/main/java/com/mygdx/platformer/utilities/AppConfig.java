@@ -71,6 +71,8 @@ public final class AppConfig {
 
     public static final float PLATFORM_HEIGHT = 0.5f;
 
+    public static final float PLATFORM_MIDDLE_SEGMENT_WIDTH = 0.5f;
+
     public static final float BASE_Y = 2.5f;
 
     public static final float MAX_Y_VARIATION = 0.5f;

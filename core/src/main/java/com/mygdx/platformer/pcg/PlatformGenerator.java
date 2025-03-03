@@ -62,7 +62,7 @@ public class PlatformGenerator {
     public void update(float cameraX, float viewportWidth) {
         while (lastPlatformX < cameraX + viewportWidth / 2 + rightOffscreenMargin) {
             float gap = minGap + (float) Math.random() * (maxGap - minGap);
-            float width = minWidth + (float) Math.random() * (maxWidth - minWidth);
+            float width = minWidth + (float) Math.round(Math.random() * (maxWidth - minWidth));
             float newX = lastPlatformX + gap + width / 2;
             float newY = baseY + ((float) Math.random() * 2 * maxYvariation - maxYvariation);
             Platform newPlatform = new Platform(world, newX, newY, width, platformHeight);

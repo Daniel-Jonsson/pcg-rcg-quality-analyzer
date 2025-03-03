@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.platformer.utilities.AppConfig;
 
-import java.util.Iterator;
 
 public abstract class BaseEnemy {
 

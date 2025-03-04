@@ -33,7 +33,7 @@ import com.mygdx.platformer.utilities.AppConfig;
  */
 public class GameScreen extends ScreenAdapter {
     /** Reference to the main game instance to allow screen switching. */
-    private PlatformerGame game;
+    private final PlatformerGame game;
 
     /** The Box2D physics world for managing physics interactions. */
     private World world;

@@ -1,7 +1,6 @@
 package com.mygdx.platformer.characters.enemies;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -32,26 +31,8 @@ public class Necromancer extends BaseEnemy {
      */
     public Necromancer(World world, Vector2 position) {
         super(world, position, AppConfig.NECROMANCER_HEALTH,
-            AppConfig.NECROMANCER_ATTACK_POWER, AppConfig.NECROMANCER_SPEED);
-    }
-
-    /**
-     * Renders the necromancer on the screen, ensuring it faces the correct direction.
-     *
-     * @param batch The sprite batch used for rendering.
-     */
-    @Override
-    public void render(SpriteBatch batch) {
-        boolean flip = !facingRight;
-        int offsetModifier = flip ? -1 : 1;
-
-        batch.draw(
-            currentFrame,
-            body.getPosition().x - AppConfig.NECROMANCER_WIDTH * offsetModifier,
-            body.getPosition().y - AppConfig.NECROMANCER_HITBOX_SIZE_Y,
-            AppConfig.NECROMANCER_WIDTH * AppConfig.NECROMANCER_SCALE * offsetModifier,
-            AppConfig.NECROMANCER_HEIGHT * AppConfig.NECROMANCER_SCALE
-        );
+            AppConfig.NECROMANCER_SPEED, AppConfig.NECROMANCER_WIDTH,
+            AppConfig.NECROMANCER_HEIGHT);
     }
 
     /**
@@ -93,5 +74,14 @@ public class Necromancer extends BaseEnemy {
     protected Vector2 getHitBoxSize() {
         return new Vector2(AppConfig.NECROMANCER_HITBOX_SIZE_X,
             AppConfig.NECROMANCER_HITBOX_SIZE_Y);
+    }
+
+    /**
+     * Accessor method for getting the sprite scale
+     * @return The scaling factor for the necromancer sprite.
+     */
+    @Override
+    protected float getScale() {
+        return AppConfig.NECROMANCER_SCALE;
     }
 }

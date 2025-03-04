@@ -33,7 +33,7 @@ import com.mygdx.platformer.utilities.AppConfig;
  */
 public class GameScreen extends ScreenAdapter {
     /** Reference to the main game instance to allow screen switching. */
-    private PlatformerGame game;
+    private final PlatformerGame game;
 
     /** The Box2D physics world for managing physics interactions. */
     private World world;
@@ -102,8 +102,10 @@ public class GameScreen extends ScreenAdapter {
         platformGenerator = new PlatformGenerator(world, enemyManager);
 
 
-        player = new Player(world, AppConfig.PLAYER_SPAWN_X,
-            AppConfig.PLAYER_SPAWN_Y, attackManager);
+        player = new Player(world, new Vector2(AppConfig.PLAYER_SPAWN_X,
+            AppConfig.PLAYER_SPAWN_Y),AppConfig.PLAYER_HP,
+            AppConfig.PLAYER_MOVE_SPEED,
+            attackManager);
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 
         // createGround();

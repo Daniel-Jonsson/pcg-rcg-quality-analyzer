@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.attacks.AttackManager;
+import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
@@ -22,14 +23,7 @@ import com.mygdx.platformer.utilities.Assets;
  * @author Robert Kullman
  * @author Daniel Jönsson
  */
-public class Player {
-
-
-    /** The Box2D physics body of the player. */
-    private final Body body;
-
-    /** The movement speed of the player. */
-    private float moveSpeed = AppConfig.PLAYER_MOVE_SPEED;
+public class Player extends BaseCharacter {
 
     /** The force applied when the player jumps. */
     private float jumpForce = AppConfig.PLAYER_JUMP_FORCE;
@@ -47,11 +41,6 @@ public class Player {
     /** Whether the jump button is currently being held down. */
     private boolean jumpHolding = false;
 
-    /** The player's movement direction (negative = left, positive = right, 0 =
-     * idle)
-     * . */
-    private float moveDirection = 0;
-
     /** Tracks whether the jump key was pressed in the last frame. */
     private boolean wasJumpKeyPressed = false;
 
@@ -62,104 +51,48 @@ public class Player {
     private AttackManager attackManager;
 
     /** Animation for the idle state. */
-    private final Animation<TextureRegion> idleAnimation;
+    private Animation<TextureRegion> idleAnimation;
 
     /** Animation for the walking state. */
-    private final Animation<TextureRegion> walkAnimation;
+    private Animation<TextureRegion> walkAnimation;
 
     /** Animation for the jumping state. */
-    private final Animation<TextureRegion> jumpAnimation;
+    private Animation<TextureRegion> jumpAnimation;
 
     /** Animation for the attacking state. */
-    private final Animation<TextureRegion> attackAnimation;
-
-    /** Tracks the elapsed time for animations. */
-    private float stateTime = 0f;
-
-    /** Indicates whether the player is facing right. */
-    private boolean facingRight = true;
+    private Animation<TextureRegion> attackAnimation;
 
     /** The texture atlas containing the player's animations. */
     private TextureAtlas playerAtlas;
-
-    /** The current animation frame displayed for the player. */
-    private TextureRegion currentFrame;
 
 
     /**
      * Instantiates the player in the game world.
      * @param world The Box2D world.
-     * @param x Starting x-coordinate where the player spawns.
-     * @param y Starting y-coordinate where the player spawns.
+     * @param position The player position.
+     * @param health The player health.
+     * @param movementSpeed The movement speed of the player.
      * @param manager the AttackManager for spawning attacks.
      */
-    public Player(World world, final float x, final float y, AttackManager manager) {
+    public Player(World world, Vector2 position,
+                  int health, float movementSpeed, AttackManager manager) {
+        super(world, position, health, movementSpeed, AppConfig.PLAYER_WIDTH,
+            AppConfig.PLAYER_HEIGHT);
         this.attackManager = manager;
-
-        playerAtlas = Assets.getPlayerAtlas();
-
-        idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION, playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
-        walkAnimation = new Animation<>(AppConfig.WALK_FRAME_DURATION, playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
-        jumpAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION, playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
-        attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION, playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
-
-        currentFrame = idleAnimation.getKeyFrame(0);
-
-
-
-        // physics body
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x, y);
-        bodyDef.fixedRotation = true;
-        body = world.createBody(bodyDef); // add player body to game world
-
-        // collision box
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(AppConfig.PLAYER_HITBOX_SIZE_X, AppConfig.PLAYER_HITBOX_SIZE_Y);
-
-        // attach the polygon shape to the body
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        fixtureDef.friction = 1f;
-        fixtureDef.restitution = 0f;
-
-        fixtureDef.filter.categoryBits = AppConfig.CATEGORY_PLAYER; // the collision category for the player
-        fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ENEMY; // this sets what the player will collide with
-
-        body.createFixture(fixtureDef);
-        shape.dispose();
 
         MassData massData = new MassData();
         massData.mass = AppConfig.PLAYER_MASS;
         body.setMassData(massData);
-    }
-
-    /**
-     * Renders the player sprite.
-     * @param batch SpriteBatch for rendering.
-     */
-    public void render(SpriteBatch batch) {
-        boolean flip = !facingRight;
-        int offsetModifier = flip ? -1 : 1;
-
-        batch.draw(currentFrame,
-            body.getPosition().x - AppConfig.PLAYER_WIDTH * offsetModifier,
-            body.getPosition().y - AppConfig.PLAYER_HITBOX_SIZE_Y,
-            AppConfig.PLAYER_WIDTH * AppConfig.PLAYER_SCALE * offsetModifier,
-            AppConfig.PLAYER_HEIGHT * AppConfig.PLAYER_SCALE
-        );
+        facingRight = true;
     }
 
     /**
      * Updates the player state.
      * @param deltaTime time since last frame.
      */
+    @Override
     public void update(float deltaTime) {
-        stateTime += deltaTime;
-
-        body.setLinearVelocity(moveDirection, body.getLinearVelocity().y);
+        super.update(deltaTime);
 
         if (jumpRequested) {
             body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
@@ -187,6 +120,26 @@ public class Player {
 
     }
 
+    /**
+     * Sets up the animations for the Player. Loads the sprite regions
+     * specified in the atlas.
+     */
+    @Override
+    protected void setupAnimations() {
+        playerAtlas = Assets.getPlayerAtlas();
+
+        idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
+            playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
+        walkAnimation = new Animation<>(AppConfig.WALK_FRAME_DURATION,
+            playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
+        jumpAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
+            playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
+        attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION,
+            playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
+
+        currentFrame = idleAnimation.getKeyFrame(0);
+
+    }
 
     /**
      * Handles player input.
@@ -195,10 +148,10 @@ public class Player {
         moveDirection = 0;
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            moveDirection = -moveSpeed;
+            moveDirection = -1;
             facingRight = false;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            moveDirection = moveSpeed;
+            moveDirection = 1;
             facingRight = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
@@ -243,5 +196,45 @@ public class Player {
      */
     public Body getBody() {
         return body;
+    }
+
+    /**
+     * Must be implemented by subclasses to define their hitbox size.
+     *
+     * @return A {@code Vector2} representing the hitbox width and height.
+     */
+    @Override
+    protected Vector2 getHitBoxSize() {
+        return new Vector2(AppConfig.PLAYER_HITBOX_SIZE_X,
+            AppConfig.PLAYER_HITBOX_SIZE_Y);
+    }
+
+    /**
+     * Returns the collision category for the character.
+     *
+     * @return A short representing the collision category.
+     */
+    @Override
+    protected short getCollisionCategory() {
+        return AppConfig.CATEGORY_PLAYER;
+    }
+
+    /**
+     * Returns the collision mask for the character.
+     *
+     * @return A short representing what the character can collide with.
+     */
+    @Override
+    protected short getCollisionMask() {
+        return AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ATTACK | AppConfig.CATEGORY_ENEMY;
+    }
+
+    /**
+     * Returns the player scale used for rendering sprites.
+     * @return The player scale.
+     */
+    @Override
+    protected float getScale() {
+        return AppConfig.PLAYER_SCALE;
     }
 }

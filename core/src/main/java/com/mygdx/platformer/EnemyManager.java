@@ -72,6 +72,7 @@ public class EnemyManager {
     public void render(SpriteBatch batch) {
         for (BaseEnemy enemy : enemies) {
             enemy.render(batch);
+            enemy.renderHealthBar(batch);
         }
     }
 

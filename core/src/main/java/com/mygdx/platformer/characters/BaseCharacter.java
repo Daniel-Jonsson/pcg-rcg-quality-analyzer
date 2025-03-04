@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 
 /**
  * Abstract class representing a base character with shared logic for both
- * players and enemies. Handles physics, health, rendering, and movement.
+ * players and enemies. Handles physics, maxHealth, rendering, and movement.
  *
  * @author Daniel Jönsson, Robert Kullman
  */
@@ -16,7 +16,9 @@ public abstract class BaseCharacter implements CharacterActions {
     /** The physics body of the character. */
     protected Body body;
     /** The hit points of the character. */
-    protected int health;
+    protected int maxHealth;
+
+    protected int currentHealth;
     /** The movement speed of the character. */
     protected float movementSpeed;
     /** Whether the character is dead. */
@@ -30,9 +32,9 @@ public abstract class BaseCharacter implements CharacterActions {
     /** The current animation frame of the character. */
     protected TextureRegion currentFrame;
     /** The width of the character. */
-    private final float width;
+    protected final float width;
     /** The height of the character. */
-    private final float height;
+    protected final float height;
     /** The hitbox dimensions of the character. */
     private final Vector2 hitBox;
     /** The scale of the character. */
@@ -44,14 +46,14 @@ public abstract class BaseCharacter implements CharacterActions {
      *
      * @param world The Box2D world.
      * @param position The initial position of the character.
-     * @param health The health points of the character.
+     * @param maxHealth The maxHealth points of the character.
      * @param movementSpeed The movement speed of the character.
      * @param width The width of the character.
      * @param height The height of the character.
      */
-    public BaseCharacter(World world, Vector2 position, int health,
+    public BaseCharacter(World world, Vector2 position, int maxHealth,
                          float movementSpeed, float width, float height) {
-        this.health = health;
+        this.maxHealth = this.currentHealth = maxHealth;
         this.movementSpeed = movementSpeed;
         this.isDead = false;
         this.width = width;
@@ -120,14 +122,15 @@ public abstract class BaseCharacter implements CharacterActions {
     }
 
     /**
-     * Reduces health when taking damage and checks if the character is dead.
+     * Reduces maxHealth when taking damage and checks if the character is dead.
      *
      * @param damage The damage taken.
      */
     @Override
     public void takeDamage(int damage) {
-        health -= damage;
-        if (health <= 0) {
+        currentHealth -= damage;
+        if (currentHealth < 0) {
+            currentHealth = 0;
             isDead = true;
         }
     }
@@ -135,7 +138,7 @@ public abstract class BaseCharacter implements CharacterActions {
     /**
      * Checks if the character is dead.
      *
-     * @return {@code true} if the character has 0 or negative health,
+     * @return {@code true} if the character has 0 or negative maxHealth,
      * otherwise {@code false}.
      */
     @Override

@@ -95,6 +95,9 @@ public final class AppConfig {
     /** Player mass for physics simulation. */
     public static final float PLAYER_MASS = 0.35f;
 
+    /** Player hitpoints */
+    public static final int PLAYER_HP = 500;
+
     /* Procedural Content Generation (PCG) */
 
     /** Minimum gap between platforms. */
@@ -174,7 +177,7 @@ public final class AppConfig {
     /* Goblin Enemy Configuration */
 
     public static final int GOBLIN_ATTACK_POWER = 15;
-    public static final int GOBLIN_HEALTH = 30;
+    public static final int GOBLIN_HEALTH = 250;
     public static final float GOBLIN_SPEED = 1f;
     public static final float GOBLIN_SCALE = 1.5f;
     public static final float GOBLIN_WIDTH = 0.5f;
@@ -185,7 +188,7 @@ public final class AppConfig {
     /* Necromancer Enemy Configuration */
 
     public static final int NECROMANCER_ATTACK_POWER = 20;
-    public static final int NECROMANCER_HEALTH = 20;
+    public static final int NECROMANCER_HEALTH = 400;
     public static final float NECROMANCER_SPEED = 0.5f;
     public static final float NECROMANCER_SCALE = 3f;
     public static final float NECROMANCER_WIDTH = 0.5f;

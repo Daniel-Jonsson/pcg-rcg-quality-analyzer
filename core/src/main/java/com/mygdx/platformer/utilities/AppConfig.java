@@ -215,4 +215,8 @@ public final class AppConfig {
     public static final float STANDARD_FRAME_DURATION = 0.1f;
     public static final float WALK_FRAME_DURATION = 0.15f;
     public static final float ATTACK_FRAME_DURATION = 0.1f;
+
+    /* HealthBar */
+    public static final float HEALTHBAR_SPRITE_WIDTH = 1.5f;
+    public static final float HEALTHBAR_SPRITE_HEIGHT = 0.3f;
 }

@@ -32,27 +32,8 @@ public class Goblin extends BaseEnemy {
      * @param position The initial position of the goblin.
      */
     public Goblin(World world, Vector2 position) {
-        super(world, position, AppConfig.GOBLIN_HEALTH, AppConfig.GOBLIN_ATTACK_POWER, AppConfig.GOBLIN_SPEED);
-    }
-
-    /**
-     * Renders the goblin on the screen, ensuring it faces the correct
-     * direction.
-     *
-     * @param batch The sprite batch used for rendering.
-     */
-    @Override
-    public void render(SpriteBatch batch) {
-        boolean flip = !facingRight;
-        int offsetModifier = flip ? -1 : 1;
-
-        batch.draw(
-            currentFrame,
-            body.getPosition().x - AppConfig.GOBLIN_WIDTH * offsetModifier,
-            body.getPosition().y - AppConfig.GOBLIN_HITBOX_SIZE_Y,
-            AppConfig.GOBLIN_WIDTH * AppConfig.GOBLIN_SCALE * offsetModifier,
-            AppConfig.GOBLIN_HEIGHT * AppConfig.GOBLIN_SCALE
-        );
+        super(world, position, AppConfig.GOBLIN_HEALTH,
+            AppConfig.GOBLIN_SPEED, AppConfig.GOBLIN_WIDTH, AppConfig.GOBLIN_HEIGHT);
     }
 
     /**
@@ -97,6 +78,15 @@ public class Goblin extends BaseEnemy {
     @Override
     protected Vector2 getHitBoxSize() {
         return new Vector2(AppConfig.GOBLIN_HITBOX_SIZE_X, AppConfig.GOBLIN_HITBOX_SIZE_Y);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @return
+     */
+    @Override
+    protected float getScale() {
+        return AppConfig.GOBLIN_SCALE;
     }
 
 }

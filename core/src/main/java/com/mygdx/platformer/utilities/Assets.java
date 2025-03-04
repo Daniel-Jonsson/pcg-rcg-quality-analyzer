@@ -21,6 +21,8 @@ public final class Assets {
     /** File path for the player texture. */
     public static final String PLAYER_TEXTURE = "textures/player.png";
 
+    public static final String HEALTHBAR_TEXTURE = "textures/healthbar.png";
+
     /** File path for the throwing dagger texture. */
     public static final String THROWING_DAGGER_TEXTURE = "textures/throwing_dagger.png";
 

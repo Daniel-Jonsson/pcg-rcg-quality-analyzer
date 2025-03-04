@@ -66,7 +66,7 @@ public class Player extends BaseCharacter {
      * Instantiates the player in the game world.
      * @param world The Box2D world.
      * @param position The player position.
-     * @param health The player health.
+     * @param health The player maxHealth.
      * @param movementSpeed The movement speed of the player.
      * @param manager the AttackManager for spawning attacks.
      */

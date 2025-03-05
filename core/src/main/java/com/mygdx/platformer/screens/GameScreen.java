@@ -87,8 +87,8 @@ public class GameScreen extends ScreenAdapter {
         world = new World(new Vector2(0, AppConfig.GRAVITY), true); // init world and set y gravity to -10
 
         Vector2 spawnPosition = new Vector2(AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
-        this.enemyManager = new EnemyManager(world, attackManager, spawnPosition);
         this.attackManager = new AttackManager(world);
+        this.enemyManager = new EnemyManager(world, attackManager, spawnPosition);
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();

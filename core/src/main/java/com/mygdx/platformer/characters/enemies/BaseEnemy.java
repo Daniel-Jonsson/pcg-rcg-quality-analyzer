@@ -76,12 +76,6 @@ public abstract class BaseEnemy extends BaseCharacter {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        moveTime += deltaTime;
-        if (moveTime >= switchTime) {
-            moveDirection *= -1;
-            moveTime = 0; // Reset movement timer
-            facingRight = moveDirection > 0;
-        }
     }
 
     /**
@@ -117,5 +111,6 @@ public abstract class BaseEnemy extends BaseCharacter {
      */
     public void setMoveDirection(float moveDirection) {
         this.moveDirection = moveDirection;
+        facingRight = moveDirection > 0;
     }
 }

@@ -151,4 +151,14 @@ public abstract class BaseAttack {
     public int getDamage() {
         return damage;
     }
+
+    /**
+     * Checks if the attack is a player attack.
+     *
+     * @return {@code true} if the attack is a player attack, otherwise {@code
+     * false}.
+     */
+    public boolean isPlayerAttack() {
+        return isPlayerAttack;
+    }
 }

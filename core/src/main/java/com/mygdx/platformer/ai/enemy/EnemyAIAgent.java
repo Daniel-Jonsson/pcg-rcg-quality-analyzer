@@ -30,8 +30,10 @@ public class EnemyAIAgent extends AIAgent {
     @Override
     public void update(float deltaTime) {
         updateTargetDistance();
-        behaviorTree.resetTask();
-        behaviorTree.step();
+        if (behaviorTree != null) {
+            behaviorTree.resetTask();
+            behaviorTree.step();
+        }
     }
 
     private void setupBehaviorTree() {

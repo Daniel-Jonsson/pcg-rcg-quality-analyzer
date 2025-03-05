@@ -5,6 +5,7 @@ import com.badlogic.gdx.ai.btree.branch.Selector;
 import com.badlogic.gdx.ai.btree.branch.Sequence;
 import com.mygdx.platformer.ai.AIAgent;
 import com.mygdx.platformer.ai.tasks.CharacterInRangeTask;
+import com.mygdx.platformer.ai.tasks.PursueTask;
 import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.BaseCharacter;
 
@@ -40,7 +41,12 @@ public class EnemyAIAgent extends AIAgent {
         attackSequence.addChild(new CharacterInRangeTask(true));
         
         root.addChild(attackSequence);
-        
+
+        Sequence<AIAgent> pursueSequence = new Sequence<>();
+        pursueSequence.addChild(new CharacterInRangeTask(false));
+        pursueSequence.addChild(new PursueTask());
+        root.addChild(pursueSequence);
+
         behaviorTree = new BehaviorTree<>(root);
         behaviorTree.setObject(this);
     }

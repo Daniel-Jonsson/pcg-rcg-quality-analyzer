@@ -3,9 +3,12 @@ package com.mygdx.platformer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.ai.enemy.EnemyAIAgent;
+import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.characters.enemies.Goblin;
 import com.mygdx.platformer.characters.enemies.Necromancer;
+import com.mygdx.platformer.utilities.AppConfig;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,8 +28,17 @@ public class EnemyManager {
     /** The Box2D world where enemies exist. */
     private World world;
 
+    /** The attack manager for the game. */
+    private AttackManager attackManager;
+
     /** List of active enemies in the game. */
     private List<BaseEnemy> enemies;
+
+    /** List of active AI agents in the game. */
+    private List<EnemyAIAgent> aiAgents;
+
+    /** The target position for the enemies to pursue. */
+    private Vector2 targetPosition;
 
     /** Random number generator used for determining enemy types when
      * spawning. */
@@ -38,10 +50,13 @@ public class EnemyManager {
      *
      * @param world The Box2D world where enemies will be spawned and updated.
      */
-    public EnemyManager(World world) {
+    public EnemyManager(World world, AttackManager attackManager, Vector2 targetPosition) {
         this.world = world;
         this.enemies = new ArrayList<>();
+        this.aiAgents = new ArrayList<>();
         this.random = new Random();
+        this.attackManager = attackManager;
+        this.targetPosition = targetPosition;
     }
 
     /**
@@ -52,14 +67,24 @@ public class EnemyManager {
      *                 created.
      */
     public void spawnEnemyAt(Vector2 position) {
-
+        BaseEnemy enemy;
+        float detectionRange;
+        float attackRange;
+        float attackCooldown;
         if (random.nextBoolean()) {
-            Goblin goblin = new Goblin(world, position);
-            enemies.add(goblin);
+            enemy = new Goblin(world, position);
+            detectionRange = AppConfig.GOBLIN_DETECTION_RANGE;
+            attackRange = AppConfig.GOBLIN_ATTACK_RANGE;
+            attackCooldown = AppConfig.GOBLIN_ATTACK_COOLDOWN;
         } else {
-            Necromancer necromancer = new Necromancer(world, position);
-            enemies.add(necromancer);
+            enemy = new Necromancer(world, position);
+            detectionRange = AppConfig.NECROMANCER_DETECTION_RANGE;
+            attackRange = AppConfig.NECROMANCER_ATTACK_RANGE;
+            attackCooldown = AppConfig.NECROMANCER_ATTACK_COOLDOWN;
         }
+
+        enemies.add(enemy);
+        aiAgents.add(new EnemyAIAgent(enemy, detectionRange, attackRange, attackManager, attackCooldown));
 
         System.out.println("Spawned enemy at " + position);
     }
@@ -85,14 +110,25 @@ public class EnemyManager {
      */
     public void update(float deltaTime) {
         Iterator<BaseEnemy> iterator = enemies.iterator();
-        while (iterator.hasNext()) {
+        Iterator<EnemyAIAgent> aiIterator = aiAgents.iterator();
+        while (iterator.hasNext() && aiIterator.hasNext()) {
             BaseEnemy enemy = iterator.next();
-            enemy.update(deltaTime);
+            EnemyAIAgent aiAgent = aiIterator.next();
             if (enemy.isDead()) {
-                iterator.remove();
                 world.destroyBody(enemy.getBody());
+                iterator.remove();
+                aiIterator.remove();
+                continue;
             }
+            aiAgent.setTargetPosition(targetPosition);
+            aiAgent.update(deltaTime);
+            enemy.update(deltaTime);
         }
+    }
+
+
+    public void setTargetPosition(Vector2 targetPosition) {
+        this.targetPosition = targetPosition;
     }
 
 }

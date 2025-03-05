@@ -132,6 +132,7 @@ public class GameScreen extends ScreenAdapter {
             doPhysicsStep(deltaTime);
             attackManager.update(camera.position.x,
                 AppConfig.SCREEN_WIDTH);
+            enemyManager.setTargetPosition(player.getBody().getPosition());
             enemyManager.update(deltaTime);
         }
 

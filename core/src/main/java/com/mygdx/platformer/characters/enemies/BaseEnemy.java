@@ -109,4 +109,13 @@ public abstract class BaseEnemy extends BaseCharacter {
      * hitbox.
      */
     protected abstract Vector2 getHitBoxSize();
+
+
+    /**
+     * Sets the move direction of the enemy.
+     * @param moveDirection The new move direction.
+     */
+    public void setMoveDirection(float moveDirection) {
+        this.moveDirection = moveDirection;
+    }
 }

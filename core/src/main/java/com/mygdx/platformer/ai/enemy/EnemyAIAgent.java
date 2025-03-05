@@ -18,6 +18,7 @@ public class EnemyAIAgent extends AIAgent {
         super(character, detectionRange, attackRange);
         this.attackManager = attackManager;
         this.attackCooldown = attackCooldown;
+        setupBehaviorTree();
     }
 
     /**

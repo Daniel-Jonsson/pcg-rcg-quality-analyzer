@@ -305,6 +305,20 @@ public class GameScreen extends ScreenAdapter {
                         enemy.takeDamage(attack.getDamage());
                     }
                 }
+
+                // Player -> Enemy collision
+                if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
+                    && b.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)
+                    || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
+                    && a.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)) {
+                        BaseAttack attack = (aUserData instanceof BaseAttack) ? (BaseAttack)aUserData
+                            : (BaseAttack) bUserData;
+
+                    if (!attack.isPlayerAttack()) {
+                        attack.setShouldRemove(true);
+                        player.takeDamage(attack.getDamage());
+                    }
+                }
             }
 
             @Override

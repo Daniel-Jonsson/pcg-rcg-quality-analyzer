@@ -86,7 +86,8 @@ public class GameScreen extends ScreenAdapter {
     public void show() {
         world = new World(new Vector2(0, AppConfig.GRAVITY), true); // init world and set y gravity to -10
 
-        this.enemyManager = new EnemyManager(world);
+        Vector2 spawnPosition = new Vector2(AppConfig.PLAYER_SPAWN_X, AppConfig.PLAYER_SPAWN_Y);
+        this.enemyManager = new EnemyManager(world, attackManager, spawnPosition);
         this.attackManager = new AttackManager(world);
 
         batch = new SpriteBatch();
@@ -102,8 +103,7 @@ public class GameScreen extends ScreenAdapter {
         platformGenerator = new PlatformGenerator(world, enemyManager);
 
 
-        player = new Player(world, new Vector2(AppConfig.PLAYER_SPAWN_X,
-            AppConfig.PLAYER_SPAWN_Y),AppConfig.PLAYER_HP,
+        player = new Player(world, spawnPosition,AppConfig.PLAYER_HP,
             AppConfig.PLAYER_MOVE_SPEED,
             attackManager);
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());

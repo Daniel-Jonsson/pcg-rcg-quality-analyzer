@@ -81,6 +81,13 @@ public abstract class AIAgent {
     }
 
     /**
+     * @return The character that the AI is controlling
+     */
+    public BaseCharacter getCharacter() {
+        return character;
+    }
+
+    /**
      * @return The current target position
      */
     public Vector2 getTargetPosition() {

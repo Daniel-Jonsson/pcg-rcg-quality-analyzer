@@ -39,12 +39,22 @@ public class AttackManager {
      * @param position The position where the attack should be created.
      * @param directionModifier The direction in which the attack moves (e.g
      *                          ., -1 for left, 1 for right).
+     * @param isPlayerAttack Whether the attack is a player attack.
      */
-    public void spawnAttackAt(Vector2 position, int directionModifier) {
-        OrbAttack orbAttack = new OrbAttack(world, position.x, position.y, orbTexture, directionModifier);
+    private void spawnAttackAt(Vector2 position, int directionModifier, boolean isPlayerAttack) {
+        OrbAttack orbAttack = new OrbAttack(world, position.x, position.y, orbTexture, directionModifier, isPlayerAttack);
         attacks.add(orbAttack);
-        System.out.println("Spawned orb at " + position);
     }
+
+
+    public void spawnEnemyAttackAt(Vector2 position, int directionModifier) {
+        spawnAttackAt(position, directionModifier, false);
+    }
+
+    public void spawnAttackAt(Vector2 position, int directionModifier) {
+        spawnAttackAt(position, directionModifier, true);
+    }
+
 
     /**
      * Updates all active attacks, removing any that should be destroyed. In

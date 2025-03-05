@@ -20,9 +20,10 @@ public class OrbAttack extends BaseAttack {
      * @param texture The texture representing the orb's appearance.
      * @param directionModifier The direction in which the orb moves (e.g.,
      *                          -1 for left, 1 for right).
+     * @param isPlayerAttack Whether the attack is a player attack.
      */
-    public OrbAttack(World world, float x, float y, Texture texture, int directionModifier) {
-        super(world, 20, 7 * directionModifier, x, y, texture);
+    public OrbAttack(World world, float x, float y, Texture texture, int directionModifier, boolean isPlayerAttack) {
+        super(world, 20, 7 * directionModifier, x, y, texture, isPlayerAttack);
         super.body.setUserData(this);
     }
 }

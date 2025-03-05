@@ -46,7 +46,7 @@ public class AttackTask extends LeafTask<AIAgent> {
 
         int direction = targetPosition.x > character.getBody().getPosition().x ? 1 : -1;
 
-        attackManager.spawnAttackAt(character.getBody().getPosition(), direction);
+        attackManager.spawnEnemyAttackAt(character.getBody().getPosition(), direction);
 
         lastAttackTime = currentTime;
 

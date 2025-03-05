@@ -40,11 +40,6 @@ public class EnemyAIAgent extends AIAgent {
     private void setupBehaviorTree() {
         Selector<AIAgent> root = new Selector<>();
 
-        Sequence<AIAgent> attackSequence = new Sequence<>();
-        attackSequence.addChild(new CharacterInRangeTask(true));
-        
-        root.addChild(attackSequence);
-
         Sequence<AIAgent> pursueSequence = new Sequence<>();
         pursueSequence.addChild(new CharacterInRangeTask(false));
         pursueSequence.addChild(new PursueTask());

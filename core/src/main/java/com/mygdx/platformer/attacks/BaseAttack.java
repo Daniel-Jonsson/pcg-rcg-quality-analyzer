@@ -27,6 +27,7 @@ public abstract class BaseAttack {
     protected boolean shouldRemove;
     protected final World world;
     protected final Body body;
+    protected boolean isPlayerAttack;
 
     /**
      * Constructs a new attack instance with specified parameters.
@@ -37,11 +38,13 @@ public abstract class BaseAttack {
      * @param x The initial x-coordinate of the attack.
      * @param y The initial y-coordinate of the attack.
      * @param texture The texture used for the attack's sprite.
+     * @param isPlayerAttack Whether the attack is a player attack.
      */
     public BaseAttack(World world, int damage, float speed, float x, float y,
-                      Texture texture) {
+                      Texture texture, boolean isPlayerAttack) {
         this.world = world;
         this.damage = damage;
+        this.isPlayerAttack = isPlayerAttack;
         this.speed = speed;
         this.x = x;
         this.y = y;
@@ -62,7 +65,12 @@ public abstract class BaseAttack {
         fixtureDef.shape = shape;
         fixtureDef.isSensor = true;
         fixtureDef.filter.categoryBits = AppConfig.CATEGORY_ATTACK;
-        fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ENEMY;
+
+        if (isPlayerAttack) {
+            fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ENEMY;
+        } else {
+            fixtureDef.filter.maskBits = AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_PLAYER;
+        }
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -77,11 +85,12 @@ public abstract class BaseAttack {
      * @param x The initial x-coordinate of the attack.
      * @param y The initial y-coordinate of the attack.
      * @param texture The texture used for the attack's sprite.
+     * @param isPlayerAttack Whether the attack is a player attack.
      */
-    public BaseAttack(World world, float x, float y, Texture texture) {
+    public BaseAttack(World world, float x, float y, Texture texture, boolean isPlayerAttack) {
         this(world, AppConfig.BASE_ATTACK_DEFAULT_DMG,
             AppConfig.BASE_ATTACK_DEFAULT_SPEED, x, y,
-            texture);
+            texture, isPlayerAttack);
     }
 
     /**
@@ -141,5 +150,15 @@ public abstract class BaseAttack {
      */
     public int getDamage() {
         return damage;
+    }
+
+    /**
+     * Checks if the attack is a player attack.
+     *
+     * @return {@code true} if the attack is a player attack, otherwise {@code
+     * false}.
+     */
+    public boolean isPlayerAttack() {
+        return isPlayerAttack;
     }
 }

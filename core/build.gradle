@@ -6,6 +6,7 @@ dependencies {
   api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion" // Optional: Add if core uses Box2D directly
   api "com.github.tommyettinger:libgdx-utils-box2d:$utilsBox2dVersion"
   api "com.github.tommyettinger:libgdx-utils:$utilsVersion"
+  api "com.badlogicgames.gdx:gdx-ai:1.8.2"
   implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 
   if(enableGraalNative == 'true') {

@@ -78,7 +78,19 @@ public abstract class BaseEnemy extends BaseCharacter {
      */
     @Override
     public void update(float deltaTime) {
-        super.update(deltaTime);
+        stateTime += deltaTime;
+
+        if (isGrounded()) {
+            body.setLinearVelocity(moveDirection * movementSpeed, body.getLinearVelocity().y);
+        } else {
+            float currentXVelocity = getBody().getLinearVelocity().x;
+            float currentYVelocity = getBody().getLinearVelocity().y;
+
+            if (Math.abs(currentXVelocity) < movementSpeed * 3) {
+                float direction = facingRight ? 1f : -1f;
+                body.setLinearVelocity(direction * (movementSpeed * 3), currentYVelocity);
+            }
+        }
 
         if (isAttacking) {
             attackAnimationTime += deltaTime;
@@ -87,6 +99,8 @@ public abstract class BaseEnemy extends BaseCharacter {
             }
         }
     }
+
+
 
     /**
      * Gets the collision category for enemies
@@ -126,12 +140,12 @@ public abstract class BaseEnemy extends BaseCharacter {
 
     /**
      * Uses raycasting to check if the enemy unit is nearing an edge.
-     * @param direction
+     * @param direction indicates the direction in which to check for ground.
      * @return
      */
     public boolean isGroundAhead(float direction) {
         Vector2 enemyPosition = getBody().getPosition();
-        float rayLength = 1f;
+        float rayLength = 1.5f;
 
         Vector2 rayStart = new Vector2(enemyPosition.x + (direction * 0.5f), enemyPosition.y);
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
@@ -178,6 +192,40 @@ public abstract class BaseEnemy extends BaseCharacter {
 
     public void setFacingDirection(float moveDirection) {
         facingRight = moveDirection > 0;
+    }
+
+    public boolean canJumpToPlatform(float direction) {
+        Vector2 enemyPosition = getBody().getPosition();
+        float jumpCheckDistance = 10f;
+
+        Vector2 rayStart = new Vector2(enemyPosition.x + (direction * jumpCheckDistance), enemyPosition.y);
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - 1.0f);
+
+        return checkForGround(rayStart, rayEnd);
+    }
+
+    public void jump() {
+        if (isGrounded()) {
+            float jumpForce = 30f;
+            float forwardBoost = 5f;
+
+            float forwardDirection = facingRight ? 1f : -1f;
+
+            float currentXVelocity = getBody().getLinearVelocity().x;
+
+            getBody().applyLinearImpulse(new Vector2(currentXVelocity + (forwardDirection * forwardBoost), jumpForce),
+                getBody().getWorldCenter(), true);
+        }
+    }
+
+    public boolean isGrounded() {
+        Vector2 enemyPosition = getBody().getPosition();
+        float rayLength = 0.2f;
+
+        Vector2 rayStart = new Vector2(enemyPosition.x, enemyPosition.y - (height / 2));
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
+
+        return checkForGround(rayStart, rayEnd);
     }
 
 }

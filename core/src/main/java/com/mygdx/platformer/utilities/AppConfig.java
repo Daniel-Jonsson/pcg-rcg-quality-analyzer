@@ -165,7 +165,7 @@ public final class AppConfig {
     public static final float ENEMY_SPAWN_HEIGHT = 0.5f;
 
     /** Enemy mass for physics calculations. */
-    public static final float ENEMY_MASS = 100f;
+    public static final float ENEMY_MASS = 5f;
 
     /* Collision Categories */
 

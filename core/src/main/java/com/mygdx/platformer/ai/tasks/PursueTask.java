@@ -26,6 +26,7 @@ public class PursueTask extends LeafTask<AIAgent> {
 
         if (distanceToTarget <= 1.5f) {
             enemy.setMoveDirection(0);
+            enemy.setFacingDirection(targetPosition.x > enemyPosition.x ? 1f : -1f);
             return Status.RUNNING;
         }
 

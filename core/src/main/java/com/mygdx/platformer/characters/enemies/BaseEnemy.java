@@ -175,4 +175,8 @@ public abstract class BaseEnemy extends BaseCharacter {
         return 0.5f;
     }
 
+    public void setFacingDirection(float moveDirection) {
+        facingRight = moveDirection > 0;
+    }
+
 }

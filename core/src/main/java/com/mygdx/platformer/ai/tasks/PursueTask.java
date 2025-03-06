@@ -23,12 +23,16 @@ public class PursueTask extends LeafTask<AIAgent> {
         Vector2 enemyPosition = enemy.getBody().getPosition();
 
         float distanceToTarget = enemyPosition.dst(targetPosition);
+        float targetDirection = targetPosition.x > enemyPosition.x ? 1f : -1f;
 
-        if (distanceToTarget <= 1.5f) {
+
+        if (distanceToTarget <= 1.5f || !enemy.isGroundAhead(targetDirection)) {
             enemy.setMoveDirection(0);
             enemy.setFacingDirection(targetPosition.x > enemyPosition.x ? 1f : -1f);
             return Status.RUNNING;
         }
+
+
 
         float pursueDirection = targetPosition.x > enemyPosition.x ? 1f : -1f;
         enemy.setMoveDirection(pursueDirection);

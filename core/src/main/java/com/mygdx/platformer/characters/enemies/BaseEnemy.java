@@ -165,6 +165,7 @@ public abstract class BaseEnemy extends BaseCharacter {
     }
 
     protected abstract void onAttackStart();
+
     protected abstract void onAttackEnd();
 
     public boolean isAttacking() {

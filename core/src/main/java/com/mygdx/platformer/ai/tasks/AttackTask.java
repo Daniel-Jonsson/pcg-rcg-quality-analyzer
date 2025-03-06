@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.platformer.ai.AIAgent;
 import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.BaseCharacter;
+import com.mygdx.platformer.characters.enemies.BaseEnemy;
 
 public class AttackTask extends LeafTask<AIAgent> {
     private float attackCooldown;
@@ -25,6 +26,7 @@ public class AttackTask extends LeafTask<AIAgent> {
     public Status execute() {
         AIAgent agent = getObject();
         BaseCharacter character = agent.getCharacter();
+        BaseEnemy enemy = (BaseEnemy) agent.getCharacter();
         long lastAttackTime = attackCooldowns.getOrDefault(character, 0L);
 
         long currentTime = System.currentTimeMillis();
@@ -51,6 +53,7 @@ public class AttackTask extends LeafTask<AIAgent> {
         lastAttackTime = currentTime;
 
         attackCooldowns.put(character, lastAttackTime);
+        enemy.startAttack();
 
         return Status.SUCCEEDED;
     }
@@ -63,5 +66,5 @@ public class AttackTask extends LeafTask<AIAgent> {
         attackTask.attackCooldowns = new HashMap<>(attackCooldowns);
         return task;
     }
-    
+
 }

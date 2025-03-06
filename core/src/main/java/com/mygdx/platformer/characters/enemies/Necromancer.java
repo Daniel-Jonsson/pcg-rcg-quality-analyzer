@@ -44,7 +44,11 @@ public class Necromancer extends BaseEnemy {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        currentFrame = idleAnimation.getKeyFrame(stateTime);
+        if (isAttacking()) {
+            currentFrame = attackAnimation.getKeyFrame(stateTime, false);
+        } else {
+            currentFrame = idleAnimation.getKeyFrame(stateTime);
+        }
     }
 
     /**
@@ -60,7 +64,7 @@ public class Necromancer extends BaseEnemy {
             Animation.PlayMode.LOOP);
         attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION,
             textureAtlas.findRegions("necromancer_attack"),
-            Animation.PlayMode.LOOP);
+            Animation.PlayMode.NORMAL);
         currentFrame = idleAnimation.getKeyFrame(0);
     }
 
@@ -83,5 +87,20 @@ public class Necromancer extends BaseEnemy {
     @Override
     protected float getScale() {
         return AppConfig.NECROMANCER_SCALE;
+    }
+
+    protected float getAttackDuration() {
+        return attackAnimation.getAnimationDuration();
+    }
+
+    @Override
+    protected void onAttackStart() {
+
+        stateTime = 0;
+    }
+
+    @Override
+    protected void onAttackEnd() {
+        stateTime = 0;
     }
 }

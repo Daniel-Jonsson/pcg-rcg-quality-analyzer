@@ -24,6 +24,9 @@ public abstract class BaseEnemy extends BaseCharacter {
 
     private Sprite healthBarSprite;
 
+    protected boolean isAttacking = false;
+    private float attackAnimationTime;
+
 
     /**
      * Constructs a new enemy instance with the specified attributes.
@@ -76,6 +79,13 @@ public abstract class BaseEnemy extends BaseCharacter {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
+        if (isAttacking) {
+            attackAnimationTime += deltaTime;
+            if (attackAnimationTime >= getAttackDuration()) {
+                stopAttack();
+            }
+        }
     }
 
     /**
@@ -141,6 +151,28 @@ public abstract class BaseEnemy extends BaseCharacter {
         }, start, end);
 
         return isGrounded[0];
+    }
+
+    public void startAttack() {
+        isAttacking = true;
+        attackAnimationTime = 0; // Reset animation timer
+        onAttackStart();
+    }
+
+    public void stopAttack() {
+        isAttacking = false;
+        onAttackEnd();
+    }
+
+    protected abstract void onAttackStart();
+    protected abstract void onAttackEnd();
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    protected float getAttackDuration() {
+        return 0.5f;
     }
 
 }

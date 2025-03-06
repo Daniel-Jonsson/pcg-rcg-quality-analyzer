@@ -15,14 +15,24 @@ public class PursueTask extends LeafTask<AIAgent> {
         BaseCharacter character = agent.getCharacter();
         Vector2 targetPosition = agent.getTargetPosition();
 
+        if (targetPosition == null) {
+            return Status.FAILED;
+        }
+
         BaseEnemy enemy = (BaseEnemy) character;
+        Vector2 enemyPosition = enemy.getBody().getPosition();
 
-        float pursueDirection = targetPosition.x > enemy.getBody().getPosition().x ? 1f : -1f;
+        float distanceToTarget = enemyPosition.dst(targetPosition);
 
+        if (distanceToTarget <= 1.5f) {
+            enemy.setMoveDirection(0);
+            return Status.RUNNING;
+        }
+
+        float pursueDirection = targetPosition.x > enemyPosition.x ? 1f : -1f;
         enemy.setMoveDirection(pursueDirection);
 
         return Status.RUNNING;
-
     }
 
     @Override

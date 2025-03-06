@@ -17,19 +17,20 @@ public class PatrolTask extends LeafTask<AIAgent> {
     public Status execute() {
         AIAgent agent = getObject();
         BaseCharacter character = agent.getCharacter();
+
         if (character == null) {
             return Status.FAILED;
         }
-        
+
         BaseEnemy enemy = (BaseEnemy) character;
 
-        enemy.setMoveDirection(moveDirection);
-
-        patrolTime += Gdx.graphics.getDeltaTime();
-        if (patrolTime >= switchDirectionTime) {
-            moveDirection *= -1;
-            patrolTime = 0;
+        if (!enemy.isGroundAhead(moveDirection)) {
+            moveDirection *= -1; // Turn around
+            patrolTime = 0; // Reset patrol timer
+            return Status.RUNNING;
         }
+
+        enemy.setMoveDirection(moveDirection);
 
         return Status.RUNNING;
     }

@@ -20,9 +20,7 @@ import com.mygdx.platformer.utilities.Assets;
  * @author Daniel Jönsson, Robert Kullman
  */
 public abstract class BaseEnemy extends BaseCharacter {
-
-    private float moveTime = 0; // Tracks how long the enemy has moved in one direction, temporary for testing purposes
-    protected final float switchTime = 1f; // Time before switching direction,
+    World world;
 
     private Sprite healthBarSprite;
 
@@ -47,6 +45,8 @@ public abstract class BaseEnemy extends BaseCharacter {
         healthBarSprite = new Sprite(new Texture(Assets.HEALTHBAR_TEXTURE));
         healthBarSprite.setSize(AppConfig.HEALTHBAR_SPRITE_WIDTH,
             AppConfig.HEALTHBAR_SPRITE_HEIGHT);
+
+        this.world = world;
     }
 
     /**
@@ -113,4 +113,34 @@ public abstract class BaseEnemy extends BaseCharacter {
         this.moveDirection = moveDirection;
         facingRight = moveDirection > 0;
     }
+
+    /**
+     * Uses raycasting to check if the enemy unit is nearing an edge.
+     * @param direction
+     * @return
+     */
+    public boolean isGroundAhead(float direction) {
+        Vector2 enemyPosition = getBody().getPosition();
+        float rayLength = 1f;
+
+        Vector2 rayStart = new Vector2(enemyPosition.x + (direction * 0.5f), enemyPosition.y);
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
+
+        return checkForGround(rayStart, rayEnd);
+    }
+
+    private boolean checkForGround(Vector2 start, Vector2 end) {
+        final boolean[] isGrounded = {false};
+
+        world.rayCast((fixture, point, normal, fraction) -> {
+            if (fixture.getBody().getUserData() != null && fixture.getBody().getUserData().equals("ground")) {
+                isGrounded[0] = true;
+                return 0;
+            }
+            return -1;
+        }, start, end);
+
+        return isGrounded[0];
+    }
+
 }

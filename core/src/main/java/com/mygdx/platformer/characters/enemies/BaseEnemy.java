@@ -26,6 +26,7 @@ public abstract class BaseEnemy extends BaseCharacter {
 
     protected boolean isAttacking = false;
     private float attackAnimationTime;
+    private boolean hasJumped = false;
 
 
     /**
@@ -145,27 +146,15 @@ public abstract class BaseEnemy extends BaseCharacter {
      */
     public boolean isGroundAhead(float direction) {
         Vector2 enemyPosition = getBody().getPosition();
-        float rayLength = 1.5f;
+        float rayLength = 1f;
 
-        Vector2 rayStart = new Vector2(enemyPosition.x + (direction * 0.5f), enemyPosition.y);
+        Vector2 rayStart = new Vector2(enemyPosition.x + (direction * 0.2f), enemyPosition.y - (height/2));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
         return checkForGround(rayStart, rayEnd);
     }
 
-    private boolean checkForGround(Vector2 start, Vector2 end) {
-        final boolean[] isGrounded = {false};
 
-        world.rayCast((fixture, point, normal, fraction) -> {
-            if (fixture.getBody().getUserData() != null && fixture.getBody().getUserData().equals("ground")) {
-                isGrounded[0] = true;
-                return 0;
-            }
-            return -1;
-        }, start, end);
-
-        return isGrounded[0];
-    }
 
     public void startAttack() {
         isAttacking = true;
@@ -196,7 +185,7 @@ public abstract class BaseEnemy extends BaseCharacter {
 
     public boolean canJumpToPlatform(float direction) {
         Vector2 enemyPosition = getBody().getPosition();
-        float jumpCheckDistance = 10f;
+        float jumpCheckDistance = 6f;
 
         Vector2 rayStart = new Vector2(enemyPosition.x + (direction * jumpCheckDistance), enemyPosition.y);
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - 1.0f);
@@ -205,9 +194,10 @@ public abstract class BaseEnemy extends BaseCharacter {
     }
 
     public void jump() {
-        if (isGrounded()) {
-            float jumpForce = 30f;
-            float forwardBoost = 5f;
+        if (isGrounded() && !hasJumped) {
+            hasJumped = true;
+            float jumpForce = 70f;
+            float forwardBoost = 20f;
 
             float forwardDirection = facingRight ? 1f : -1f;
 
@@ -220,12 +210,27 @@ public abstract class BaseEnemy extends BaseCharacter {
 
     public boolean isGrounded() {
         Vector2 enemyPosition = getBody().getPosition();
-        float rayLength = 0.2f;
+        float rayLength = 1.0f;
 
         Vector2 rayStart = new Vector2(enemyPosition.x, enemyPosition.y - (height / 2));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
         return checkForGround(rayStart, rayEnd);
+    }
+
+    private boolean checkForGround(Vector2 start, Vector2 end) {
+        final boolean[] isGrounded = {false};
+
+        world.rayCast((fixture, point, normal, fraction) -> {
+            if (fixture.getBody().getUserData() != null && fixture.getBody().getUserData().equals("ground")) {
+                isGrounded[0] = true;
+
+                return 0;
+            }
+            return -1;
+        }, start, end);
+
+        return isGrounded[0];
     }
 
 }

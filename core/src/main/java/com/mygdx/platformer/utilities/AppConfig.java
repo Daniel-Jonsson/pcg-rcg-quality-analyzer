@@ -199,7 +199,7 @@ public final class AppConfig {
     public static final float NECROMANCER_HITBOX_SIZE_X = 0.4f;
     public static final float NECROMANCER_HITBOX_SIZE_Y = 0.65f;
     public static final float NECROMANCER_DETECTION_RANGE = 10f;
-    public static final float NECROMANCER_ATTACK_RANGE = 5f;
+    public static final float NECROMANCER_ATTACK_RANGE = 8;
     public static final float NECROMANCER_ATTACK_COOLDOWN = 4f;
 
     /* UI Text Strings */

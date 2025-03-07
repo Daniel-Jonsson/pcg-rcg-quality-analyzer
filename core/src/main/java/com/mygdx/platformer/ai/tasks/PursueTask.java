@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.platformer.ai.AIAgent;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
+import com.mygdx.platformer.characters.enemies.Goblin;
 
 public class PursueTask extends LeafTask<AIAgent> {
 
@@ -25,7 +26,7 @@ public class PursueTask extends LeafTask<AIAgent> {
         float distanceToTarget = enemyPosition.dst(targetPosition);
         float targetDirection = targetPosition.x > enemyPosition.x ? 1f : -1f;
 
-        if (!enemy.isGroundAhead(targetDirection) && enemy.canJumpToPlatform(targetDirection) && enemy.isGrounded()) {
+        if (enemy instanceof Goblin && !enemy.isGroundAhead(targetDirection) && enemy.canJumpToPlatform(targetDirection) && enemy.isGrounded()) {
             enemy.jump();
             return Status.RUNNING;
         }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
 import java.util.ArrayList;
@@ -40,19 +41,32 @@ public class AttackManager {
      * @param directionModifier The direction in which the attack moves (e.g
      *                          ., -1 for left, 1 for right).
      * @param isPlayerAttack Whether the attack is a player attack.
+     * @param attackType AttackType enum.
      */
-    private void spawnAttackAt(Vector2 position, int directionModifier, boolean isPlayerAttack) {
-        OrbAttack orbAttack = new OrbAttack(world, position.x, position.y, orbTexture, directionModifier, isPlayerAttack);
-        attacks.add(orbAttack);
+    public void spawnAttackAt(Vector2 position, int directionModifier, boolean isPlayerAttack, AppConfig.AttackType attackType) {
+        BaseAttack attack;
+
+        switch (attackType) {
+            case PLAYER_THROWING_DAGGER:
+                attack = new PlayerAttack(world, position.x, position.y, Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
+                break;
+            case GOBLIN_THROWING_DAGGER:
+                attack = new GoblinAttack(world, position.x, position.y, Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
+                break;
+            case DEATH_BOLT:
+                attack = new NecromancerAttack(world, position.x, position.y, Assets.assetManager.get(Assets.DEATH_BOLT), directionModifier, isPlayerAttack);
+                break;
+
+            default:
+                attack = new PlayerAttack(world, position.x, position.y, Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, false);
+                break;
+        }
+
+        attacks.add(attack);
     }
 
-
-    public void spawnEnemyAttackAt(Vector2 position, int directionModifier) {
-        spawnAttackAt(position, directionModifier, false);
-    }
-
-    public void spawnAttackAt(Vector2 position, int directionModifier) {
-        spawnAttackAt(position, directionModifier, true);
+    public void spawnEnemyAttackAt(Vector2 position, int directionModifier, AppConfig.AttackType attackType) {
+        spawnAttackAt(position, directionModifier, false, attackType);
     }
 
 

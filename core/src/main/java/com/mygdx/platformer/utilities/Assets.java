@@ -50,6 +50,7 @@ public final class Assets {
     /** File path for the necromancer sprite atlas. */
     public static final String NECROMANCER_ATLAS = "atlas/necromancer_sprites.atlas";
 
+    public static final String DEATH_BOLT = "textures/projectiles/death_bolt.png";
     /**
      * Load all game assets using asset manager. This method enqueues assets
      * for loading and blocks until they are fully loaded.
@@ -63,6 +64,7 @@ public final class Assets {
         assetManager.load(THROWING_DAGGER_TEXTURE, Texture.class);
         assetManager.load(GOBLIN_IDLE, Texture.class);
         assetManager.load(PLATFORM_TEXTURE, Texture.class);
+        assetManager.load(DEATH_BOLT, Texture.class);
 
         assetManager.load(PLATFORM_START, Texture.class);
         assetManager.load(PLATFORM_END, Texture.class);

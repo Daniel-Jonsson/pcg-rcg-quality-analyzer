@@ -47,7 +47,7 @@ public class Goblin extends BaseEnemy {
 
         if (isAttacking()) {
             currentFrame = attackAnimation.getKeyFrame(stateTime, false);
-        }else if (Math.abs(body.getLinearVelocity().x) > 0.1f) {
+        }else if (Math.abs(body.getLinearVelocity().x) > 0) {
             currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         } else {
             currentFrame = idleAnimation.getKeyFrame(stateTime, true);
@@ -95,12 +95,20 @@ public class Goblin extends BaseEnemy {
         return attackAnimation.getAnimationDuration();
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     protected void onAttackStart() {
         currentFrame = attackAnimation.getKeyFrame(0);
         stateTime = 0;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     protected void onAttackEnd() {
         stateTime = 0;

@@ -152,11 +152,7 @@ public class Player extends BaseCharacter {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             int attackDirectionModifier = facingRight ? 1 : -1;
-            attackManager.spawnAttackAt(
-                new Vector2(body.getPosition().x,
-                body.getPosition().y + AppConfig.PLAYER_Y_ATTACK_OFFSET),
-                    attackDirectionModifier
-                );
+            attackManager.spawnAttackAt(new Vector2(body.getPosition().x, body.getPosition().y + AppConfig.PLAYER_ATTACK_Y_OFFSET),attackDirectionModifier, true, AppConfig.AttackType.PLAYER_THROWING_DAGGER);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {

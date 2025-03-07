@@ -4,7 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.MassData;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
@@ -64,7 +65,7 @@ public abstract class BaseEnemy extends BaseCharacter {
         float barWidth = AppConfig.HEALTHBAR_SPRITE_WIDTH * healthPercentage;
         healthBarSprite.setPosition(
             (body.getPosition().x - (barWidth / 2)),
-            body.getPosition().y + (height * getScale() / 2) + 0.3f
+            body.getPosition().y + (height * getScale() / 2) + AppConfig.PLAYER_HEALTHBAR_Y_OFFSET
         );
 
         healthBarSprite.setSize(barWidth, AppConfig.ATTACK_SPRITE_HEIGHT);
@@ -87,9 +88,9 @@ public abstract class BaseEnemy extends BaseCharacter {
             float currentXVelocity = getBody().getLinearVelocity().x;
             float currentYVelocity = getBody().getLinearVelocity().y;
 
-            if (Math.abs(currentXVelocity) < movementSpeed * 3) {
+            if (Math.abs(currentXVelocity) < movementSpeed * AppConfig.ENEMY_JUMP_FORWARD_BOOST_MULTIPLIER) {
                 float direction = facingRight ? 1f : -1f;
-                body.setLinearVelocity(direction * (movementSpeed * 3), currentYVelocity);
+                body.setLinearVelocity(direction * (movementSpeed * AppConfig.ENEMY_JUMP_FORWARD_BOOST_MULTIPLIER), currentYVelocity);
             }
         }
 
@@ -148,41 +149,65 @@ public abstract class BaseEnemy extends BaseCharacter {
         Vector2 enemyPosition = getBody().getPosition();
         float rayLength = 1f;
 
-        Vector2 rayStart = new Vector2(enemyPosition.x + (direction * 0.2f), enemyPosition.y - (height/2));
+        Vector2 rayStart = new Vector2(enemyPosition.x + (direction * AppConfig.ENEMY_GROUNDCHECK_FORWARD_OFFSET), enemyPosition.y - (height / 2));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
         return checkForGround(rayStart, rayEnd);
     }
 
-
-
+    /**
+     * Sets the isAttacking flag to true and resets the animation timer.
+     */
     public void startAttack() {
         isAttacking = true;
         attackAnimationTime = 0; // Reset animation timer
         onAttackStart();
     }
 
+    /**
+     * Sets the isAttacking flag to false and stops the attack.
+     */
     public void stopAttack() {
         isAttacking = false;
         onAttackEnd();
     }
 
+    /**
+     * Implemented in concrete classes to set animation starting frame and
+     * resetting animation stateTime.
+     */
     protected abstract void onAttackStart();
 
+    /**
+     * Implemented in concrete classes to reset stateTime when
+     * an attack ends.
+     */
     protected abstract void onAttackEnd();
 
+
+    /**
+     * Accessor for the isAttacking flag.
+     * @return boolean indicating attacking status.
+     */
     public boolean isAttacking() {
         return isAttacking;
     }
 
-    protected float getAttackDuration() {
-        return 0.5f;
-    }
+    /**
+     * Accessor for the animation attack duration.
+     * @return animation attack duration (in seconds).
+     */
+    protected abstract float getAttackDuration();
 
     public void setFacingDirection(float moveDirection) {
         facingRight = moveDirection > 0;
     }
 
+    /**
+     * Uses raycasting to find platforms which can be reached by jumping.
+     * @param direction the direction in which the enemy is facing.
+     * @return boolean indicating jump possibility.
+     */
     public boolean canJumpToPlatform(float direction) {
         Vector2 enemyPosition = getBody().getPosition();
         float jumpCheckDistance = 6f;
@@ -193,11 +218,14 @@ public abstract class BaseEnemy extends BaseCharacter {
         return checkForGround(rayStart, rayEnd);
     }
 
+    /**
+     * Performs a jump, given that the enemy is grounded.
+     */
     public void jump() {
         if (isGrounded() && !hasJumped) {
             hasJumped = true;
-            float jumpForce = 70f;
-            float forwardBoost = 20f;
+            float jumpForce = AppConfig.ENEMY_JUMP_FORCE;
+            float forwardBoost = AppConfig.ENEMY_JUMP_FORWARD_BOOST;
 
             float forwardDirection = facingRight ? 1f : -1f;
 
@@ -208,6 +236,10 @@ public abstract class BaseEnemy extends BaseCharacter {
         }
     }
 
+    /**
+     * Uses raycasting to determine whether the enemy is grounded.
+     * @return boolean indicating grounding status.
+     */
     public boolean isGrounded() {
         Vector2 enemyPosition = getBody().getPosition();
         float rayLength = 1.0f;
@@ -218,6 +250,12 @@ public abstract class BaseEnemy extends BaseCharacter {
         return checkForGround(rayStart, rayEnd);
     }
 
+    /**
+     *
+     * @param start raycasting starting point.
+     * @param end raycasting end point.
+     * @return boolean indicating grounding status.
+     */
     private boolean checkForGround(Vector2 start, Vector2 end) {
         final boolean[] isGrounded = {false};
 

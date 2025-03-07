@@ -81,7 +81,7 @@ public class Necromancer extends BaseEnemy {
     }
 
     /**
-     * Accessor method for getting the sprite scale
+     * Accessor method for getting the sprite scale.
      * @return The scaling factor for the necromancer sprite.
      */
     @Override
@@ -89,16 +89,28 @@ public class Necromancer extends BaseEnemy {
         return AppConfig.NECROMANCER_SCALE;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     protected float getAttackDuration() {
         return attackAnimation.getAnimationDuration();
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     protected void onAttackStart() {
-
+        currentFrame = attackAnimation.getKeyFrame(0);
         stateTime = 0;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @Override
     protected void onAttackEnd() {
         stateTime = 0;

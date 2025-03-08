@@ -130,10 +130,8 @@ public class GameScreen extends ScreenAdapter {
             logic(deltaTime);
             platformGenerator.update(camera.position.x, AppConfig.SCREEN_WIDTH);
             doPhysicsStep(deltaTime);
-            attackManager.update(camera.position.x,
-                AppConfig.SCREEN_WIDTH);
+
             enemyManager.setTargetPosition(player.getBody().getPosition());
-            enemyManager.update(deltaTime);
         }
 
         ScreenUtils.clear(Color.BLACK);
@@ -168,6 +166,9 @@ public class GameScreen extends ScreenAdapter {
         runTime += frameTime;
         while (runTime >= AppConfig.TIME_STEP) {
             player.update(AppConfig.TIME_STEP);
+            enemyManager.update(AppConfig.TIME_STEP);
+            attackManager.update(camera.position.x,
+                AppConfig.SCREEN_WIDTH);
             world.step(AppConfig.TIME_STEP, AppConfig.VELOCITY_ITERATIONS, AppConfig.POSITION_ITERATIONS);
             runTime -= AppConfig.TIME_STEP;
         }

@@ -83,8 +83,23 @@ public final class AppConfig {
     /** Player sprite height in world units. */
     public static final float PLAYER_HEIGHT = 0.7f;
 
-    /** Offset for the player's attack position. */
-    public static final float PLAYER_Y_ATTACK_OFFSET = PLAYER_HEIGHT / 3;
+    /** Player attack power. **/
+    public static final int PLAYER_ATTACK_POWER = 40;
+
+    /** Player attack speed. **/
+    public static final float PLAYER_ATTACK_SPEED = 7f;
+
+    /** Player attack spawn offset for x-axis. **/
+    public static final float PLAYER_ATTACK_X_OFFSET = 0.3f;
+
+    /** Player attack spawn offset for y-axis. **/
+    public static final float PLAYER_ATTACK_Y_OFFSET = 0.1f;
+
+    /** Player attack scale modifier. **/
+    public static final float PLAYER_ATTACK_SCALE = 1.0f;
+
+    /** Player healthbar offset for y-axis. **/
+    public static final float PLAYER_HEALTHBAR_Y_OFFSET = 0.3f;
 
     /** Player hitbox width in world units. */
     public static final float PLAYER_HITBOX_SIZE_X = 0.3f;
@@ -95,7 +110,7 @@ public final class AppConfig {
     /** Player mass for physics simulation. */
     public static final float PLAYER_MASS = 0.35f;
 
-    /** Player hitpoints */
+    /** Player hitpoints. */
     public static final int PLAYER_HP = 500;
 
     /* Procedural Content Generation (PCG) */
@@ -165,64 +180,189 @@ public final class AppConfig {
     public static final float ENEMY_SPAWN_HEIGHT = 0.5f;
 
     /** Enemy mass for physics calculations. */
-    public static final float ENEMY_MASS = 100f;
+    public static final float ENEMY_MASS = 5f;
+
+    /** Forward in-air speed multiplier for enemy jumps. **/
+    public static final int ENEMY_JUMP_FORWARD_BOOST_MULTIPLIER = 3;
+
+    /** Enemy jump force. **/
+    public static final float ENEMY_JUMP_FORCE = 70f;
+
+    /** Enemy forward jump impulse. **/
+    public static final float ENEMY_JUMP_FORWARD_BOOST = 20;
+
+    /** Offset for enemy ground detection raycasting. **/
+    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.2f;
 
     /* Collision Categories */
 
+    /** Category bit for players. **/
     public static final short CATEGORY_PLAYER = 0x0001;   // 0001
+
+    /** Category bit for enemies. **/
     public static final short CATEGORY_ENEMY = 0x0002;    // 0010
+
+    /** Category bit for platforms. **/
     public static final short CATEGORY_PLATFORM = 0x0004; // 0100
+
+    /** Category bit for attacks. **/
     public static final short CATEGORY_ATTACK = 0x0008;   // 1000
 
     /* Goblin Enemy Configuration */
 
+    /** The attack power of a goblin. **/
     public static final int GOBLIN_ATTACK_POWER = 15;
+
+    /** The speed at which a goblin attack moves. **/
+    public static final float GOBLIN_ATTACK_SPEED = 3f;
+
+    /** The horizontal offset for the goblin's attack spawn position. **/
+    public static final float GOBLIN_ATTACK_X_OFFSET = 0.3f;
+
+    /** The vertical offset for the goblin's attack spawn position. **/
+    public static final float GOBLIN_ATTACK_Y_OFFSET = 0.1f;
+
+    /** The scale factor for goblin attack animations. **/
+    public static final float GOBLIN_ATTACK_SCALE = 1.0f;
+
+    /** The maximum health points of a goblin. **/
     public static final int GOBLIN_HEALTH = 250;
+
+    /** The movement speed of a goblin. **/
     public static final float GOBLIN_SPEED = 1f;
+
+    /** The scaling factor applied to the goblin's sprite. **/
     public static final float GOBLIN_SCALE = 1.5f;
+
+    /** The width of the goblin in world units. **/
     public static final float GOBLIN_WIDTH = 0.5f;
+
+    /** The height of the goblin in world units. **/
     public static final float GOBLIN_HEIGHT = 0.5f;
+
+    /** The hitbox width of the goblin. **/
     public static final float GOBLIN_HITBOX_SIZE_X = 0.2f;
+
+    /** The hitbox height of the goblin. **/
     public static final float GOBLIN_HITBOX_SIZE_Y = 0.4f;
+
+    /** The detection range at which a goblin can sense the player. **/
     public static final float GOBLIN_DETECTION_RANGE = 5f;
+
+    /** The attack range within which a goblin can attack the player. **/
     public static final float GOBLIN_ATTACK_RANGE = 3f;
+
+    /** The cooldown time (in seconds) between goblin attacks. **/
     public static final float GOBLIN_ATTACK_COOLDOWN = 1f;
 
     /* Necromancer Enemy Configuration */
 
-    public static final int NECROMANCER_ATTACK_POWER = 20;
+    /** The attack power of a necromancer. **/
+    public static final int NECROMANCER_ATTACK_POWER = 40;
+
+    /** The speed at which a necromancer attack moves. **/
+    public static final float NECROMANCER_ATTACK_SPEED = 4f;
+
+    /** The horizontal offset for the necromancer's attack spawn position. **/
+    public static final float NECROMANCER_ATTACK_X_OFFSET = 1.3f;
+
+    /** The vertical offset for the necromancer's attack spawn position. **/
+    public static final float NECROMANCER_ATTACK_Y_OFFSET = 0.4f;
+
+    /** The scale factor for necromancer attack animations. **/
+    public static final float NECROMANCER_ATTACK_SCALE = 2.0f;
+
+    /** The maximum health points of a necromancer. **/
     public static final int NECROMANCER_HEALTH = 400;
+
+    /** The movement speed of a necromancer. **/
     public static final float NECROMANCER_SPEED = 0.5f;
+
+    /** The scaling factor applied to the necromancer's sprite. **/
     public static final float NECROMANCER_SCALE = 3f;
+
+    /** The width of the necromancer in world units. **/
     public static final float NECROMANCER_WIDTH = 0.5f;
+
+    /** The height of the necromancer in world units. **/
     public static final float NECROMANCER_HEIGHT = 0.5f;
+
+    /** The hitbox width of the necromancer. **/
     public static final float NECROMANCER_HITBOX_SIZE_X = 0.4f;
+
+    /** The hitbox height of the necromancer. **/
     public static final float NECROMANCER_HITBOX_SIZE_Y = 0.65f;
+
+    /** The detection range at which a necromancer can sense the player. **/
     public static final float NECROMANCER_DETECTION_RANGE = 10f;
-    public static final float NECROMANCER_ATTACK_RANGE = 5f;
+
+    /** The attack range within which a necromancer can attack the player. **/
+    public static final float NECROMANCER_ATTACK_RANGE = 8;
+
+    /** The cooldown time (in seconds) between necromancer attacks. **/
     public static final float NECROMANCER_ATTACK_COOLDOWN = 4f;
 
     /* UI Text Strings */
 
+    /** UI text for quitting the game. **/
     public static final String QUIT = "Quit";
+
+    /** UI text for returning to the main menu. **/
     public static final String MAIN_MENU = "Main Menu";
+
+    /** UI text label for displaying survival time. **/
     public static final String SURVIVAL_TIME = "Survival Time: ";
+
+    /** UI text displayed when the player loses the game. **/
     public static final String GAME_OVER = "Game Over";
 
     /* Attack Configuration */
 
+    /** The height of an attack sprite in world units. **/
     public static final float ATTACK_SPRITE_HEIGHT = 0.3f;
+
+    /** The width of an attack sprite in world units. **/
     public static final float ATTACK_SPRITE_WIDTH = 0.6f;
+
+    /** The default damage dealt by an attack. **/
     public static final int BASE_ATTACK_DEFAULT_DMG = 20;
+
+    /** The default speed of an attack projectile. **/
     public static final int BASE_ATTACK_DEFAULT_SPEED = 25;
 
     /* Animation Durations */
 
+    /** The standard frame duration for animations. **/
     public static final float STANDARD_FRAME_DURATION = 0.1f;
+
+    /** The frame duration for walk animations. **/
     public static final float WALK_FRAME_DURATION = 0.15f;
+
+    /** The frame duration for attack animations. **/
     public static final float ATTACK_FRAME_DURATION = 0.1f;
 
     /* HealthBar */
+
+    /** The width of the health bar sprite. **/
     public static final float HEALTHBAR_SPRITE_WIDTH = 1.5f;
+
+    /** The height of the health bar sprite. **/
     public static final float HEALTHBAR_SPRITE_HEIGHT = 0.3f;
+
+    /* Attack types */
+
+    /**
+     * Enum representing different types of attacks available in the game.
+     */
+    public enum AttackType {
+
+        /** The player's throwing dagger attack. **/
+        PLAYER_THROWING_DAGGER,
+
+        /** The goblin's throwing dagger attack. **/
+        GOBLIN_THROWING_DAGGER,
+
+        /** The necromancer's magical death bolt attack. **/
+        DEATH_BOLT
+    }
 }

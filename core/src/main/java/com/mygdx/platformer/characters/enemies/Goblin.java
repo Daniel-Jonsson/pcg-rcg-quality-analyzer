@@ -44,7 +44,10 @@ public class Goblin extends BaseEnemy {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        if (Math.abs(body.getLinearVelocity().x) > 0.1f) {
+
+        if (isAttacking()) {
+            currentFrame = attackAnimation.getKeyFrame(stateTime, false);
+        }else if (Math.abs(body.getLinearVelocity().x) > 0) {
             currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         } else {
             currentFrame = idleAnimation.getKeyFrame(stateTime, true);
@@ -86,6 +89,29 @@ public class Goblin extends BaseEnemy {
     @Override
     protected float getScale() {
         return AppConfig.GOBLIN_SCALE;
+    }
+
+    protected float getAttackDuration() {
+        return attackAnimation.getAnimationDuration();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @return
+     */
+    @Override
+    protected void onAttackStart() {
+        currentFrame = attackAnimation.getKeyFrame(0);
+        stateTime = 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @return
+     */
+    @Override
+    protected void onAttackEnd() {
+        stateTime = 0;
     }
 
 }

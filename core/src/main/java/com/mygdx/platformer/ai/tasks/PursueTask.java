@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.platformer.ai.AIAgent;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
+import com.mygdx.platformer.characters.enemies.Goblin;
 
 public class PursueTask extends LeafTask<AIAgent> {
 
@@ -15,14 +16,31 @@ public class PursueTask extends LeafTask<AIAgent> {
         BaseCharacter character = agent.getCharacter();
         Vector2 targetPosition = agent.getTargetPosition();
 
+        if (targetPosition == null) {
+            return Status.FAILED;
+        }
+
         BaseEnemy enemy = (BaseEnemy) character;
+        Vector2 enemyPosition = enemy.getBody().getPosition();
 
-        float pursueDirection = targetPosition.x > enemy.getBody().getPosition().x ? 1f : -1f;
+        float distanceToTarget = enemyPosition.dst(targetPosition);
+        float targetDirection = targetPosition.x > enemyPosition.x ? 1f : -1f;
 
+        if (enemy instanceof Goblin && !enemy.isGroundAhead(targetDirection) && enemy.canJumpToPlatform(targetDirection) && enemy.isGrounded()) {
+            enemy.jump();
+            return Status.RUNNING;
+        }
+
+        if (distanceToTarget <= 1.5f || !enemy.isGroundAhead(targetDirection)) {
+            enemy.setMoveDirection(0);
+            enemy.setFacingDirection(targetPosition.x > enemyPosition.x ? 1f : -1f);
+            return Status.RUNNING;
+        }
+
+        float pursueDirection = targetPosition.x > enemyPosition.x ? 1f : -1f;
         enemy.setMoveDirection(pursueDirection);
 
         return Status.RUNNING;
-
     }
 
     @Override

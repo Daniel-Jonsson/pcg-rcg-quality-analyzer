@@ -82,6 +82,8 @@ public class Platform {
         bodyDef.position.set(x, y); // position in world units (meters)
         body = world.createBody(bodyDef);
 
+
+
         // collision box
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width / 2, height / 2);
@@ -95,7 +97,7 @@ public class Platform {
 
         body.createFixture(fixtureDef);
         shape.dispose();
-        body.setUserData(this);
+        body.setUserData("ground"); // enables ground detection via raycasting.
 
     }
 

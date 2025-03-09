@@ -56,6 +56,14 @@ public class StartScreen implements Screen {
             }
         });
 
+        TextButton autoPlayButton = new TextButton("Auto-play", skin);
+        autoPlayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game));
+            }
+        });
+
 
 
         // Arrange UI with Table
@@ -71,9 +79,16 @@ public class StartScreen implements Screen {
             .height(AppConfig.BUTTON_HEIGHT)
             .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
             .row();
+        table.add(autoPlayButton)
+            .width(AppConfig.BUTTON_WIDTH)
+            .height(AppConfig.BUTTON_HEIGHT)
+            .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
+            .row();
         table.add(quitButton)
             .width(AppConfig.BUTTON_WIDTH)
             .height(AppConfig.BUTTON_HEIGHT);
+
+
 
         stage.addActor(table);
     }

@@ -3,7 +3,15 @@ package com.mygdx.platformer.ai.autoplay;
 import com.badlogic.gdx.ai.btree.BehaviorTree;
 import com.badlogic.gdx.ai.btree.Task;
 import com.badlogic.gdx.ai.btree.branch.Selector;
+import com.badlogic.gdx.ai.btree.branch.Sequence;
 import com.badlogic.gdx.ai.btree.decorator.Repeat;
+import com.mygdx.platformer.ai.autoplay.tasks.AttackEnemyTask;
+import com.mygdx.platformer.ai.autoplay.tasks.CheckPathClearTask;
+import com.mygdx.platformer.ai.autoplay.tasks.DetectEnemyTask;
+import com.mygdx.platformer.ai.autoplay.tasks.DetectProjectile;
+import com.mygdx.platformer.ai.autoplay.tasks.DodgeTask;
+import com.mygdx.platformer.ai.autoplay.tasks.IdleTask;
+import com.mygdx.platformer.ai.autoplay.tasks.MoveForwardTask;
 import com.mygdx.platformer.characters.player.Player;
 
 /**
@@ -32,7 +40,37 @@ public class AutoPlayAgent {
     private Task<Player> createTree() {
         Selector<Player> root = new Selector<>();
 
-        return new Repeat<>(root);
+        // Survival strategy
+        Sequence<Player> survivalStrategy = new Sequence<>();
+        survivalStrategy.addChild(new DetectProjectile());
+        survivalStrategy.addChild(new DodgeTask());
+
+        // Combat strategy
+        Sequence<Player> combatStrategy = new Sequence<>();
+        combatStrategy.addChild(new DetectEnemyTask());
+        combatStrategy.addChild(new AttackEnemyTask());
+
+        // Movement strategy
+        Sequence<Player> movementStrategy = new Sequence<>();
+        movementStrategy.addChild(new CheckPathClearTask());
+        movementStrategy.addChild(new MoveForwardTask());
+
+        // Add strategies to the behavior tree
+        root.addChild(survivalStrategy);
+        root.addChild(combatStrategy);
+        root.addChild(movementStrategy);
+        root.addChild(new IdleTask());
+
+
+        return new Repeat<>(root); // loop the tree
+    }
+
+    /**
+     * Updates the AI behavior tree on each time frame.
+     * @param delta time since last frame.
+     */
+    public void update(float delta) {
+        behaviorTree.step();
     }
 
 }

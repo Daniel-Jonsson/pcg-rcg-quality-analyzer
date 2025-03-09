@@ -119,18 +119,7 @@ public class Player extends BaseCharacter {
             autoPlayAgent.update(deltaTime);
         }
 
-        if (jumpRequested) {
-            body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
-            jumpRequested = false;
-            jumpHoldTime = 0;
-        }
-
-        if (jumpHolding && jumpHoldTime < AppConfig.MAX_JUMP_HOLD_TIME && body.getLinearVelocity().y > 0) {
-            body.applyForce(new Vector2(0, AppConfig.JUMP_HOLD_FORCE), body.getWorldCenter(), true);
-            jumpHoldTime += deltaTime;
-        } else {
-            jumpHolding = false;
-        }
+       checkJumpStatus(deltaTime);
 
         // Determine animation state
         if (!isGrounded) {
@@ -143,6 +132,21 @@ public class Player extends BaseCharacter {
             currentFrame = idleAnimation.getKeyFrame(stateTime);
         }
 
+    }
+
+    private void checkJumpStatus(float deltaTime) {
+        if (jumpRequested) {
+            body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
+            jumpRequested = false;
+            jumpHoldTime = 0;
+        }
+
+        if (jumpHolding && jumpHoldTime < AppConfig.MAX_JUMP_HOLD_TIME && body.getLinearVelocity().y > 0) {
+            body.applyForce(new Vector2(0, AppConfig.JUMP_HOLD_FORCE), body.getWorldCenter(), true);
+            jumpHoldTime += deltaTime;
+        } else {
+            jumpHolding = false;
+        }
     }
 
     /**
@@ -170,14 +174,14 @@ public class Player extends BaseCharacter {
      * Handles player input.
      */
     public void handleInput() {
-        moveDirection = 0;
+        if (!autoPlayEnabled) {
+            moveDirection = 0;
+        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            moveDirection = -1;
-            facingRight = false;
+            moveBackward();
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            moveDirection = 1;
-            facingRight = true;
+           moveForward();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
            attack();
@@ -259,8 +263,11 @@ public class Player extends BaseCharacter {
     }
 
     public void jump() {
-        jumpRequested = true;
-        jumpHolding = true;
+        if (isGrounded) {
+            jumpRequested = true;
+            jumpHolding = true;
+
+        }
     }
 
     public void attack() {
@@ -279,15 +286,19 @@ public class Player extends BaseCharacter {
     public void moveForward() {
         moveDirection = 1;
         facingRight = true;
+
+    }
+
+    public void moveBackward() {
+        moveDirection = -1;
+        facingRight = false;
     }
 
     /**
      * Makes the player dodge an incoming projectile.
      */
     public void dodge() {
-        if (isGrounded) {
-            jumpRequested = true;
-        }
+
     }
 
     /**
@@ -318,11 +329,8 @@ public class Player extends BaseCharacter {
 
         Vector2 rayStart = new Vector2(playerPosition.x, playerPosition.y);
         Vector2 rayEnd = new Vector2(playerPosition.x + (direction * rayLength), playerPosition.y);
-        boolean result = checkForEnemy(rayStart, rayEnd);
-        if (result) {
-            System.out.println("has enemies nearby");
-        }
-        return result;
+
+        return checkForEnemy(rayStart, rayEnd);
     }
 
     /**
@@ -351,5 +359,45 @@ public class Player extends BaseCharacter {
 
     public float getGameTime() {
         return gameTime;
+    }
+
+    /**
+     *
+     * @param start raycasting starting point.
+     * @param end raycasting end point.
+     * @return boolean indicating grounding status.
+     */
+    private boolean checkForGround(Vector2 start, Vector2 end) {
+        final boolean[] isGrounded = {false};
+
+        gameWorld.rayCast((fixture, point, normal, fraction) -> {
+            if (fixture.getBody().getUserData() != null && fixture.getBody().getUserData().equals("ground")) {
+                isGrounded[0] = true;
+
+                return 0;
+            }
+            return -1;
+        }, start, end);
+
+        return isGrounded[0];
+    }
+
+    /**
+     * Uses raycasting to check if the enemy unit is nearing an edge.
+     * @param direction indicates the direction in which to check for ground.
+     * @return
+     */
+    public boolean isGroundAhead(float direction) {
+        Vector2 position = body.getPosition();
+        float rayLength = 3f;
+
+        Vector2 rayStart = new Vector2(position.x + (direction * AppConfig.ENEMY_GROUNDCHECK_FORWARD_OFFSET), position.y - (height / 2));
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
+
+        return checkForGround(rayStart, rayEnd);
+    }
+
+    public boolean isGrounded() {
+        return isGrounded;
     }
 }

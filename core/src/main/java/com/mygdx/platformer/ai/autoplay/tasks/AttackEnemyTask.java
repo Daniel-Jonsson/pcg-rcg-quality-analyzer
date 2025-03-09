@@ -9,7 +9,7 @@ import com.mygdx.platformer.characters.player.Player;
  * @author Robert Kullman, Daniel Jönsson
  */
 public class AttackEnemyTask extends LeafTask<Player> {
-    private float attackCooldown = 0.3f;
+    private float attackCooldown = 0.2f;
     private float lastAttackTime = -attackCooldown;
 
     @Override
@@ -18,7 +18,6 @@ public class AttackEnemyTask extends LeafTask<Player> {
         float currentTime = player.getGameTime();
 
         if (currentTime - lastAttackTime >= attackCooldown) {
-            System.out.println("Attacking enemy!");
             player.attack();
             lastAttackTime = currentTime;
             return Status.SUCCEEDED;

@@ -2,14 +2,14 @@ package com.mygdx.platformer.ai.autoplay;
 
 import com.badlogic.gdx.ai.btree.BehaviorTree;
 import com.badlogic.gdx.ai.btree.Task;
+import com.badlogic.gdx.ai.btree.branch.Parallel;
 import com.badlogic.gdx.ai.btree.branch.Selector;
 import com.badlogic.gdx.ai.btree.branch.Sequence;
 import com.badlogic.gdx.ai.btree.decorator.Repeat;
 import com.mygdx.platformer.ai.autoplay.tasks.AttackEnemyTask;
-import com.mygdx.platformer.ai.autoplay.tasks.CheckPathClearTask;
 import com.mygdx.platformer.ai.autoplay.tasks.DetectEnemyTask;
 import com.mygdx.platformer.ai.autoplay.tasks.DetectProjectile;
-import com.mygdx.platformer.ai.autoplay.tasks.DodgeTask;
+import com.mygdx.platformer.ai.autoplay.tasks.JumpTask;
 import com.mygdx.platformer.ai.autoplay.tasks.IdleTask;
 import com.mygdx.platformer.ai.autoplay.tasks.MoveForwardTask;
 import com.mygdx.platformer.characters.player.Player;
@@ -25,7 +25,7 @@ public class AutoPlayAgent {
     private BehaviorTree behaviorTree;
 
     private float aiStepTimer = 0;
-    private final float stepInterval = 0.2f;
+    private final float stepInterval = 0.05f;
 
     /**
      * Constructor for the AutoPlayAgent class, which initializes the
@@ -42,11 +42,13 @@ public class AutoPlayAgent {
      */
     private Task<Player> createTree() {
         Selector<Player> root = new Selector<>();
+        Parallel<Player> parallel = new Parallel<>();
+
 
         // Survival strategy
         Sequence<Player> survivalStrategy = new Sequence<>();
         survivalStrategy.addChild(new DetectProjectile());
-        survivalStrategy.addChild(new DodgeTask());
+        survivalStrategy.addChild(new JumpTask());
 
         // Combat strategy
         Sequence<Player> combatStrategy = new Sequence<>();
@@ -55,13 +57,17 @@ public class AutoPlayAgent {
 
         // Movement strategy
         Sequence<Player> movementStrategy = new Sequence<>();
-        movementStrategy.addChild(new CheckPathClearTask());
         movementStrategy.addChild(new MoveForwardTask());
+        movementStrategy.addChild(new JumpTask());
 
         // Add strategies to the behavior tree
         //root.addChild(survivalStrategy);
-        root.addChild(combatStrategy);
-        //root.addChild(movementStrategy);
+        parallel.addChild(combatStrategy);
+        parallel.addChild(movementStrategy);
+
+        root.addChild(parallel);
+
+
         root.addChild(new IdleTask());
 
         return new Repeat<>(root); // loop the tree

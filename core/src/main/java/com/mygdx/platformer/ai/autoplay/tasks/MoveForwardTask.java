@@ -12,12 +12,13 @@ public class MoveForwardTask extends LeafTask<Player> {
     @Override
     public Status execute() {
         Player player = getObject();
-        player.moveForward();
-        return Status.SUCCEEDED;
+        System.out.println("moving forward");
+       player.moveForward();
+       return Status.SUCCEEDED;
     }
 
     @Override
     protected Task<Player> copyTo(Task<Player> task) {
-        return null;
+        return new MoveForwardTask();
     }
 }

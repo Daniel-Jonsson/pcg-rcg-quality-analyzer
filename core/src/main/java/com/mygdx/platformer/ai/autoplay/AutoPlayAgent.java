@@ -61,7 +61,6 @@ public class AutoPlayAgent {
         root.addChild(movementStrategy);
         root.addChild(new IdleTask());
 
-
         return new Repeat<>(root); // loop the tree
     }
 

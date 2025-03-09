@@ -65,15 +65,19 @@ public class GameScreen extends ScreenAdapter {
     EnemyManager enemyManager;
     AttackManager attackManager;
 
+    Boolean autoPlayEnabled = false;
+
 
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
      * game instance.
      * @param g main Game instance.
      */
-   public GameScreen(final PlatformerGame g) {
+   public GameScreen(final PlatformerGame g, boolean autoPlay) {
        this.game = g; // reference main class to enable switching to another screen
        this.gameTimer = new GameTimer();
+
+       autoPlayEnabled = autoPlay;
 
 
         //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");

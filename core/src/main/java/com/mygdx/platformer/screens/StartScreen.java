@@ -44,7 +44,7 @@ public class StartScreen implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game, false));
             }
         });
 
@@ -60,7 +60,7 @@ public class StartScreen implements Screen {
         autoPlayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game, true));
             }
         });
 

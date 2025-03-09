@@ -11,7 +11,7 @@ import com.mygdx.platformer.characters.player.Player;
 public class IdleTask extends LeafTask<Player> {
     @Override
     public Status execute() {
-        return null;
+        return Status.RUNNING;
     }
 
     @Override

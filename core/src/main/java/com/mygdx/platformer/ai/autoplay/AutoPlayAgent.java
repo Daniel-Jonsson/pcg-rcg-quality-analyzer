@@ -24,6 +24,9 @@ public class AutoPlayAgent {
 
     private BehaviorTree behaviorTree;
 
+    private float aiStepTimer = 0;
+    private final float stepInterval = 0.2f;
+
     /**
      * Constructor for the AutoPlayAgent class, which initializes the
      * AI with a behavior tree.
@@ -56,9 +59,9 @@ public class AutoPlayAgent {
         movementStrategy.addChild(new MoveForwardTask());
 
         // Add strategies to the behavior tree
-        root.addChild(survivalStrategy);
+        //root.addChild(survivalStrategy);
         root.addChild(combatStrategy);
-        root.addChild(movementStrategy);
+        //root.addChild(movementStrategy);
         root.addChild(new IdleTask());
 
         return new Repeat<>(root); // loop the tree
@@ -69,7 +72,11 @@ public class AutoPlayAgent {
      * @param delta time since last frame.
      */
     public void update(float delta) {
-        behaviorTree.step();
+        aiStepTimer += delta;
+        if (aiStepTimer >= stepInterval) {
+            aiStepTimer = 0;
+            behaviorTree.step();
+        }
     }
 
 }

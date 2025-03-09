@@ -11,7 +11,10 @@ import com.mygdx.platformer.characters.player.Player;
 public class DetectProjectile extends LeafTask<Player> {
     @Override
     public Status execute() {
-        return null;
+        Player player = getObject();
+        System.out.println("Detecting projectile");
+       // return player.detectIncomingProjectile() ? Status.SUCCEEDED : Status.FAILED;
+        return Status.FAILED;
     }
 
     @Override

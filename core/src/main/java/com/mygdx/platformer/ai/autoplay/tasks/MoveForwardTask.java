@@ -11,7 +11,9 @@ import com.mygdx.platformer.characters.player.Player;
 public class MoveForwardTask extends LeafTask<Player> {
     @Override
     public Status execute() {
-        return null;
+        Player player = getObject();
+        player.moveForward();
+        return Status.SUCCEEDED;
     }
 
     @Override

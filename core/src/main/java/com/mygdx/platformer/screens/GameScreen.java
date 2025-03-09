@@ -109,7 +109,8 @@ public class GameScreen extends ScreenAdapter {
 
         player = new Player(world, spawnPosition,AppConfig.PLAYER_HP,
             AppConfig.PLAYER_MOVE_SPEED,
-            attackManager);
+            attackManager, autoPlayEnabled);
+
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 
         // createGround();
@@ -126,7 +127,9 @@ public class GameScreen extends ScreenAdapter {
     public void render(final float deltaTime) {
         if (!isGameOver) {
             checkGameOver();
-            player.handleInput();
+            //if(!autoPlayEnabled) {
+                player.handleInput();
+            //}
             gameTimer.update(deltaTime);
             camera.position.x += 2f * deltaTime;
             camera.update();

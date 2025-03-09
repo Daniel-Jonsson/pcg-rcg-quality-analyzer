@@ -7,11 +7,15 @@ import com.mygdx.platformer.characters.player.Player;
 public class DetectEnemyTask extends LeafTask<Player> {
     @Override
     public Status execute() {
-        return null;
+        Player player = getObject();
+        if (player.hasEnemiesNearby(player.getDirection())) {
+            return Status.SUCCEEDED;
+        }
+        return Status.RUNNING;
     }
 
     @Override
     protected Task<Player> copyTo(Task<Player> task) {
-        return null;
+        return new DetectEnemyTask();
     }
 }

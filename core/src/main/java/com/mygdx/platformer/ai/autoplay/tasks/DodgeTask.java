@@ -11,7 +11,10 @@ import com.mygdx.platformer.characters.player.Player;
 public class DodgeTask extends LeafTask<Player> {
     @Override
     public Status execute() {
-        return null;
+        Player player = getObject();
+        System.out.println("dodging");
+        player.dodge();
+        return Status.SUCCEEDED;
     }
 
     @Override

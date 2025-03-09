@@ -11,7 +11,8 @@ import com.mygdx.platformer.characters.player.Player;
 public class CheckPathClearTask extends LeafTask<Player> {
     @Override
     public Status execute() {
-        return null;
+        Player player = getObject();
+        return player.isPathClear() ? Status.SUCCEEDED : Status.FAILED;
     }
 
     @Override

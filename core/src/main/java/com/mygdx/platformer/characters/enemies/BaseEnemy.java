@@ -44,7 +44,7 @@ public abstract class BaseEnemy extends BaseCharacter {
         MassData massData = new MassData();
         massData.mass = AppConfig.ENEMY_MASS;
         body.setMassData(massData);
-        body.setUserData("enemy");
+        body.setUserData(this);
         moveDirection = -1;
         facingRight = false;
         healthBarSprite = new Sprite(new Texture(Assets.HEALTHBAR_TEXTURE));

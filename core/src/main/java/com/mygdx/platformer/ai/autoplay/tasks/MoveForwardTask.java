@@ -20,7 +20,7 @@ public class MoveForwardTask extends LeafTask<Player> {
     }
     @Override
     public Status execute() {
-        //System.out.println("executing move forward task");
+
         Player player = getObject();
         Vector2 playerPosition = player.getBody().getPosition();
 
@@ -28,14 +28,18 @@ public class MoveForwardTask extends LeafTask<Player> {
         float minX = screenCenter - 5;
         float maxX = screenCenter + 5;
 
-        if (player.isGrounded() && !player.isGroundAhead(player.getDirection())) {
+       // System.out.println("grounded: " + player.isGrounded());
+       // System.out.println("ground ahead: " + player.isGroundAhead(player.getDirection()));
+
+        if (player.isGrounded() && !player.isGroundAhead(player.getFacingDirection())) {
+
             return Status.SUCCEEDED;
         }
         // If player reaches the front limit, stop moving
         if (playerPosition.x >= maxX) {
             reachedFrontLimit = true;
 
-            if (isMoving){
+            if (player.getBody().getLinearVelocity().x > 0) {
                 player.stop();
                 isMoving = false;
             }
@@ -47,7 +51,8 @@ public class MoveForwardTask extends LeafTask<Player> {
 
         }
         // Move forward if allowed, but only call moveForward() once
-        if (!reachedFrontLimit && !isMoving) {
+        if (!reachedFrontLimit && player.getFacingDirection() != 0) {
+            //System.out.println("moving forward");
             player.moveForward();
             isMoving = true;
             return Status.RUNNING;

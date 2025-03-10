@@ -290,7 +290,9 @@ public class GameScreen extends ScreenAdapter {
 
                 if (a.getBody() == playerBody || b.getBody() == playerBody) {
                     if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
-                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM) {
+                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
+                        || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
+                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
                         player.setGrounded(true);
                     }
                 }
@@ -314,7 +316,6 @@ public class GameScreen extends ScreenAdapter {
                     }
                 }
 
-                // Player -> Enemy collision
                 if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
                     && b.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)
                     || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
@@ -338,7 +339,9 @@ public class GameScreen extends ScreenAdapter {
 
                 if (a.getBody() == playerBody || b.getBody() == playerBody) {
                     if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM ||
-                        b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM) {
+                        b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
+                        || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
+                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
                         player.setGrounded(false);
                     }
                 }

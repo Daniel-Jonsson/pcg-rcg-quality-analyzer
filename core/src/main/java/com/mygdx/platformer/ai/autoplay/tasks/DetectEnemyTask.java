@@ -8,7 +8,7 @@ public class DetectEnemyTask extends LeafTask<Player> {
     @Override
     public Status execute() {
         Player player = getObject();
-        if (player.hasEnemiesNearby(player.getDirection())) {
+        if (player.hasEnemiesNearby(player.getFacingDirection())) {
             return Status.SUCCEEDED;
         }
         return Status.RUNNING;

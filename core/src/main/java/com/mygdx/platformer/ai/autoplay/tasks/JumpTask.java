@@ -2,6 +2,7 @@ package com.mygdx.platformer.ai.autoplay.tasks;
 
 import com.badlogic.gdx.ai.btree.LeafTask;
 import com.badlogic.gdx.ai.btree.Task;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.platformer.characters.player.Player;
 
 /**
@@ -10,11 +11,23 @@ import com.mygdx.platformer.characters.player.Player;
  */
 public class JumpTask extends LeafTask<Player> {
     private boolean jumpTriggered = false;
+    private static final float TOLERANCE = 0.5f;
     @Override
     public Status execute() {
-        //System.out.println("executing jump task");
         Player player = getObject();
-        float direction = player.getDirection();
+        float direction = player.getFacingDirection();
+
+
+        Vector2 platformPos = player.getNextPlatformPosition();
+        if (platformPos != null && !player.isGrounded()) {
+            float playerX = player.getBody().getPosition().x;
+            if (Math.abs(playerX - platformPos.x) < TOLERANCE) {
+
+                player.stop();
+                // Return SUCCEEDED to signal that landing is achieved.
+                return Status.RUNNING;
+            }
+        }
 
         if (!player.isGroundAhead(direction) && player.isGrounded() && !jumpTriggered) {
             player.jump();
@@ -24,11 +37,13 @@ public class JumpTask extends LeafTask<Player> {
         if (!player.isGrounded()) {
             return Status.RUNNING;
         }
+
+
         if (jumpTriggered && player.isGrounded()) {
             jumpTriggered = false;
             return Status.SUCCEEDED;
         }
-        return Status.RUNNING;
+        return Status.SUCCEEDED;
     }
 
     @Override

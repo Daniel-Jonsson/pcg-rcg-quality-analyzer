@@ -277,10 +277,9 @@ public class Player extends BaseCharacter {
     }
 
     public void attack() {
-        int attackDirection = facingRight ? 1 : -1;
         attackManager.spawnAttackAt(
             new Vector2(body.getPosition().x, body.getPosition().y + AppConfig.PLAYER_ATTACK_Y_OFFSET),
-            attackDirection,
+            getFacingDirection(),
             true,
             AppConfig.AttackType.PLAYER_THROWING_DAGGER
         );
@@ -363,7 +362,7 @@ public class Player extends BaseCharacter {
         return enemyDetected[0];
     }
 
-    public int getDirection() {
+    public int getFacingDirection() {
         return facingRight ? 1 : -1;
     }
 
@@ -409,6 +408,30 @@ public class Player extends BaseCharacter {
 
     public boolean isGrounded() {
         return isGrounded;
+    }
+
+    public Vector2 getNextPlatformPosition() {
+        Vector2 playerPos = getBody().getPosition();
+        float rayLength = 10f; // Maximum horizontal distance to search
+
+        // Start the ray a little ahead of the player
+        Vector2 rayStart = new Vector2(playerPos.x, playerPos.y);
+        // Cast the ray horizontally at the same vertical level
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y-20);
+
+        final Vector2[] platformPos = { null };
+
+        gameWorld.rayCast((fixture, point, normal, fraction) -> {
+            // Check if the fixture belongs to a platform
+            if (fixture.getBody().getUserData() != null &&
+                fixture.getBody().getUserData().equals("ground")) {
+                platformPos[0] = new Vector2(point.x, point.y);
+                return 0; // Stop the raycast after the first hit
+            }
+            return -1; // Continue raycasting
+        }, rayStart, rayEnd);;
+
+        return platformPos[0];
     }
 
 

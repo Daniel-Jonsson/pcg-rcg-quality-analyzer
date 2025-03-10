@@ -59,8 +59,7 @@ public final class AppConfig {
     /** Initial spawn x-coordinate of the player. */
     public static final int PLAYER_SPAWN_X = 1;
 
-    /** Initial spawn y-coordinate of the player. */
-    public static final int PLAYER_SPAWN_Y = 4;
+
 
     /** Player movement speed. */
     public static final float PLAYER_MOVE_SPEED = 5f;
@@ -131,16 +130,16 @@ public final class AppConfig {
     public static final float PLATFORM_HEIGHT = 0.5f;
 
     /** Base y-position for platforms. */
-    public static final float PLATFORM_BASE_Y_POSITION = 2.5f;
+    public static final float PLATFORM_BASE_Y_POSITION = 5f;
+
+    /** Initial spawn y-coordinate of the player. */
+    public static final float PLAYER_SPAWN_Y = PLATFORM_BASE_Y_POSITION + 1f;
 
     /** Width of a middle segment of a platform. */
     public static final float PLATFORM_MIDDLE_SEGMENT_WIDTH = 0.5f;
 
-    /** Base y-coordinate for generating platforms. */
-    public static final float BASE_Y = 2.5f;
-
     /** Maximum allowed variation in platform y-coordinates. */
-    public static final float MAX_Y_VARIATION = 0.5f;
+    public static final float MAX_Y_VARIATION = 2f;
 
     /** Right margin offscreen for platform spawning. */
     public static final float RIGHT_OFFSCREEN_MARGIN = 2.0f;

@@ -112,6 +112,9 @@ public final class AppConfig {
     /** Player hitpoints. */
     public static final int PLAYER_HP = 500;
 
+    /** Offset for player ground detection raycasting. **/
+    public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.1f;
+
     /* Procedural Content Generation (PCG) */
 
     /** Minimum gap between platforms. */
@@ -191,7 +194,7 @@ public final class AppConfig {
     public static final float ENEMY_JUMP_FORWARD_BOOST = 20;
 
     /** Offset for enemy ground detection raycasting. **/
-    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.2f;
+    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.5f;
 
     /* Collision Categories */
 

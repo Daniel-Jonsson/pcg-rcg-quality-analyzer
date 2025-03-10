@@ -400,7 +400,7 @@ public class Player extends BaseCharacter {
         Vector2 position = body.getPosition();
         float rayLength = 3f;
 
-        Vector2 rayStart = new Vector2(position.x + (direction * AppConfig.ENEMY_GROUNDCHECK_FORWARD_OFFSET), position.y - (height / 2));
+        Vector2 rayStart = new Vector2(position.x + (direction * AppConfig.PLAYER_GROUNDCHECK_FORWARD_OFFSET), position.y - (height / 3));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
         return checkForGround(rayStart, rayEnd);
@@ -432,6 +432,10 @@ public class Player extends BaseCharacter {
         }, rayStart, rayEnd);;
 
         return platformPos[0];
+    }
+
+    public void setFacingRight(boolean facingRight) {
+        this.facingRight = facingRight;
     }
 
 

@@ -22,8 +22,7 @@ public class AttackEnemyTask extends LeafTask<Player> {
             lastAttackTime = currentTime;
             return Status.SUCCEEDED;
         }
-
-        return Status.RUNNING;
+        return Status.RUNNING;  // run until cooldown has passed and the attack can be performed.
     }
 
     @Override

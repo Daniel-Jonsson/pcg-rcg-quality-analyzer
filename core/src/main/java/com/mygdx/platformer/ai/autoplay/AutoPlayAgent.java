@@ -6,6 +6,7 @@ import com.badlogic.gdx.ai.btree.branch.Parallel;
 import com.badlogic.gdx.ai.btree.branch.Selector;
 import com.badlogic.gdx.ai.btree.branch.Sequence;
 import com.badlogic.gdx.ai.btree.decorator.Repeat;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.platformer.ai.autoplay.tasks.AttackEnemyTask;
 import com.mygdx.platformer.ai.autoplay.tasks.DetectEnemyTask;
 import com.mygdx.platformer.ai.autoplay.tasks.DetectProjectile;
@@ -21,18 +22,20 @@ import com.mygdx.platformer.characters.player.Player;
  * @author Robert Kullman, Daniel Jönsson
  */
 public class AutoPlayAgent {
-
+    OrthographicCamera camera;
     private BehaviorTree behaviorTree;
 
     private float aiStepTimer = 0;
     private final float stepInterval = 0.05f;
+
 
     /**
      * Constructor for the AutoPlayAgent class, which initializes the
      * AI with a behavior tree.
      * @param player The player character which is to be controlled by the AI.
      */
-    public AutoPlayAgent(Player player) {
+    public AutoPlayAgent(Player player, OrthographicCamera camera) {
+        this.camera = camera;
         behaviorTree = new BehaviorTree<>(createTree(), player);
     }
 
@@ -57,7 +60,7 @@ public class AutoPlayAgent {
 
         // Movement strategy
         Sequence<Player> movementStrategy = new Sequence<>();
-        movementStrategy.addChild(new MoveForwardTask());
+        movementStrategy.addChild(new MoveForwardTask(camera));
         movementStrategy.addChild(new JumpTask());
 
         // Add strategies to the behavior tree

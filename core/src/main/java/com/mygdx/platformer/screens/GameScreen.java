@@ -109,7 +109,7 @@ public class GameScreen extends ScreenAdapter {
 
         player = new Player(world, spawnPosition,AppConfig.PLAYER_HP,
             AppConfig.PLAYER_MOVE_SPEED,
-            attackManager, autoPlayEnabled);
+            attackManager, autoPlayEnabled, camera);
 
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 

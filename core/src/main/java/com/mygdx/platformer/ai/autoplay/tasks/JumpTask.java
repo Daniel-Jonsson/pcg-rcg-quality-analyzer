@@ -12,6 +12,7 @@ public class JumpTask extends LeafTask<Player> {
     private boolean jumpTriggered = false;
     @Override
     public Status execute() {
+        //System.out.println("executing jump task");
         Player player = getObject();
         float direction = player.getDirection();
 

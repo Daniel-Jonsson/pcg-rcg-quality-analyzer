@@ -2,6 +2,7 @@ package com.mygdx.platformer.characters.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -72,6 +73,10 @@ public class Player extends BaseCharacter {
 
     private float gameTime = 0.0f;
 
+    OrthographicCamera camera;
+
+    private boolean autoMoving = false;
+
 
     /**
      * Instantiates the player in the game world.
@@ -82,10 +87,11 @@ public class Player extends BaseCharacter {
      * @param manager the AttackManager for spawning attacks.
      */
     public Player(World world, Vector2 position,
-                  int health, float movementSpeed, AttackManager manager, boolean autoPlay) {
+                  int health, float movementSpeed, AttackManager manager, boolean autoPlay, OrthographicCamera camera) {
         super(world, position, health, movementSpeed, AppConfig.PLAYER_WIDTH,
             AppConfig.PLAYER_HEIGHT);
         this.attackManager = manager;
+        this.camera = camera;
 
         MassData massData = new MassData();
         massData.mass = AppConfig.PLAYER_MASS;
@@ -96,7 +102,7 @@ public class Player extends BaseCharacter {
         this.gameWorld = world;
 
         if (autoPlayEnabled) {
-            this.autoPlayAgent = new AutoPlayAgent(this);
+            this.autoPlayAgent = new AutoPlayAgent(this, camera);
         }
     }
 
@@ -294,6 +300,10 @@ public class Player extends BaseCharacter {
         facingRight = false;
     }
 
+    public void stop() {
+        moveDirection = 0;
+    }
+
     /**
      * Makes the player dodge an incoming projectile.
      */
@@ -400,4 +410,6 @@ public class Player extends BaseCharacter {
     public boolean isGrounded() {
         return isGrounded;
     }
+
+
 }

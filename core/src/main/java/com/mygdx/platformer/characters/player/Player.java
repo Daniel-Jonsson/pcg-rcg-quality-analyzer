@@ -77,6 +77,10 @@ public class Player extends BaseCharacter {
 
     private boolean autoMoving = false;
 
+    private boolean attackTriggered = false;
+
+    private float attackAnimationTimer = 0.0f;
+
 
     /**
      * Instantiates the player in the game world.
@@ -128,11 +132,16 @@ public class Player extends BaseCharacter {
        checkJumpStatus(deltaTime);
 
         // Determine animation state
-        if (!isGrounded) {
-            currentFrame = jumpAnimation.getKeyFrame(stateTime);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+        if (attackTriggered) {
             currentFrame = attackAnimation.getKeyFrame(stateTime);
-        } else if (moveDirection != 0) {
+            attackAnimationTimer += deltaTime;
+            if (attackAnimationTimer > 0.1f) {
+                attackTriggered = false;
+                attackAnimationTimer = 0.0f;
+            }
+        } else if (!isGrounded) {
+            currentFrame = jumpAnimation.getKeyFrame(stateTime);
+        }  else if (moveDirection != 0) {
             currentFrame = walkAnimation.getKeyFrame(stateTime);
         } else {
             currentFrame = idleAnimation.getKeyFrame(stateTime);
@@ -283,6 +292,7 @@ public class Player extends BaseCharacter {
             true,
             AppConfig.AttackType.PLAYER_THROWING_DAGGER
         );
+        attackTriggered = true;
     }
 
     /**

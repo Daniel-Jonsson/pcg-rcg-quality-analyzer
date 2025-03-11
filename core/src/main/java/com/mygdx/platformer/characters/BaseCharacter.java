@@ -192,4 +192,25 @@ public abstract class BaseCharacter implements CharacterActions {
      * This method must be implemented by concrete classes.
      */
     protected abstract void setupAnimations();
+
+    /**
+     *
+     * @param start raycasting starting point.
+     * @param end raycasting end point.
+     * @return boolean indicating grounding status.
+     */
+    protected boolean checkForGround(World world, Vector2 start, Vector2 end) {
+        final boolean[] isGrounded = {false};
+
+        world.rayCast((fixture, point, normal, fraction) -> {
+            if (fixture.getBody().getUserData() != null && fixture.getBody().getUserData().equals("ground")) {
+                isGrounded[0] = true;
+
+                return 0;
+            }
+            return -1;
+        }, start, end);
+
+        return isGrounded[0];
+    }
 }

@@ -75,8 +75,6 @@ public class Player extends BaseCharacter {
 
     OrthographicCamera camera;
 
-    private boolean autoMoving = false;
-
     private boolean attackTriggered = false;
 
     private float attackAnimationTimer = 0.0f;
@@ -281,7 +279,6 @@ public class Player extends BaseCharacter {
         if (isGrounded) {
             jumpRequested = true;
             jumpHolding = true;
-
         }
     }
 
@@ -381,27 +378,6 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     *
-     * @param start raycasting starting point.
-     * @param end raycasting end point.
-     * @return boolean indicating grounding status.
-     */
-    private boolean checkForGround(Vector2 start, Vector2 end) {
-        final boolean[] isGrounded = {false};
-
-        gameWorld.rayCast((fixture, point, normal, fraction) -> {
-            if (fixture.getBody().getUserData() != null && fixture.getBody().getUserData().equals("ground")) {
-                isGrounded[0] = true;
-
-                return 0;
-            }
-            return -1;
-        }, start, end);
-
-        return isGrounded[0];
-    }
-
-    /**
      * Uses raycasting to check if the enemy unit is nearing an edge.
      * @param direction indicates the direction in which to check for ground.
      * @return
@@ -413,7 +389,7 @@ public class Player extends BaseCharacter {
         Vector2 rayStart = new Vector2(position.x + (direction * AppConfig.PLAYER_GROUNDCHECK_FORWARD_OFFSET), position.y - (height / 3));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
-        return checkForGround(rayStart, rayEnd);
+        return checkForGround(gameWorld, rayStart, rayEnd);
     }
 
     public boolean isGrounded() {
@@ -422,12 +398,10 @@ public class Player extends BaseCharacter {
 
     public Vector2 getNextPlatformPosition() {
         Vector2 playerPos = getBody().getPosition();
-        float rayLength = 10f; // Maximum horizontal distance to search
 
-        // Start the ray a little ahead of the player
         Vector2 rayStart = new Vector2(playerPos.x, playerPos.y);
-        // Cast the ray horizontally at the same vertical level
-        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y-20);
+
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y-10);
 
         final Vector2[] platformPos = { null };
 

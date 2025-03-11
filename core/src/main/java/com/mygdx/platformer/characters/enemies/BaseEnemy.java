@@ -152,7 +152,7 @@ public abstract class BaseEnemy extends BaseCharacter {
         Vector2 rayStart = new Vector2(enemyPosition.x + (direction * AppConfig.ENEMY_GROUNDCHECK_FORWARD_OFFSET), enemyPosition.y - (height / 2));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
-        return checkForGround(rayStart, rayEnd);
+        return checkForGround(world, rayStart, rayEnd);
     }
 
     /**
@@ -215,7 +215,7 @@ public abstract class BaseEnemy extends BaseCharacter {
         Vector2 rayStart = new Vector2(enemyPosition.x + (direction * jumpCheckDistance), enemyPosition.y);
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - 1.0f);
 
-        return checkForGround(rayStart, rayEnd);
+        return checkForGround(world, rayStart, rayEnd);
     }
 
     /**
@@ -247,28 +247,7 @@ public abstract class BaseEnemy extends BaseCharacter {
         Vector2 rayStart = new Vector2(enemyPosition.x, enemyPosition.y - (height / 2));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
-        return checkForGround(rayStart, rayEnd);
-    }
-
-    /**
-     *
-     * @param start raycasting starting point.
-     * @param end raycasting end point.
-     * @return boolean indicating grounding status.
-     */
-    private boolean checkForGround(Vector2 start, Vector2 end) {
-        final boolean[] isGrounded = {false};
-
-        world.rayCast((fixture, point, normal, fraction) -> {
-            if (fixture.getBody().getUserData() != null && fixture.getBody().getUserData().equals("ground")) {
-                isGrounded[0] = true;
-
-                return 0;
-            }
-            return -1;
-        }, start, end);
-
-        return isGrounded[0];
+        return checkForGround(world, rayStart, rayEnd);
     }
 
 }

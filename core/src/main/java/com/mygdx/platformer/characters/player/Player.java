@@ -147,6 +147,13 @@ public class Player extends BaseCharacter {
 
     }
 
+    /**
+     * Checks whether a jump has been requested, subsequently applying force to
+     * execute the jump. Because jump height is variable, a check is also performed
+     * to determine whether the jump button is being held down, and
+     * additional force should be applied.
+     * @param deltaTime Time passed since last physics update.
+     */
     private void checkJumpStatus(float deltaTime) {
         if (jumpRequested) {
             body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
@@ -275,6 +282,9 @@ public class Player extends BaseCharacter {
         return AppConfig.PLAYER_SCALE;
     }
 
+    /**
+     * Triggers a jump by setting the pertinent flags.
+     */
     public void jump() {
         if (isGrounded) {
             jumpRequested = true;
@@ -282,6 +292,10 @@ public class Player extends BaseCharacter {
         }
     }
 
+    /**
+     * Performs an attack by spawning an attack via the attackManager instance. The method also
+     * sets the attackTriggered flag to allow correct animation handling in the update() method.
+     */
     public void attack() {
         attackManager.spawnAttackAt(
             new Vector2(body.getPosition().x, body.getPosition().y + AppConfig.PLAYER_ATTACK_Y_OFFSET),
@@ -293,7 +307,7 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Moves the player forward, used by the AI.
+     * Moves the player forward.
      */
     public void moveForward() {
         moveDirection = 1;
@@ -301,11 +315,17 @@ public class Player extends BaseCharacter {
 
     }
 
+    /**
+     * Moves the player backward.
+     */
     public void moveBackward() {
         moveDirection = -1;
         facingRight = false;
     }
 
+    /**
+     * Stops player movement.
+     */
     public void stop() {
         moveDirection = 0;
     }
@@ -369,10 +389,18 @@ public class Player extends BaseCharacter {
         return enemyDetected[0];
     }
 
+    /**
+     * Accessor method for the facingRight flag.
+     * @return The current value of the boolean facingRight flag.
+     */
     public int getFacingDirection() {
         return facingRight ? 1 : -1;
     }
 
+    /**
+     * Accessor method for the gameTime field.
+     * @return The current value of the gameTime field.
+     */
     public float getGameTime() {
         return gameTime;
     }
@@ -392,10 +420,19 @@ public class Player extends BaseCharacter {
         return checkForGround(gameWorld, rayStart, rayEnd);
     }
 
+    /**
+     * Accessor method for the isGrounded flag.
+     * @return The current value of the boolean flag indicating grounding.
+     */
     public boolean isGrounded() {
         return isGrounded;
     }
 
+    /**
+     * Uses raycasting to detect the edge of the next platform. This method serves
+     * to stop the player in air during auto-play to ensure a safe landing when jumping.
+     * @return A Vector2 position indicating the point where the ray hits a platform.
+     */
     public Vector2 getNextPlatformPosition() {
         Vector2 playerPos = getBody().getPosition();
 
@@ -418,9 +455,11 @@ public class Player extends BaseCharacter {
         return platformPos[0];
     }
 
+    /**
+     * Mutator for the facingRight flag.
+     * @param facingRight The new value to be set to the facingRight boolean.
+     */
     public void setFacingRight(boolean facingRight) {
         this.facingRight = facingRight;
     }
-
-
 }

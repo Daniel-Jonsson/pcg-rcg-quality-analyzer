@@ -4,6 +4,7 @@ import com.badlogic.gdx.ai.btree.LeafTask;
 import com.badlogic.gdx.ai.btree.Task;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.platformer.characters.player.Player;
+import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * This task attempts to dodge an attack if detected.
@@ -11,7 +12,7 @@ import com.mygdx.platformer.characters.player.Player;
  */
 public class JumpTask extends LeafTask<Player> {
     private boolean jumpTriggered = false;
-    private static final float TOLERANCE = 0.5f;
+    private static final float tolerance = AppConfig.AUTO_PLAY_PLATFORM_DETECTION_TOLERANCE;
 
     /**
      * Executes the task.
@@ -26,10 +27,9 @@ public class JumpTask extends LeafTask<Player> {
         Vector2 platformPos = player.getNextPlatformPosition();
         if (platformPos != null && !player.isGrounded()) {
             float playerX = player.getBody().getPosition().x;
-            if (Math.abs(playerX - platformPos.x) < TOLERANCE) {
+            if (Math.abs(playerX - platformPos.x) < tolerance) {
 
                 player.stop();
-                // Return SUCCEEDED to signal that landing is achieved.
                 return Status.RUNNING;
             }
         }

@@ -3,13 +3,14 @@ package com.mygdx.platformer.ai.autoplay.tasks;
 import com.badlogic.gdx.ai.btree.LeafTask;
 import com.badlogic.gdx.ai.btree.Task;
 import com.mygdx.platformer.characters.player.Player;
+import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * This task executes an attack if an enemy is detected.
  * @author Robert Kullman, Daniel Jönsson
  */
 public class AttackEnemyTask extends LeafTask<Player> {
-    private float attackCooldown = 0.2f;
+    private float attackCooldown = AppConfig.AUTO_PLAY_ATTACK_COOLDOWN;
     private float lastAttackTime = -attackCooldown;
 
     /**

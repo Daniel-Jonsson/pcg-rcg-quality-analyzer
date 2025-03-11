@@ -367,4 +367,18 @@ public final class AppConfig {
         /** The necromancer's magical death bolt attack. **/
         DEATH_BOLT
     }
+
+    /* Auto-play */
+
+    /** Cooldown for player attacks during auto play. **/
+    public static final float AUTO_PLAY_ATTACK_COOLDOWN = 0.2f;
+
+    /** Platform detection tolerance for landing during autoplay. **/
+    public static final float AUTO_PLAY_PLATFORM_DETECTION_TOLERANCE = 0.5f;
+
+    /** Backward limit (in game distance units) for autoplay movement. **/
+    public static final float AUTO_PLAY_BACKWARD_MOVEMENT_LIMIT = 4f;
+
+    /** Forward limit (in game distance units) for autoplay movement. **/
+    public static final float AUTO_PLAY_FORWARD_MOVEMENT_LIMIT = 4f;
 }

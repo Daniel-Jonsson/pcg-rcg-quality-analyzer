@@ -14,11 +14,13 @@ public class DetectEnemyTask extends LeafTask<Player> {
     public Status execute() {
         Player player = getObject();
 
-        if (player.getBody().getLinearVelocity().x < 0.1 && player.getBody().getLinearVelocity().y < 0.1 && player.hasEnemiesNearby(-1)) {
+        // detect backward
+        if (player.getBody().getLinearVelocity().x == 0 && player.getBody().getLinearVelocity().y == 0 && player.hasEnemiesNearby(-1)) {
             player.setFacingRight(false);
             return Status.SUCCEEDED;
         }
 
+        // detect forward
         if (player.hasEnemiesNearby(1)) {
             player.setFacingRight(true);
             return Status.SUCCEEDED;

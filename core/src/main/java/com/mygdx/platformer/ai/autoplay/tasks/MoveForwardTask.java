@@ -5,6 +5,7 @@ import com.badlogic.gdx.ai.btree.Task;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.platformer.characters.player.Player;
+import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * This task moved the player forward if the path is clear.
@@ -35,8 +36,8 @@ public class MoveForwardTask extends LeafTask<Player> {
         Vector2 playerPosition = player.getBody().getPosition();
 
         float screenCenter = camera.position.x; // Dynamic screen reference
-        float minX = screenCenter - 5;
-        float maxX = screenCenter + 5;
+        float minX = screenCenter - AppConfig.AUTO_PLAY_BACKWARD_MOVEMENT_LIMIT;
+        float maxX = screenCenter + AppConfig.AUTO_PLAY_FORWARD_MOVEMENT_LIMIT;
 
        // System.out.println("grounded: " + player.isGrounded());
        // System.out.println("ground ahead: " + player.isGroundAhead(player.getDirection()));

@@ -113,7 +113,6 @@ public class GameScreen extends ScreenAdapter {
 
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 
-        // createGround();
         initCollisionListener();
 
     }
@@ -218,6 +217,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void resize(final int width, final int height) {
         viewport.update(width, height, true);
+        gameOverOverlay.resize(width, height);
     }
 
 
@@ -257,22 +257,6 @@ public class GameScreen extends ScreenAdapter {
         platformGenerator.dispose();
         gameOverOverlay.dispose();
     }
-
-//    private void createGround() {
-//
-//        BodyDef groundBodyDef = new BodyDef();
-//        groundBodyDef.type = BodyDef.BodyType.StaticBody;
-//        groundBodyDef.position.set(camera.viewportWidth / 2, 0);
-//
-//        Body groundBody = world.createBody(groundBodyDef);
-//
-//        PolygonShape groundBox = new PolygonShape();
-//        groundBox.setAsBox(camera.viewportWidth / 2, 0.01f);
-//
-//        groundBody.createFixture(groundBox, 0.0f);
-//
-//        groundBox.dispose();
-//    }
 
     /**
      * Initializes collision detection logic.

@@ -194,7 +194,7 @@ public final class AppConfig {
     public static final float ENEMY_JUMP_FORWARD_BOOST = 20;
 
     /** Offset for enemy ground detection raycasting. **/
-    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.5f;
+    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 1f;
 
     /* Collision Categories */
 

@@ -15,9 +15,19 @@ public class MoveForwardTask extends LeafTask<Player> {
     private boolean reachedFrontLimit = false;
     private boolean isMoving = false;
 
+    /**
+     * Constructor for the MoveForwardTask, allowing a camera to be passed as parameter,
+     * which is necessary to determing the players relative position.
+     * @param camera The game camera.
+     */
     public MoveForwardTask(OrthographicCamera camera) {
         this.camera = camera;
     }
+
+    /**
+     * Executes the task.
+     * @return Status of the task.
+     */
     @Override
     public Status execute() {
 
@@ -60,6 +70,11 @@ public class MoveForwardTask extends LeafTask<Player> {
         return Status.RUNNING;
     }
 
+    /**
+     * Copies the task to a new task.
+     * @param task the task to be filled.
+     * @return The new task.
+     */
     @Override
     protected Task<Player> copyTo(Task<Player> task) {
         return new MoveForwardTask(camera);

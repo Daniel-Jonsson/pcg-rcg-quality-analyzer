@@ -5,6 +5,11 @@ import com.badlogic.gdx.ai.btree.Task;
 import com.mygdx.platformer.characters.player.Player;
 
 public class DetectEnemyTask extends LeafTask<Player> {
+
+    /**
+     * Executes the task.
+     * @return Status of the task.
+     */
     @Override
     public Status execute() {
         Player player = getObject();
@@ -21,6 +26,11 @@ public class DetectEnemyTask extends LeafTask<Player> {
         return Status.RUNNING;
     }
 
+    /**
+     * Copies the task to a new task.
+     * @param task the task to be filled.
+     * @return The new task.
+     */
     @Override
     protected Task<Player> copyTo(Task<Player> task) {
         return new DetectEnemyTask();

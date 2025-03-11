@@ -12,6 +12,11 @@ import com.mygdx.platformer.characters.player.Player;
 public class JumpTask extends LeafTask<Player> {
     private boolean jumpTriggered = false;
     private static final float TOLERANCE = 0.5f;
+
+    /**
+     * Executes the task.
+     * @return Status of the task.
+     */
     @Override
     public Status execute() {
         Player player = getObject();
@@ -46,6 +51,11 @@ public class JumpTask extends LeafTask<Player> {
         return Status.SUCCEEDED;
     }
 
+    /**
+     * Copies the task to a new task.
+     * @param task the task to be filled.
+     * @return The new task.
+     */
     @Override
     protected Task<Player> copyTo(Task<Player> task) {
         return new JumpTask();

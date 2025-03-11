@@ -9,6 +9,11 @@ import com.mygdx.platformer.characters.player.Player;
  * @author Robert Kullman, Daniel Jönsson
  */
 public class DetectProjectile extends LeafTask<Player> {
+
+    /**
+     * Executes the task.
+     * @return Status of the task.
+     */
     @Override
     public Status execute() {
         Player player = getObject();
@@ -17,6 +22,11 @@ public class DetectProjectile extends LeafTask<Player> {
         return Status.FAILED;
     }
 
+    /**
+     * Copies the task to a new task.
+     * @param task the task to be filled.
+     * @return The new task.
+     */
     @Override
     protected Task<Player> copyTo(Task<Player> task) {
         return null;

@@ -2,6 +2,7 @@ package com.mygdx.platformer.characters.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,8 +10,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.ai.autoplay.AutoPlayAgent;
 import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.BaseCharacter;
+import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
@@ -61,6 +64,21 @@ public class Player extends BaseCharacter {
     /** The texture atlas containing the player's animations. */
     private TextureAtlas playerAtlas;
 
+    /** Indicates whether auto-play is enabled**/
+    private boolean autoPlayEnabled;
+
+    private AutoPlayAgent autoPlayAgent;
+
+    World gameWorld;
+
+    private float gameTime = 0.0f;
+
+    OrthographicCamera camera;
+
+    private boolean attackTriggered = false;
+
+    private float attackAnimationTimer = 0.0f;
+
 
     /**
      * Instantiates the player in the game world.
@@ -71,15 +89,23 @@ public class Player extends BaseCharacter {
      * @param manager the AttackManager for spawning attacks.
      */
     public Player(World world, Vector2 position,
-                  int health, float movementSpeed, AttackManager manager) {
+                  int health, float movementSpeed, AttackManager manager, boolean autoPlay, OrthographicCamera camera) {
         super(world, position, health, movementSpeed, AppConfig.PLAYER_WIDTH,
             AppConfig.PLAYER_HEIGHT);
         this.attackManager = manager;
+        this.camera = camera;
 
         MassData massData = new MassData();
         massData.mass = AppConfig.PLAYER_MASS;
         body.setMassData(massData);
         facingRight = true;
+
+        autoPlayEnabled = autoPlay;
+        this.gameWorld = world;
+
+        if (autoPlayEnabled) {
+            this.autoPlayAgent = new AutoPlayAgent(this, camera);
+        }
     }
 
     /**
@@ -90,6 +116,45 @@ public class Player extends BaseCharacter {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
+        gameTime += deltaTime;
+
+
+        if (gameTime > 10000f) {
+            gameTime = 0;
+        }
+
+        if(autoPlayEnabled && autoPlayAgent != null) {
+            autoPlayAgent.update(deltaTime);
+        }
+
+       checkJumpStatus(deltaTime);
+
+        // Determine animation state
+        if (attackTriggered) {
+            currentFrame = attackAnimation.getKeyFrame(stateTime);
+            attackAnimationTimer += deltaTime;
+            if (attackAnimationTimer > 0.1f) {
+                attackTriggered = false;
+                attackAnimationTimer = 0.0f;
+            }
+        } else if (!isGrounded) {
+            currentFrame = jumpAnimation.getKeyFrame(stateTime);
+        }  else if (moveDirection != 0) {
+            currentFrame = walkAnimation.getKeyFrame(stateTime);
+        } else {
+            currentFrame = idleAnimation.getKeyFrame(stateTime);
+        }
+
+    }
+
+    /**
+     * Checks whether a jump has been requested, subsequently applying force to
+     * execute the jump. Because jump height is variable, a check is also performed
+     * to determine whether the jump button is being held down, and
+     * additional force should be applied.
+     * @param deltaTime Time passed since last physics update.
+     */
+    private void checkJumpStatus(float deltaTime) {
         if (jumpRequested) {
             body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
             jumpRequested = false;
@@ -102,18 +167,6 @@ public class Player extends BaseCharacter {
         } else {
             jumpHolding = false;
         }
-
-        // Determine animation state
-        if (!isGrounded) {
-            currentFrame = jumpAnimation.getKeyFrame(stateTime);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-            currentFrame = attackAnimation.getKeyFrame(stateTime);
-        } else if (moveDirection != 0) {
-            currentFrame = walkAnimation.getKeyFrame(stateTime);
-        } else {
-            currentFrame = idleAnimation.getKeyFrame(stateTime);
-        }
-
     }
 
     /**
@@ -141,18 +194,17 @@ public class Player extends BaseCharacter {
      * Handles player input.
      */
     public void handleInput() {
-        moveDirection = 0;
+        if (!autoPlayEnabled) {
+            moveDirection = 0;
+        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            moveDirection = -1;
-            facingRight = false;
+            moveBackward();
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            moveDirection = 1;
-            facingRight = true;
+           moveForward();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            int attackDirectionModifier = facingRight ? 1 : -1;
-            attackManager.spawnAttackAt(new Vector2(body.getPosition().x, body.getPosition().y + AppConfig.PLAYER_ATTACK_Y_OFFSET),attackDirectionModifier, true, AppConfig.AttackType.PLAYER_THROWING_DAGGER);
+           attack();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {
@@ -228,5 +280,186 @@ public class Player extends BaseCharacter {
     @Override
     protected float getScale() {
         return AppConfig.PLAYER_SCALE;
+    }
+
+    /**
+     * Triggers a jump by setting the pertinent flags.
+     */
+    public void jump() {
+        if (isGrounded) {
+            jumpRequested = true;
+            jumpHolding = true;
+        }
+    }
+
+    /**
+     * Performs an attack by spawning an attack via the attackManager instance. The method also
+     * sets the attackTriggered flag to allow correct animation handling in the update() method.
+     */
+    public void attack() {
+        attackManager.spawnAttackAt(
+            new Vector2(body.getPosition().x, body.getPosition().y + AppConfig.PLAYER_ATTACK_Y_OFFSET),
+            getFacingDirection(),
+            true,
+            AppConfig.AttackType.PLAYER_THROWING_DAGGER
+        );
+        attackTriggered = true;
+    }
+
+    /**
+     * Moves the player forward.
+     */
+    public void moveForward() {
+        moveDirection = 1;
+        facingRight = true;
+
+    }
+
+    /**
+     * Moves the player backward.
+     */
+    public void moveBackward() {
+        moveDirection = -1;
+        facingRight = false;
+    }
+
+    /**
+     * Stops player movement.
+     */
+    public void stop() {
+        moveDirection = 0;
+    }
+
+    /**
+     * Makes the player dodge an incoming projectile.
+     */
+    public void dodge() {
+
+    }
+
+    /**
+     * Detects incoming projectiles.
+     * @return True if a projectile is approaching.
+     */
+    public boolean detectIncomingProjectile() {
+        return false;
+    }
+
+    /**
+     * Checks if the path ahead is clear.
+     * @return True if the path is clear.
+     */
+    public boolean isPathClear() {
+
+        return false;
+    }
+
+    /**
+     * Uses raycasting to check if an enemy is within sight range.
+     * @param direction The direction to check (1 for right, -1 for left).
+     * @return True if an enemy is detected in the direction.
+     */
+    public boolean hasEnemiesNearby(float direction) {
+        Vector2 playerPosition = body.getPosition();
+        float rayLength = 10;
+
+        Vector2 rayStart = new Vector2(playerPosition.x, playerPosition.y);
+        Vector2 rayEnd = new Vector2(playerPosition.x + (direction * rayLength), playerPosition.y);
+
+        return checkForEnemy(rayStart, rayEnd);
+    }
+
+    /**
+     * Casts a ray in a given direction to detect enemies.
+     * @param start The start position of the ray.
+     * @param end The end position of the ray.
+     * @return True if an enemy is detected.
+     */
+    private boolean checkForEnemy(Vector2 start, Vector2 end) {
+        final boolean[] enemyDetected = {false};
+
+        gameWorld.rayCast((fixture, point, normal, fraction) -> {
+            if (fixture.getBody().getUserData() instanceof BaseEnemy) {
+                enemyDetected[0] = true;
+                return 0; // Stop raycast after finding an enemy
+            }
+            return -1;
+        }, start, end);
+
+        return enemyDetected[0];
+    }
+
+    /**
+     * Accessor method for the facingRight flag.
+     * @return The current value of the boolean facingRight flag.
+     */
+    public int getFacingDirection() {
+        return facingRight ? 1 : -1;
+    }
+
+    /**
+     * Accessor method for the gameTime field.
+     * @return The current value of the gameTime field.
+     */
+    public float getGameTime() {
+        return gameTime;
+    }
+
+    /**
+     * Uses raycasting to check if the enemy unit is nearing an edge.
+     * @param direction indicates the direction in which to check for ground.
+     * @return
+     */
+    public boolean isGroundAhead(float direction) {
+        Vector2 position = body.getPosition();
+        float rayLength = 3f;
+
+        Vector2 rayStart = new Vector2(position.x + (direction * AppConfig.PLAYER_GROUNDCHECK_FORWARD_OFFSET), position.y - (height / 3));
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
+
+        return checkForGround(gameWorld, rayStart, rayEnd);
+    }
+
+    /**
+     * Accessor method for the isGrounded flag.
+     * @return The current value of the boolean flag indicating grounding.
+     */
+    public boolean isGrounded() {
+        return isGrounded;
+    }
+
+    /**
+     * Uses raycasting to detect the edge of the next platform. This method serves
+     * to stop the player in air during auto-play to ensure a safe landing when jumping.
+     * @return A Vector2 position indicating the point where the ray hits a platform.
+     */
+    public Vector2 getNextPlatformPosition() {
+        Vector2 playerPos = getBody().getPosition();
+
+        Vector2 rayStart = new Vector2(playerPos.x, playerPos.y);
+
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y-10);
+
+        final Vector2[] platformPos = { null };
+
+        gameWorld.rayCast((fixture, point, normal, fraction) -> {
+            // Check if the fixture belongs to a platform
+            if (fixture.getBody().getUserData() != null &&
+                fixture.getBody().getUserData().equals("ground")) {
+                platformPos[0] = new Vector2(point.x, point.y);
+                return 0; // Stop the raycast after the first hit
+            }
+            return -1; // Continue raycasting
+        }, rayStart, rayEnd);;
+
+        return platformPos[0];
+    }
+
+    /**
+     * Mutator for the facingRight flag.
+     * @param facingRight The new value to be set to the facingRight boolean.
+     */
+    public void setFacingRight(boolean facingRight) {
+        this.facingRight = facingRight;
     }
 }

@@ -65,15 +65,19 @@ public class GameScreen extends ScreenAdapter {
     EnemyManager enemyManager;
     AttackManager attackManager;
 
+    Boolean autoPlayEnabled = false;
+
 
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
      * game instance.
      * @param g main Game instance.
      */
-   public GameScreen(final PlatformerGame g) {
+   public GameScreen(final PlatformerGame g, boolean autoPlay) {
        this.game = g; // reference main class to enable switching to another screen
        this.gameTimer = new GameTimer();
+
+       autoPlayEnabled = autoPlay;
 
 
         //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
@@ -105,10 +109,10 @@ public class GameScreen extends ScreenAdapter {
 
         player = new Player(world, spawnPosition,AppConfig.PLAYER_HP,
             AppConfig.PLAYER_MOVE_SPEED,
-            attackManager);
+            attackManager, autoPlayEnabled, camera);
+
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 
-        // createGround();
         initCollisionListener();
 
     }
@@ -122,7 +126,9 @@ public class GameScreen extends ScreenAdapter {
     public void render(final float deltaTime) {
         if (!isGameOver) {
             checkGameOver();
-            player.handleInput();
+            //if(!autoPlayEnabled) {
+                player.handleInput();
+            //}
             gameTimer.update(deltaTime);
             camera.position.x += 2f * deltaTime;
             camera.update();
@@ -211,6 +217,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void resize(final int width, final int height) {
         viewport.update(width, height, true);
+        gameOverOverlay.resize(width, height);
     }
 
 
@@ -251,22 +258,6 @@ public class GameScreen extends ScreenAdapter {
         gameOverOverlay.dispose();
     }
 
-//    private void createGround() {
-//
-//        BodyDef groundBodyDef = new BodyDef();
-//        groundBodyDef.type = BodyDef.BodyType.StaticBody;
-//        groundBodyDef.position.set(camera.viewportWidth / 2, 0);
-//
-//        Body groundBody = world.createBody(groundBodyDef);
-//
-//        PolygonShape groundBox = new PolygonShape();
-//        groundBox.setAsBox(camera.viewportWidth / 2, 0.01f);
-//
-//        groundBody.createFixture(groundBox, 0.0f);
-//
-//        groundBox.dispose();
-//    }
-
     /**
      * Initializes collision detection logic.
      */
@@ -283,7 +274,9 @@ public class GameScreen extends ScreenAdapter {
 
                 if (a.getBody() == playerBody || b.getBody() == playerBody) {
                     if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
-                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM) {
+                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
+                        || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
+                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
                         player.setGrounded(true);
                     }
                 }
@@ -307,7 +300,6 @@ public class GameScreen extends ScreenAdapter {
                     }
                 }
 
-                // Player -> Enemy collision
                 if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
                     && b.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)
                     || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
@@ -331,7 +323,9 @@ public class GameScreen extends ScreenAdapter {
 
                 if (a.getBody() == playerBody || b.getBody() == playerBody) {
                     if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM ||
-                        b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM) {
+                        b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
+                        || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
+                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
                         player.setGrounded(false);
                     }
                 }

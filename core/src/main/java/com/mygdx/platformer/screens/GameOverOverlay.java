@@ -89,6 +89,10 @@ public class GameOverOverlay {
         }
     }
 
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
     /**
      * Disposes of resources when the overlay is no longer needed.
      */

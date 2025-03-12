@@ -59,8 +59,7 @@ public final class AppConfig {
     /** Initial spawn x-coordinate of the player. */
     public static final int PLAYER_SPAWN_X = 1;
 
-    /** Initial spawn y-coordinate of the player. */
-    public static final int PLAYER_SPAWN_Y = 4;
+
 
     /** Player movement speed. */
     public static final float PLAYER_MOVE_SPEED = 5f;
@@ -113,6 +112,9 @@ public final class AppConfig {
     /** Player hitpoints. */
     public static final int PLAYER_HP = 500;
 
+    /** Offset for player ground detection raycasting. **/
+    public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.1f;
+
     /* Procedural Content Generation (PCG) */
 
     /** Minimum gap between platforms. */
@@ -131,16 +133,16 @@ public final class AppConfig {
     public static final float PLATFORM_HEIGHT = 0.5f;
 
     /** Base y-position for platforms. */
-    public static final float PLATFORM_BASE_Y_POSITION = 2.5f;
+    public static final float PLATFORM_BASE_Y_POSITION = 5f;
+
+    /** Initial spawn y-coordinate of the player. */
+    public static final float PLAYER_SPAWN_Y = PLATFORM_BASE_Y_POSITION + 1f;
 
     /** Width of a middle segment of a platform. */
     public static final float PLATFORM_MIDDLE_SEGMENT_WIDTH = 0.5f;
 
-    /** Base y-coordinate for generating platforms. */
-    public static final float BASE_Y = 2.5f;
-
     /** Maximum allowed variation in platform y-coordinates. */
-    public static final float MAX_Y_VARIATION = 0.5f;
+    public static final float MAX_Y_VARIATION = 2f;
 
     /** Right margin offscreen for platform spawning. */
     public static final float RIGHT_OFFSCREEN_MARGIN = 2.0f;
@@ -192,7 +194,7 @@ public final class AppConfig {
     public static final float ENEMY_JUMP_FORWARD_BOOST = 20;
 
     /** Offset for enemy ground detection raycasting. **/
-    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.2f;
+    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 1f;
 
     /* Collision Categories */
 
@@ -365,4 +367,18 @@ public final class AppConfig {
         /** The necromancer's magical death bolt attack. **/
         DEATH_BOLT
     }
+
+    /* Auto-play */
+
+    /** Cooldown for player attacks during auto play. **/
+    public static final float AUTO_PLAY_ATTACK_COOLDOWN = 0.2f;
+
+    /** Platform detection tolerance for landing during autoplay. **/
+    public static final float AUTO_PLAY_PLATFORM_DETECTION_TOLERANCE = 0.5f;
+
+    /** Backward limit (in game distance units) for autoplay movement. **/
+    public static final float AUTO_PLAY_BACKWARD_MOVEMENT_LIMIT = 4f;
+
+    /** Forward limit (in game distance units) for autoplay movement. **/
+    public static final float AUTO_PLAY_FORWARD_MOVEMENT_LIMIT = 4f;
 }

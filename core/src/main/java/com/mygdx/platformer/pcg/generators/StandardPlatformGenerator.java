@@ -28,6 +28,9 @@ public class StandardPlatformGenerator implements IPlatformGenerator {
     private float maxYvariation = AppConfig.MAX_Y_VARIATION;
     private float spawnProbability = AppConfig.BASE_SPAWN_PROBABILITY;
 
+    private float minYPosition = 1.0f;
+    private float maxYPosition = AppConfig.SCREEN_HEIGHT * 0.8f;
+
     @Override
     public Platform initialize(World world, EnemyManager enemyManager) {
         this.world = world;
@@ -45,7 +48,20 @@ public class StandardPlatformGenerator implements IPlatformGenerator {
         float gap = minGap + (float) Math.random() * (maxGap - minGap);
         float width = minWidth + (float) Math.round(Math.random() * (maxWidth - minWidth));
         float newX = lastPlatformX + gap + width / 2;
-        float newY = baseY + ((float) Math.random() * 2 * maxYvariation - maxYvariation);
+
+        float normalizedHeight = (baseY - minYPosition) / (maxYPosition - minYPosition);
+        float bias = 1.0f - normalizedHeight;
+
+        float yVariation;
+        if (random.nextFloat() < bias) {
+            yVariation = random.nextFloat() * maxYvariation;
+        } else {
+            yVariation = -random.nextFloat() * maxYvariation;
+        }
+
+        float newY = baseY + yVariation;
+
+        newY = Math.max(minYPosition, Math.min(maxYPosition, newY));
 
         Platform newPlatform = new Platform(world, newX, newY, width, platformHeight);
 

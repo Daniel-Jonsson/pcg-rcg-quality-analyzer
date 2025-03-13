@@ -23,6 +23,7 @@ import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.attacks.BaseAttack;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.characters.player.Player;
+import com.mygdx.platformer.difficulty.GameDifficultyManager;
 import com.mygdx.platformer.pcg.manager.PlatformManager;
 import com.mygdx.platformer.utilities.AppConfig;
 
@@ -135,6 +136,7 @@ public class GameScreen extends ScreenAdapter {
             input();
             logic(deltaTime);
             platformManager.update(camera.position.x, AppConfig.SCREEN_WIDTH);
+            GameDifficultyManager.getInstance().update(deltaTime);
             doPhysicsStep(deltaTime);
 
             enemyManager.setTargetPosition(player.getBody().getPosition());

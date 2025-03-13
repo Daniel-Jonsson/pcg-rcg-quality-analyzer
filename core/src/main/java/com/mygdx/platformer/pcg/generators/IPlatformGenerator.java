@@ -14,4 +14,5 @@ import com.mygdx.platformer.pcg.Platform;
 public interface IPlatformGenerator {
     Platform initialize(World world, EnemyManager enemyManager);
     Platform generatePlatform(float lastPlatformX, float baseY);
+    String getGeneratorType();
 }

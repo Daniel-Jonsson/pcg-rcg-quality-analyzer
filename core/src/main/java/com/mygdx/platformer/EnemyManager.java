@@ -3,6 +3,7 @@ package com.mygdx.platformer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.ai.enemy.EnemyAIAgent;
 import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
@@ -23,7 +24,7 @@ import java.util.Random;
  *
  * @author Daniel Jönsson, Robert Kullman
  */
-public class EnemyManager {
+public class EnemyManager implements GameDifficultyObserver {
 
     /** The Box2D world where enemies exist. */
     private World world;
@@ -129,6 +130,11 @@ public class EnemyManager {
 
     public void setTargetPosition(Vector2 targetPosition) {
         this.targetPosition = targetPosition;
+    }
+
+    @Override
+    public void onDifficultyChanged(int difficultyLevel) {
+        // TODO: Implement difficulty-based enemy changes (i.e. hp, speed, etc.)
     }
 
 }

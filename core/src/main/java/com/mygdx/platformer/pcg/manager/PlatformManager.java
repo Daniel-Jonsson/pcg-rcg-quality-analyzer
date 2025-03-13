@@ -7,6 +7,7 @@ import com.mygdx.platformer.pcg.Platform;
 import com.mygdx.platformer.pcg.factory.PlatformGeneratorFactory;
 import com.mygdx.platformer.pcg.generators.IPlatformGenerator;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.difficulty.observer.GameDifficultyObserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ import java.util.Map;
  * @author Daniel Jönsson
  * @author Robert Kullman
  */
-public class PlatformManager {
+public class PlatformManager implements GameDifficultyObserver {
     private List<Platform> platforms;
     private Map<AppConfig.PlatformGeneratorType, IPlatformGenerator> generators;
     private IPlatformGenerator currentGenerator;
@@ -155,5 +156,10 @@ public class PlatformManager {
      */
     public List<Platform> getPlatforms() {
         return platforms;
+    }
+
+    @Override
+    public void onDifficultyChanged(int difficultyLevel) {
+        // TODO Add difficulty-based platform changes (i.e. gap size, platform size, etc.)
     }
 }

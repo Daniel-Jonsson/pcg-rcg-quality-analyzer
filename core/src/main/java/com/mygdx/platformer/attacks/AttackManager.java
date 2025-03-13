@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author Daniel Jönsson, Robert Kullman
  */
-public class AttackManager {
+public class AttackManager implements GameDifficultyObserver {
     private final List<BaseAttack> attacks;
     private final Texture orbTexture;
     private final World world;
@@ -102,5 +103,10 @@ public class AttackManager {
         for (BaseAttack attack : attacks) {
             attack.render(batch);
         }
+    }
+
+    @Override
+    public void onDifficultyChanged(int difficultyLevel) {
+        // TODO: Implement difficulty-based attack changes
     }
 }

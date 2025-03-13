@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
 /**
@@ -35,11 +36,11 @@ public class HealthBar {
 
         healthBarSprite = new Sprite(new Texture(Assets.HEALTHBAR_TEXTURE));
 
-        barWidth = 4f;
-        barHeight = 1f;
+        barWidth = AppConfig.PLAYER_HEALTHBAR_WIDTH;
+        barHeight = AppConfig.PLAYER_HEALTHBAR_HEIGHT;
 
-        offsetX = 0.5f;
-        offsetY = 0.5f;
+        offsetX = AppConfig.PLAYER_HEALTHBAR_OFFSET_X;
+        offsetY = AppConfig.PLAYER_HEALTHBAR_OFFSET_Y;
     }
 
     /**

@@ -43,7 +43,6 @@ public class PlatformManager implements GameDifficultyObserver {
     private float maxGap;
     private float minWidth;
     private float maxWidth;
-    private float platformHeight;
     private float maxYvariation;
     private float spawnProbability;
     private float minYPosition;
@@ -54,10 +53,6 @@ public class PlatformManager implements GameDifficultyObserver {
     private float difficultyWidthMultiplier = 1.0f;
     private float difficultyYvariationMultiplier = 1.0f;
     private float difficultySpawnProbabilityMultiplier = 1.0f;
-
-    private int currentDifficultyLevel = 0;
-    private int maxDifficultyLevel = 10;
-
 
 
     /**
@@ -98,11 +93,10 @@ public class PlatformManager implements GameDifficultyObserver {
         maxGap = AppConfig.MAX_GAP;
         minWidth = AppConfig.MIN_WIDTH;
         maxWidth = AppConfig.MAX_WIDTH;
-        platformHeight = AppConfig.PLATFORM_HEIGHT;
         maxYvariation = AppConfig.MAX_Y_VARIATION;
         spawnProbability = AppConfig.BASE_SPAWN_PROBABILITY;
-        minYPosition = 1.0f;
-        maxYPosition = AppConfig.SCREEN_HEIGHT * 0.8f;
+        minYPosition = AppConfig.PLATFORM_MIN_Y_POSITION;
+        maxYPosition = AppConfig.PLATFORM_MAX_Y_POSITION;
     }
 
     /**
@@ -174,7 +168,6 @@ public class PlatformManager implements GameDifficultyObserver {
         }
     }
 
-
     /**
      * Generates a new platform based on current parameters.
      * 
@@ -183,7 +176,6 @@ public class PlatformManager implements GameDifficultyObserver {
      * @return The newly generated platform
      */
     private Platform generatePlatform(float lastPlatformX, float baseY) {
-        // Apply current difficulty multipliers to parameters
         float currentMinGap = minGap * difficultyGapMultiplier;
         float currentMaxGap = maxGap * difficultyGapMultiplier;
         float currentMinWidth = minWidth * difficultyWidthMultiplier;
@@ -191,21 +183,34 @@ public class PlatformManager implements GameDifficultyObserver {
         float currentMaxYVariation = maxYvariation * difficultyYvariationMultiplier;
         float currentSpawnProbability = spawnProbability * difficultySpawnProbabilityMultiplier;
 
-        float gap = currentMinGap + random.nextFloat() * (currentMaxGap - currentMinGap);
-        float width = currentMinWidth + random.nextFloat() * (currentMaxWidth - currentMinWidth);
-        float newX = lastPlatformX + gap + width / 2;
-
         float normalizedHeight = (baseY - minYPosition) / (maxYPosition - minYPosition);
         float bias = 1.0f - normalizedHeight;
 
         float yVariation;
-
         if (random.nextFloat() < bias) {
             yVariation = random.nextFloat() * currentMaxYVariation;
         } else {
             yVariation = -random.nextFloat() * currentMaxYVariation;
         }
 
+        float absYVariation = Math.abs(yVariation);
+
+
+        float minRequiredGap = absYVariation;
+
+        float adjustedMinGap = Math.max(currentMinGap, minRequiredGap);
+
+        float gap;
+        if (adjustedMinGap >= currentMaxGap) {
+            // If the required minimum gap exceeds the maximum, use the minimum
+            gap = adjustedMinGap;
+        } else {
+            // Otherwise, generate a random gap between the adjusted minimum and maximum
+            gap = adjustedMinGap + random.nextFloat() * (currentMaxGap - adjustedMinGap);
+        }
+
+        float width = currentMinWidth + random.nextFloat() * (currentMaxWidth - currentMinWidth);
+        float newX = lastPlatformX + gap + width / 2;
         float newY = baseY + yVariation;
 
         newY = Math.max(minYPosition, Math.min(maxYPosition, newY));
@@ -252,15 +257,15 @@ public class PlatformManager implements GameDifficultyObserver {
 
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
-        this.currentDifficultyLevel = difficultyLevel;
 
-        float normalizedDifficulty = (float) difficultyLevel / maxDifficultyLevel;
-        difficultyGapMultiplier = 1.0f + normalizedDifficulty * 1.0f;
-        difficultyWidthMultiplier = 1.0f + normalizedDifficulty * 0.4f;
-        difficultyYvariationMultiplier = 1.0f + normalizedDifficulty * 1.0f;
-        difficultySpawnProbabilityMultiplier = 1.0f + normalizedDifficulty * 0.3f;
+        float gapIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT); 
+        float widthDecrease = 1.0f - (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
+        float yVariationIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT); 
+        float spawnRateIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT); 
 
-        System.out.println("Difficulty changed to: " + difficultyLevel);
-        System.out.println("Difficulty multipliers: " + difficultyGapMultiplier + ", " + difficultyWidthMultiplier + ", " + difficultyYvariationMultiplier + ", " + difficultySpawnProbabilityMultiplier);
+        difficultyGapMultiplier = gapIncrease;
+        difficultyWidthMultiplier = Math.max(AppConfig.MIN_PLATFORM_WIDTH_MULTIPLIER, widthDecrease);
+        difficultyYvariationMultiplier = yVariationIncrease;
+        difficultySpawnProbabilityMultiplier = spawnRateIncrease;
     }
 }

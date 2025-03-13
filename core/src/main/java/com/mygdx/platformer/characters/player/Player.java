@@ -270,7 +270,7 @@ public class Player extends BaseCharacter {
      */
     @Override
     protected short getCollisionMask() {
-        return AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ATTACK | AppConfig.CATEGORY_ENEMY;
+        return AppConfig.CATEGORY_PLATFORM | AppConfig.CATEGORY_ATTACK;
     }
 
     /**

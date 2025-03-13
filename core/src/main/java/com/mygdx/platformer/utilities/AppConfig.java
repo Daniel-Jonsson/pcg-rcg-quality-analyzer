@@ -142,7 +142,7 @@ public final class AppConfig {
     public static final float PLATFORM_MIDDLE_SEGMENT_WIDTH = 0.5f;
 
     /** Maximum allowed variation in platform y-coordinates. */
-    public static final float MAX_Y_VARIATION = 2f;
+    public static final float MAX_Y_VARIATION = 3f;
 
     /** Right margin offscreen for platform spawning. */
     public static final float RIGHT_OFFSCREEN_MARGIN = 2.0f;

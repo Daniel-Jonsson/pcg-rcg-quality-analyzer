@@ -3,12 +3,13 @@ package com.mygdx.platformer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.ai.enemy.EnemyAIAgent;
 import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.characters.enemies.Goblin;
 import com.mygdx.platformer.characters.enemies.Necromancer;
+import com.mygdx.platformer.difficulty.GameDifficultyManager;
+import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.utilities.AppConfig;
 
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class EnemyManager implements GameDifficultyObserver {
         this.random = new Random();
         this.attackManager = attackManager;
         this.targetPosition = targetPosition;
+        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**
@@ -134,7 +136,7 @@ public class EnemyManager implements GameDifficultyObserver {
 
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
-        // TODO: Implement difficulty-based enemy changes (i.e. hp, speed, etc.)
+        System.out.println("Difficulty on EnemyManager changed to: " + difficultyLevel);
     }
 
 }

@@ -4,7 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.difficulty.observer.GameDifficultyObserver;
+import com.mygdx.platformer.difficulty.GameDifficultyManager;
+import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
@@ -33,6 +34,7 @@ public class AttackManager implements GameDifficultyObserver {
         this.world = world;
         this.attacks = new ArrayList<>();
         this.orbTexture = new Texture(Assets.THROWING_DAGGER_TEXTURE);
+        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**
@@ -108,5 +110,6 @@ public class AttackManager implements GameDifficultyObserver {
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
         // TODO: Implement difficulty-based attack changes
+        System.out.println("Difficulty on AttackManager changed to: " + difficultyLevel);
     }
 }

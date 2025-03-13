@@ -3,11 +3,12 @@ package com.mygdx.platformer.pcg.manager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.EnemyManager;
+import com.mygdx.platformer.difficulty.GameDifficultyManager;
+import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.pcg.Platform;
 import com.mygdx.platformer.pcg.factory.PlatformGeneratorFactory;
 import com.mygdx.platformer.pcg.generators.IPlatformGenerator;
 import com.mygdx.platformer.utilities.AppConfig;
-import com.mygdx.difficulty.observer.GameDifficultyObserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +58,7 @@ public class PlatformManager implements GameDifficultyObserver {
         Platform initialPlatform = currentGenerator.initialize(world, enemyManager);
         platforms.add(initialPlatform);
         lastPlatformX = initialPlatform.getBody().getPosition().x + initialPlatform.getWidth() / 2;
+        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**
@@ -161,5 +163,6 @@ public class PlatformManager implements GameDifficultyObserver {
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
         // TODO Add difficulty-based platform changes (i.e. gap size, platform size, etc.)
+        System.out.println("Difficulty on PlatformManager changed to: " + difficultyLevel);
     }
 }

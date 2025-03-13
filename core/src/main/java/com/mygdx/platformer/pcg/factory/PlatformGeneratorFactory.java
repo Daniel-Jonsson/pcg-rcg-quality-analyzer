@@ -2,6 +2,7 @@ package com.mygdx.platformer.pcg.factory;
 
 import com.mygdx.platformer.pcg.generators.IPlatformGenerator;
 import com.mygdx.platformer.pcg.generators.StandardPlatformGenerator;
+import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * Factory class for creating platform generators.
@@ -20,10 +21,10 @@ public class PlatformGeneratorFactory {
      * @return A new instance of the requested platform generator, or null if the
      *         type is not recognized
      */
-    public static IPlatformGenerator createGenerator(String type) {
+    public static IPlatformGenerator createGenerator(AppConfig.PlatformGeneratorType type) {
         // This can be extended to include more types of generators in the future.
-        switch (type.toLowerCase()) {
-            case "standard":
+        switch (type) {
+            case STANDARD:
                 return new StandardPlatformGenerator();
             default:
                 return new StandardPlatformGenerator();
@@ -35,9 +36,9 @@ public class PlatformGeneratorFactory {
      * 
      * @return An array of all available generator types
      */
-    public static String[] getAvailableGeneratorTypes() {
-        return new String[] {
-                "Standard",
+    public static AppConfig.PlatformGeneratorType[] getAvailableGeneratorTypes() {
+        return new AppConfig.PlatformGeneratorType[] {
+                AppConfig.PlatformGeneratorType.STANDARD,
         };
     }
 }

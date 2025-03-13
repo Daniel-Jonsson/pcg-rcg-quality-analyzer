@@ -58,7 +58,7 @@ public class StandardPlatformGenerator implements IPlatformGenerator {
     }
 
     @Override
-    public String getGeneratorType() {
-        return "Standard";
+    public AppConfig.PlatformGeneratorType getGeneratorType() {
+        return AppConfig.PlatformGeneratorType.STANDARD;
     }
 }

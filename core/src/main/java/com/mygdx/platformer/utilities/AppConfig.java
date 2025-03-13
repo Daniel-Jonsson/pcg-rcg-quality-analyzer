@@ -398,6 +398,8 @@ public final class AppConfig {
      */
     public static final float DIFFICULTY_INCREASE_AMOUNT = 0.05f;
 
+    public static final float MIN_PLATFORM_WIDTH_MULTIPLIER = 0.8f;
+
     /* Auto-play */
 
     /** Cooldown for player attacks during auto play. **/

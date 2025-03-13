@@ -153,6 +153,12 @@ public final class AppConfig {
     /** X-coordinate of the first platform. */
     public static final float FIRST_PLATFORM_X = 4f;
 
+    /** Maximum y-coordinate of platforms. */
+    public static final float PLATFORM_MAX_Y_POSITION = SCREEN_HEIGHT * 0.6f;
+
+    /** Minimum y-coordinate of platforms. */
+    public static final float PLATFORM_MIN_Y_POSITION = 1.0f;
+
     /* UI Configuration */
 
     /** Width of UI buttons. */
@@ -368,9 +374,29 @@ public final class AppConfig {
         DEATH_BOLT
     }
 
+    /* DIFFICULTY ADJUSTMENT CONFIGURATIONS */
+
+    /**
+     * Enum representing different types of platform generators available in the game.
+     */
     public enum PlatformGeneratorType {
         STANDARD,
     }
+
+    /**
+     * The maximum difficulty level in the game.
+     */
+    public static final int MAX_DIFFICULTY_LEVEL = 20;
+
+    /**
+     * The time interval (in seconds) for difficulty level increase.
+     */
+    public static final float DIFFICULTY_INCREASE_TIME_INTERVAL = 10.0f;
+
+    /**
+     * The amount of difficulty level to increase per time interval (5%).
+     */
+    public static final float DIFFICULTY_INCREASE_AMOUNT = 0.05f;
 
     /* Auto-play */
 

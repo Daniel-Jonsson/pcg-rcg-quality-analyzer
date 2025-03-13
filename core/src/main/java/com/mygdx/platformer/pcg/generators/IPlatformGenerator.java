@@ -13,7 +13,9 @@ import com.mygdx.platformer.utilities.AppConfig;
  * @author Daniel Jönsson
  */
 public interface IPlatformGenerator {
-    Platform initialize(World world, EnemyManager enemyManager);
+    // The return type is Platform for now but can be made more modular and allow
+    // different types of platforms to be generated in the future.
+    Platform initialize(World world, EnemyManager enemyManager); 
     Platform generatePlatform(float lastPlatformX, float baseY);
     AppConfig.PlatformGeneratorType getGeneratorType();
 }

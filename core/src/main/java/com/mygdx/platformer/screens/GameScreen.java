@@ -191,13 +191,11 @@ public class GameScreen extends ScreenAdapter {
      * .e., Player has fallen of a platform).
      */
     private void checkGameOver() {
-        if ((player.getBody().getPosition().y + AppConfig.PLAYER_HEIGHT) <= 0) {
+        if ((player.getBody().getPosition().y + AppConfig.PLAYER_HEIGHT) <= 0 || player.getCurrentHealth() <= 0) {
             isGameOver = true;
             gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
             gameOverOverlay.show();
         }
-        // TODO: Check if player health is negative or 0 (i.e., if the player
-        //  is dead)
     }
 
     /**

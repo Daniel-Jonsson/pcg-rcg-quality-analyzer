@@ -368,6 +368,10 @@ public final class AppConfig {
         DEATH_BOLT
     }
 
+    public enum PlatformGeneratorType {
+        STANDARD,
+    }
+
     /* Auto-play */
 
     /** Cooldown for player attacks during auto play. **/

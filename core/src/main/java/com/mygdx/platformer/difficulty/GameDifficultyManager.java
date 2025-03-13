@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
+import com.mygdx.platformer.utilities.AppConfig;
 
 public class GameDifficultyManager {
     public static GameDifficultyManager INSTANCE;
     private int difficultyLevel;
-    private int maxDifficultyLevel = 10;
+    private int maxDifficultyLevel = AppConfig.MAX_DIFFICULTY_LEVEL;
     private float difficultyIncreaseInterval = 10f;
     private final List<GameDifficultyObserver> observers = new ArrayList<>();
     private float timeSinceLastDifficultyIncrease = 0f;

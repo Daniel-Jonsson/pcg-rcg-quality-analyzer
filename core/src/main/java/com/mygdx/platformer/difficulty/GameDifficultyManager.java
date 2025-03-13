@@ -22,7 +22,7 @@ public class GameDifficultyManager {
 
     public void update(float deltaTime) {
         timeSinceLastDifficultyIncrease += deltaTime;
-        if (timeSinceLastDifficultyIncrease >= difficultyIncreaseInterval) {
+        if (timeSinceLastDifficultyIncrease >= difficultyIncreaseInterval && difficultyLevel < maxDifficultyLevel) {
             increaseDifficulty();
             timeSinceLastDifficultyIncrease = 0f;
         }
@@ -50,5 +50,11 @@ public class GameDifficultyManager {
         for (GameDifficultyObserver observer : observers) {
             observer.onDifficultyChanged(difficultyLevel);
         }
+    }
+
+    public void resetDifficulty() {
+        difficultyLevel = 0;
+        timeSinceLastDifficultyIncrease = 0f;
+        notifyObservers();
     }
 }

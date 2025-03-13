@@ -31,7 +31,6 @@ public class PlatformManager {
 
     private World world;
     private float lastPlatformX; // right edge of the last platform
-    private float baseY = AppConfig.PLATFORM_BASE_Y_POSITION;
     private float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
 
     /**
@@ -109,8 +108,9 @@ public class PlatformManager {
      * @param viewportWidth The width of the viewport
      */
     public void update(float cameraX, float viewportWidth) {
-            while (lastPlatformX < cameraX + viewportWidth / 2 + rightOffscreenMargin) {
-            Platform newPlatform = currentGenerator.generatePlatform(lastPlatformX, baseY);
+        while (lastPlatformX < cameraX + viewportWidth / 2 + rightOffscreenMargin) {
+            float newBaseY = platforms.getLast().getBody().getPosition().y;
+            Platform newPlatform = currentGenerator.generatePlatform(lastPlatformX, newBaseY);
             platforms.add(newPlatform);
             lastPlatformX = newPlatform.getBody().getPosition().x + newPlatform.getWidth() / 2;
         }

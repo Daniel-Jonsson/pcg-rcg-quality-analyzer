@@ -1,6 +1,7 @@
 package com.mygdx.platformer.pcg.manager;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.EnemyManager;
 import com.mygdx.platformer.difficulty.GameDifficultyManager;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Manages platform generation and lifecycle.
@@ -30,10 +32,33 @@ public class PlatformManager implements GameDifficultyObserver {
     private Map<AppConfig.PlatformGeneratorType, IPlatformGenerator> generators;
     private IPlatformGenerator currentGenerator;
     private AppConfig.PlatformGeneratorType currentGeneratorType;
+    private Random random = new Random();
+    private EnemyManager enemyManager;
 
     private World world;
     private float lastPlatformX; // right edge of the last platform
     private float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
+
+    private float minGap;
+    private float maxGap;
+    private float minWidth;
+    private float maxWidth;
+    private float platformHeight;
+    private float maxYvariation;
+    private float spawnProbability;
+    private float minYPosition;
+    private float maxYPosition;
+
+    // Difficulty-based variables
+    private float difficultyGapMultiplier = 1.0f;
+    private float difficultyWidthMultiplier = 1.0f;
+    private float difficultyYvariationMultiplier = 1.0f;
+    private float difficultySpawnProbabilityMultiplier = 1.0f;
+
+    private int currentDifficultyLevel = 0;
+    private int maxDifficultyLevel = 10;
+
+
 
     /**
      * Constructs a new PlatformManager with the specified world and enemy manager.
@@ -45,6 +70,9 @@ public class PlatformManager implements GameDifficultyObserver {
         this.world = world;
         this.platforms = new ArrayList<>();
         this.generators = new HashMap<>();
+        this.enemyManager = enemyManager;
+
+        initializePlatformParameters();
 
         for (AppConfig.PlatformGeneratorType type : PlatformGeneratorFactory.getAvailableGeneratorTypes()) {
             IPlatformGenerator generator = PlatformGeneratorFactory.createGenerator(type);
@@ -55,10 +83,26 @@ public class PlatformManager implements GameDifficultyObserver {
 
         setCurrentGenerator(AppConfig.PlatformGeneratorType.STANDARD);
 
-        Platform initialPlatform = currentGenerator.initialize(world, enemyManager);
+        Platform initialPlatform = currentGenerator.initialize(world);
         platforms.add(initialPlatform);
         lastPlatformX = initialPlatform.getBody().getPosition().x + initialPlatform.getWidth() / 2;
         GameDifficultyManager.getInstance().registerObserver(this);
+    }
+
+    /**
+     * Initializes platform generation parameters with default values from
+     * AppConfig.
+     */
+    private void initializePlatformParameters() {
+        minGap = AppConfig.MIN_GAP;
+        maxGap = AppConfig.MAX_GAP;
+        minWidth = AppConfig.MIN_WIDTH;
+        maxWidth = AppConfig.MAX_WIDTH;
+        platformHeight = AppConfig.PLATFORM_HEIGHT;
+        maxYvariation = AppConfig.MAX_Y_VARIATION;
+        spawnProbability = AppConfig.BASE_SPAWN_PROBABILITY;
+        minYPosition = 1.0f;
+        maxYPosition = AppConfig.SCREEN_HEIGHT * 0.8f;
     }
 
     /**
@@ -113,7 +157,7 @@ public class PlatformManager implements GameDifficultyObserver {
     public void update(float cameraX, float viewportWidth) {
         while (lastPlatformX < cameraX + viewportWidth / 2 + rightOffscreenMargin) {
             float newBaseY = platforms.getLast().getBody().getPosition().y;
-            Platform newPlatform = currentGenerator.generatePlatform(lastPlatformX, newBaseY);
+            Platform newPlatform = generatePlatform(lastPlatformX, newBaseY);
             platforms.add(newPlatform);
             lastPlatformX = newPlatform.getBody().getPosition().x + newPlatform.getWidth() / 2;
         }
@@ -128,6 +172,52 @@ public class PlatformManager implements GameDifficultyObserver {
                 iter.remove();
             }
         }
+    }
+
+
+    /**
+     * Generates a new platform based on current parameters.
+     * 
+     * @param lastPlatformX The x-coordinate of the right edge of the last platform
+     * @param baseY         The base y-coordinate for platform generation
+     * @return The newly generated platform
+     */
+    private Platform generatePlatform(float lastPlatformX, float baseY) {
+        // Apply current difficulty multipliers to parameters
+        float currentMinGap = minGap * difficultyGapMultiplier;
+        float currentMaxGap = maxGap * difficultyGapMultiplier;
+        float currentMinWidth = minWidth * difficultyWidthMultiplier;
+        float currentMaxWidth = maxWidth * difficultyWidthMultiplier;
+        float currentMaxYVariation = maxYvariation * difficultyYvariationMultiplier;
+        float currentSpawnProbability = spawnProbability * difficultySpawnProbabilityMultiplier;
+
+        float gap = currentMinGap + random.nextFloat() * (currentMaxGap - currentMinGap);
+        float width = currentMinWidth + random.nextFloat() * (currentMaxWidth - currentMinWidth);
+        float newX = lastPlatformX + gap + width / 2;
+
+        float normalizedHeight = (baseY - minYPosition) / (maxYPosition - minYPosition);
+        float bias = 1.0f - normalizedHeight;
+
+        float yVariation;
+
+        if (random.nextFloat() < bias) {
+            yVariation = random.nextFloat() * currentMaxYVariation;
+        } else {
+            yVariation = -random.nextFloat() * currentMaxYVariation;
+        }
+
+        float newY = baseY + yVariation;
+
+        newY = Math.max(minYPosition, Math.min(maxYPosition, newY));
+
+        Platform newPlatform = currentGenerator.generatePlatform(newX, newY, width);
+
+        if (random.nextFloat() < currentSpawnProbability) {
+            Vector2 enemySpawnPos = new Vector2(newX, newY + AppConfig.ENEMY_SPAWN_HEIGHT);
+            enemyManager.spawnEnemyAt(enemySpawnPos);
+        }
+
+        return newPlatform;
     }
 
     /**
@@ -162,7 +252,15 @@ public class PlatformManager implements GameDifficultyObserver {
 
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
-        // TODO Add difficulty-based platform changes (i.e. gap size, platform size, etc.)
-        System.out.println("Difficulty on PlatformManager changed to: " + difficultyLevel);
+        this.currentDifficultyLevel = difficultyLevel;
+
+        float normalizedDifficulty = (float) difficultyLevel / maxDifficultyLevel;
+        difficultyGapMultiplier = 1.0f + normalizedDifficulty * 1.0f;
+        difficultyWidthMultiplier = 1.0f + normalizedDifficulty * 0.4f;
+        difficultyYvariationMultiplier = 1.0f + normalizedDifficulty * 1.0f;
+        difficultySpawnProbabilityMultiplier = 1.0f + normalizedDifficulty * 0.3f;
+
+        System.out.println("Difficulty changed to: " + difficultyLevel);
+        System.out.println("Difficulty multipliers: " + difficultyGapMultiplier + ", " + difficultyWidthMultiplier + ", " + difficultyYvariationMultiplier + ", " + difficultySpawnProbabilityMultiplier);
     }
 }

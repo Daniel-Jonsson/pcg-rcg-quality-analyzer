@@ -1,12 +1,9 @@
 package com.mygdx.platformer.pcg.generators;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.platformer.EnemyManager;
 import com.mygdx.platformer.pcg.Platform;
 import com.mygdx.platformer.utilities.AppConfig;
 
-import java.util.Random;
 
 /**
  * Standard implementation of the IPlatformGenerator interface.
@@ -17,24 +14,11 @@ import java.util.Random;
  */
 public class StandardPlatformGenerator implements IPlatformGenerator {
     private World world;
-    private EnemyManager enemyManager;
-    private Random random = new Random();
-
-    private float minGap = AppConfig.MIN_GAP;
-    private float maxGap = AppConfig.MAX_GAP;
-    private float minWidth = AppConfig.MIN_WIDTH;
-    private float maxWidth = AppConfig.MAX_WIDTH;
     private float platformHeight = AppConfig.PLATFORM_HEIGHT;
-    private float maxYvariation = AppConfig.MAX_Y_VARIATION;
-    private float spawnProbability = AppConfig.BASE_SPAWN_PROBABILITY;
-
-    private float minYPosition = 1.0f;
-    private float maxYPosition = AppConfig.SCREEN_HEIGHT * 0.8f;
 
     @Override
-    public Platform initialize(World world, EnemyManager enemyManager) {
+    public Platform initialize(World world) {
         this.world = world;
-        this.enemyManager = enemyManager;
 
         float initialWidth = AppConfig.FIRST_PLATFORM_WIDTH;
         float initialX = AppConfig.FIRST_PLATFORM_X;
@@ -44,33 +28,8 @@ public class StandardPlatformGenerator implements IPlatformGenerator {
     }
 
     @Override
-    public Platform generatePlatform(float lastPlatformX, float baseY) {
-        float gap = minGap + (float) Math.random() * (maxGap - minGap);
-        float width = minWidth + (float) Math.round(Math.random() * (maxWidth - minWidth));
-        float newX = lastPlatformX + gap + width / 2;
-
-        float normalizedHeight = (baseY - minYPosition) / (maxYPosition - minYPosition);
-        float bias = 1.0f - normalizedHeight;
-
-        float yVariation;
-        if (random.nextFloat() < bias) {
-            yVariation = random.nextFloat() * maxYvariation;
-        } else {
-            yVariation = -random.nextFloat() * maxYvariation;
-        }
-
-        float newY = baseY + yVariation;
-
-        newY = Math.max(minYPosition, Math.min(maxYPosition, newY));
-
-        Platform newPlatform = new Platform(world, newX, newY, width, platformHeight);
-
-        if (random.nextFloat() < spawnProbability) {
-            Vector2 enemySpawnPos = new Vector2(newX, newY + AppConfig.ENEMY_SPAWN_HEIGHT);
-            enemyManager.spawnEnemyAt(enemySpawnPos);
-        }
-
-        return newPlatform;
+    public Platform generatePlatform(float x, float y, float width) {
+        return new Platform(world, x, y, width, platformHeight);
     }
 
     @Override

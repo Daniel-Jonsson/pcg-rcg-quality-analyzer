@@ -1,7 +1,6 @@
 package com.mygdx.platformer.pcg.generators;
 
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.platformer.EnemyManager;
 import com.mygdx.platformer.pcg.Platform;
 import com.mygdx.platformer.utilities.AppConfig;
 
@@ -15,7 +14,7 @@ import com.mygdx.platformer.utilities.AppConfig;
 public interface IPlatformGenerator {
     // The return type is Platform for now but can be made more modular and allow
     // different types of platforms to be generated in the future.
-    Platform initialize(World world, EnemyManager enemyManager); 
-    Platform generatePlatform(float lastPlatformX, float baseY);
+    Platform initialize(World world); 
+    Platform generatePlatform(float x, float y, float width);
     AppConfig.PlatformGeneratorType getGeneratorType();
 }

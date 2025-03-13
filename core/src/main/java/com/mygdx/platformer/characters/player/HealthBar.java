@@ -10,6 +10,7 @@ import com.mygdx.platformer.utilities.Assets;
 
 /**
  * This class represents the player health bar, rendered in the upper left corner of the screen.
+ * @author Robert Kullman, Daniel Jönsson
  */
 public class HealthBar {
     private final Player player;

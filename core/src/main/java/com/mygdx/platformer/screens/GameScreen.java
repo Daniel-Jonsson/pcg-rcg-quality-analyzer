@@ -191,6 +191,7 @@ public class GameScreen extends ScreenAdapter {
             isGameOver = true;
             gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
             gameOverOverlay.show();
+            GameDifficultyManager.getInstance().resetDifficulty();
         }
         // TODO: Check if player health is negative or 0 (i.e., if the player
         //  is dead)

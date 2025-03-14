@@ -117,5 +117,18 @@ public class ErrorOverlay {
             );
         }
     }
-        
+
+    public static void dispose() {
+        if (stage != null) {
+            stage.dispose();
+            stage = null;
+        }
+
+        if (skin != null) {
+            skin.dispose();
+            skin = null;
+        }
+        currentDialog = null;
+        isActive = false;
+    }
 }

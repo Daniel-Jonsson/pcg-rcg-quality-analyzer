@@ -194,6 +194,9 @@ public final class AppConfig {
     /** Y-axis offset for the player health bar. **/
     public static final float PLAYER_HEALTHBAR_OFFSET_Y = 0.5f;
 
+    /** Modifies the scale of the game timer. **/
+    public static final float UI_TIMER_MODIFIER = 1.5f;
+
     /* Enemy Configuration */
 
     /** Base probability of enemy spawning. */

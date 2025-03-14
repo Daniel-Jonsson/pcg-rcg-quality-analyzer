@@ -81,13 +81,9 @@ public class GameScreen extends ScreenAdapter {
      */
    public GameScreen(final PlatformerGame g, boolean autoPlay, float UIScale) {
        this.game = g; // reference main class to enable switching to another screen
-       this.gameTimer = new GameTimer();
+       this.gameTimer = new GameTimer(UIScale);
        this.UIScale = UIScale;
-
        autoPlayEnabled = autoPlay;
-
-
-        //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
    }
 
     /**

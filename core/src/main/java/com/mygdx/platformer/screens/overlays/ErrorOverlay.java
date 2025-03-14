@@ -2,12 +2,16 @@ package com.mygdx.platformer.screens.overlays;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * A static utility class for displaying error messages in the game.
@@ -50,13 +54,29 @@ public class ErrorOverlay {
             }
         };
 
-        
+        TextButton okButton = new TextButton(AppConfig.OK_BUTTON_TEXT, skin);
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                hide();
+            }
+        });
 
         Label descriptionLabel = new Label(description, skin);
         descriptionLabel.setWrap(true);
         descriptionLabel.setAlignment(Align.center);
 
-        currentDialog.getContentTable().add(descriptionLabel).width(300).padTop(20);
+        currentDialog.getContentTable().add(descriptionLabel).width(AppConfig.ERROR_DIALOG_WIDTH).padTop(AppConfig.ERROR_DIALOG_PADDING);
+
+        currentDialog.button(okButton);
+
+        currentDialog.setPosition(
+            (stage.getWidth() - currentDialog.getWidth()) / 2,
+            (stage.getHeight() - currentDialog.getHeight()) / 2);
+
+        stage.addActor(currentDialog);
+
+        isActive = true;
     }
 
 

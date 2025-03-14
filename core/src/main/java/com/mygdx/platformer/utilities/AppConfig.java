@@ -197,6 +197,11 @@ public final class AppConfig {
     /** Modifies the scale of the game timer. **/
     public static final float UI_TIMER_MODIFIER = 1.5f;
 
+    public static final float DEFAULT_UI_SCALE = 1.0f;
+
+    public static final int UI_SCALE_SLIDER_PADDING = 20;
+    public static final int UI_SCALE_SLIDER_WIDTH = 300;
+
     /* Enemy Configuration */
 
     /** Base probability of enemy spawning. */

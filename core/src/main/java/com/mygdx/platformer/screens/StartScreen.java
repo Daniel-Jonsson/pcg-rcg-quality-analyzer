@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Settings;
 
 /**
  * This class represents the starting screen of the game, where the main game menu resides.
@@ -71,12 +72,17 @@ public class StartScreen implements Screen {
         // UI scale slider
         Label scaleLabel = new Label("UI Scale", skin);
         Slider scaleSlider = new Slider(0.5f, 2.0f, 0.1f, false, skin);
+
+        UI_SCALE = Settings.getUIScale();
+
         scaleSlider.setValue(UI_SCALE);
+
 
         scaleSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
                 UI_SCALE = scaleSlider.getValue();
+                Settings.saveUIScale(UI_SCALE);
             }
         });
 
@@ -106,8 +112,8 @@ public class StartScreen implements Screen {
             .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
             .row();
 
-        table.add(scaleLabel).padTop(20).row();
-        table.add(scaleSlider).width(300).padBottom(20);
+        table.add(scaleLabel).padTop(AppConfig.UI_SCALE_SLIDER_PADDING).row();
+        table.add(scaleSlider).width(AppConfig.UI_SCALE_SLIDER_WIDTH).padBottom(AppConfig.UI_SCALE_SLIDER_PADDING);
 
 
 

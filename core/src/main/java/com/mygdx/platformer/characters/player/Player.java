@@ -360,7 +360,7 @@ public class Player extends BaseCharacter {
         Vector2 playerPosition = body.getPosition();
         float rayLength = AppConfig.AUTO_PLAY_ENEMY_DETECTION_RANGE;
 
-        Vector2 rayStart = new Vector2(playerPosition.x, playerPosition.y);
+        Vector2 rayStart = new Vector2(playerPosition.x-1, playerPosition.y);
         Vector2 rayEnd = new Vector2(playerPosition.x + (direction * rayLength), playerPosition.y);
 
         return checkForEnemy(rayStart, rayEnd);
@@ -411,10 +411,22 @@ public class Player extends BaseCharacter {
         Vector2 position = body.getPosition();
         float rayLength = 3f;
 
-        Vector2 rayStart = new Vector2(position.x + (direction * AppConfig.PLAYER_GROUNDCHECK_FORWARD_OFFSET), position.y - (height / 3));
+        boolean isGround = false;
+        // first ray
+        Vector2 rayStart = new Vector2(position.x + AppConfig.PLAYER_GROUNDCHECK_FORWARD_OFFSET, position.y - (height / 2));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
-        return checkForGround(gameWorld, rayStart, rayEnd);
+        Vector2 rayStart2 = new Vector2(position.x, position.y - (height / 2));
+        Vector2 rayEnd2 = new Vector2(rayStart.x, rayStart.y - rayLength);
+
+
+        if(checkForGround(gameWorld, rayStart, rayEnd) && checkForGround(gameWorld, rayStart2, rayEnd2)){
+            isGround = true;
+        }
+
+
+
+        return isGround;
     }
 
     /**

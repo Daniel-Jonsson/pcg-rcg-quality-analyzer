@@ -1,5 +1,7 @@
 package com.mygdx.platformer.utilities;
 
+import com.badlogic.gdx.graphics.Color;
+
 /**
  * A configuration class that defines constants used throughout the game.
  * It includes settings for screen dimensions, physics properties,
@@ -428,4 +430,34 @@ public final class AppConfig {
 
     /** Forward limit (in game distance units) for autoplay movement. **/
     public static final float AUTO_PLAY_FORWARD_MOVEMENT_LIMIT = 4f;
+
+
+
+    /* ERROR OVERLAY CONFIGURATIONS */
+
+    /** The width of the error dialog. **/
+    public static final int ERROR_DIALOG_WIDTH = 300;
+
+    /** The height of the error dialog. **/
+    public static final int ERROR_DIALOG_HEIGHT = 150;
+
+    /** The padding of the error dialog. **/
+    public static final int ERROR_DIALOG_PADDING = 20;
+
+    /** The font size of the error dialog. **/
+    public static final int ERROR_DIALOG_FONT_SIZE = 16;
+
+    /** The color of the error dialog. **/
+    public static final Color ERROR_DIALOG_COLOR = new Color(1, 0, 0, 0.5f);
+
+    /** The font of the error dialog. **/
+    public static final String ERROR_DIALOG_FONT = "Arial";
+
+    /** OK button text. **/
+    public static final String OK_BUTTON_TEXT = "OK";
+
+    
+    
+    
+    
 }

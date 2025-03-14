@@ -124,10 +124,10 @@ public final class AppConfig {
     public static final float MAX_GAP = 3.0f;
 
     /** Minimum platform width. */
-    public static final float MIN_WIDTH = 3.0f;
+    public static final float MIN_WIDTH = 2.0f;
 
     /** Maximum platform width. */
-    public static final float MAX_WIDTH = 6.0f;
+    public static final float MAX_WIDTH = 8.0f;
 
     /** Height of platforms. */
     public static final float PLATFORM_HEIGHT = 0.5f;
@@ -141,8 +141,11 @@ public final class AppConfig {
     /** Width of a middle segment of a platform. */
     public static final float PLATFORM_MIDDLE_SEGMENT_WIDTH = 0.5f;
 
-    /** Maximum allowed variation in platform y-coordinates. */
-    public static final float MAX_Y_VARIATION = 3f;
+    /** Maximum allowed variation in platform y-coordinates at the start of a game. */
+    public static final float INITIAL_MAX_Y_VARIATION = 1.5f;
+
+    /** Maximum allowed variation in platform y-coordinates at the maximum difficulty level. */
+    public static final float FINAL_MAX_Y_VARIATION = 3f;
 
     /** Right margin offscreen for platform spawning. */
     public static final float RIGHT_OFFSCREEN_MARGIN = 2.0f;
@@ -200,7 +203,7 @@ public final class AppConfig {
     public static final float ENEMY_JUMP_FORWARD_BOOST = 20;
 
     /** Offset for enemy ground detection raycasting. **/
-    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 1f;
+    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.3f;
 
     /* Collision Categories */
 

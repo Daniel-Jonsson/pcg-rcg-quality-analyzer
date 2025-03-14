@@ -23,7 +23,7 @@ import java.util.Random;
  * This class is responsible for creating, updating, rendering, and disposing
  * platforms.
  * It uses an IPlatformGenerator to generate new platforms.
- * 
+ *
  * @author Daniel Jönsson
  * @author Robert Kullman
  */
@@ -54,10 +54,9 @@ public class PlatformManager implements GameDifficultyObserver {
     private float difficultyYvariationMultiplier = 1.0f;
     private float difficultySpawnProbabilityMultiplier = 1.0f;
 
-
     /**
      * Constructs a new PlatformManager with the specified world and enemy manager.
-     * 
+     *
      * @param world        The Box2D physics world
      * @param enemyManager The enemy manager for spawning enemies on platforms
      */
@@ -93,7 +92,7 @@ public class PlatformManager implements GameDifficultyObserver {
         maxGap = AppConfig.MAX_GAP;
         minWidth = AppConfig.MIN_WIDTH;
         maxWidth = AppConfig.MAX_WIDTH;
-        maxYvariation = AppConfig.MAX_Y_VARIATION;
+        maxYvariation = AppConfig.INITIAL_MAX_Y_VARIATION;
         spawnProbability = AppConfig.BASE_SPAWN_PROBABILITY;
         minYPosition = AppConfig.PLATFORM_MIN_Y_POSITION;
         maxYPosition = AppConfig.PLATFORM_MAX_Y_POSITION;
@@ -101,7 +100,7 @@ public class PlatformManager implements GameDifficultyObserver {
 
     /**
      * Registers a new platform generator.
-     * 
+     *
      * @param generator The platform generator to register
      */
     public void registerGenerator(IPlatformGenerator generator) {
@@ -110,7 +109,7 @@ public class PlatformManager implements GameDifficultyObserver {
 
     /**
      * Sets the current platform generator by type.
-     * 
+     *
      * @param generatorType The type of generator to use
      * @return true if the generator was found and set, false otherwise
      */
@@ -126,7 +125,7 @@ public class PlatformManager implements GameDifficultyObserver {
 
     /**
      * Gets the current generator type.
-     * 
+     *
      * @return The current generator type
      */
     public AppConfig.PlatformGeneratorType getCurrentGeneratorType() {
@@ -135,7 +134,7 @@ public class PlatformManager implements GameDifficultyObserver {
 
     /**
      * Gets an array of all registered generator types.
-     * 
+     *
      * @return An array of all registered generator types
      */
     public String[] getAvailableGeneratorTypes() {
@@ -144,7 +143,7 @@ public class PlatformManager implements GameDifficultyObserver {
 
     /**
      * Updates the platform system, generating new platforms and removing old ones.
-     * 
+     *
      * @param cameraX       The x-coordinate of the camera
      * @param viewportWidth The width of the viewport
      */
@@ -170,7 +169,7 @@ public class PlatformManager implements GameDifficultyObserver {
 
     /**
      * Generates a new platform based on current parameters.
-     * 
+     *
      * @param lastPlatformX The x-coordinate of the right edge of the last platform
      * @param baseY         The base y-coordinate for platform generation
      * @return The newly generated platform
@@ -213,7 +212,7 @@ public class PlatformManager implements GameDifficultyObserver {
         float newX = lastPlatformX + gap + width / 2;
         float newY = baseY + yVariation;
 
-        newY = Math.max(minYPosition, Math.min(maxYPosition, newY));
+        newY = Math.max(minYPosition, Math.min(AppConfig.FINAL_MAX_Y_VARIATION, newY));
 
         Platform newPlatform = currentGenerator.generatePlatform(newX, newY, width);
 
@@ -227,7 +226,7 @@ public class PlatformManager implements GameDifficultyObserver {
 
     /**
      * Renders all platforms.
-     * 
+     *
      * @param batch The SpriteBatch to use for rendering
      */
     public void render(SpriteBatch batch) {
@@ -248,7 +247,7 @@ public class PlatformManager implements GameDifficultyObserver {
 
     /**
      * Gets the list of active platforms.
-     * 
+     *
      * @return The list of active platforms
      */
     public List<Platform> getPlatforms() {
@@ -258,10 +257,10 @@ public class PlatformManager implements GameDifficultyObserver {
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
 
-        float gapIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT); 
+        float gapIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
         float widthDecrease = 1.0f - (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
-        float yVariationIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT); 
-        float spawnRateIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT); 
+        float yVariationIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
+        float spawnRateIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
 
         difficultyGapMultiplier = gapIncrease;
         difficultyWidthMultiplier = Math.max(AppConfig.MIN_PLATFORM_WIDTH_MULTIPLIER, widthDecrease);

@@ -9,7 +9,8 @@ import com.badlogic.gdx.ai.btree.decorator.Repeat;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.platformer.ai.autoplay.tasks.AttackEnemyTask;
 import com.mygdx.platformer.ai.autoplay.tasks.DetectEnemyTask;
-import com.mygdx.platformer.ai.autoplay.tasks.DetectProjectile;
+import com.mygdx.platformer.ai.autoplay.tasks.DetectProjectileTask;
+import com.mygdx.platformer.ai.autoplay.tasks.DodgeTask;
 import com.mygdx.platformer.ai.autoplay.tasks.JumpTask;
 import com.mygdx.platformer.ai.autoplay.tasks.IdleTask;
 import com.mygdx.platformer.ai.autoplay.tasks.MoveForwardTask;
@@ -50,8 +51,8 @@ public class AutoPlayAgent {
 
         // Survival strategy
         Sequence<Player> survivalStrategy = new Sequence<>();
-        survivalStrategy.addChild(new DetectProjectile());
-        survivalStrategy.addChild(new JumpTask());
+        survivalStrategy.addChild(new DetectProjectileTask());
+        survivalStrategy.addChild(new DodgeTask());
 
         // Combat strategy
         Sequence<Player> combatStrategy = new Sequence<>();
@@ -64,13 +65,12 @@ public class AutoPlayAgent {
         movementStrategy.addChild(new JumpTask());
 
         // Add strategies to the behavior tree
-        //root.addChild(survivalStrategy);
+
+        parallel.addChild(survivalStrategy);
         parallel.addChild(combatStrategy);
         parallel.addChild(movementStrategy);
 
         root.addChild(parallel);
-
-
         root.addChild(new IdleTask());
 
         return new Repeat<>(root); // loop the tree

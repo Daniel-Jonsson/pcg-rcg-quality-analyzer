@@ -115,7 +115,7 @@ public final class AppConfig {
     public static final int PLAYER_HP = 500;
 
     /** Offset for player ground detection raycasting. **/
-    public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.1f;
+    public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.0f;
 
     /* Procedural Content Generation (PCG) */
 
@@ -430,6 +430,12 @@ public final class AppConfig {
 
     /** Forward limit (in game distance units) for autoplay movement. **/
     public static final float AUTO_PLAY_FORWARD_MOVEMENT_LIMIT = 4f;
+
+    public static final float AUTO_PLAY_ENEMY_DETECTION_RANGE = 10f;
+
+    public static final float AUTO_PLAY_PROJECTILE_DETECTION_RANGE = 2.5f;
+
+    public static final int   AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS = 6;
 
 
 

@@ -14,7 +14,6 @@ import com.mygdx.platformer.utilities.AppConfig;
 public class MoveForwardTask extends LeafTask<Player> {
     private final OrthographicCamera camera;
     private boolean reachedFrontLimit = false;
-    private boolean isMoving = false;
 
     /**
      * Constructor for the MoveForwardTask, allowing a camera to be passed as parameter,
@@ -46,7 +45,7 @@ public class MoveForwardTask extends LeafTask<Player> {
         }
 
         if (player.isGrounded() && !player.isGroundAhead(player.getFacingDirection())) {
-
+            player.moveForward(); // move forward to prepare to jump a gap
             return Status.SUCCEEDED;
         }
         // If player reaches the front limit, stop moving
@@ -55,20 +54,19 @@ public class MoveForwardTask extends LeafTask<Player> {
 
             if (player.getBody().getLinearVelocity().x > 0) {
                 player.stop();
-                isMoving = false;
             }
             return Status.SUCCEEDED;
         }
         // If player has stopped and moves back to the rear limit, reset front limit and allow movement
         if (reachedFrontLimit && playerPosition.x <= minX) {
+            player.moveForward();
             reachedFrontLimit = false;
-
+            return Status.RUNNING;
         }
         // Move forward if allowed, but only call moveForward() once
         if (!reachedFrontLimit && player.getFacingDirection() != 0) {
             //System.out.println("moving forward");
             player.moveForward();
-            isMoving = true;
             return Status.RUNNING;
         }
         return Status.RUNNING;

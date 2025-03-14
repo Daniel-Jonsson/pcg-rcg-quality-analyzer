@@ -115,7 +115,7 @@ public final class AppConfig {
     public static final int PLAYER_HP = 500;
 
     /** Offset for player ground detection raycasting. **/
-    public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.0f;
+    public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.15f;
 
     /* Procedural Content Generation (PCG) */
 
@@ -226,6 +226,8 @@ public final class AppConfig {
 
     /** Offset for enemy ground detection raycasting. **/
     public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.3f;
+
+    public static final float ENEMY_BT_UPDATE_INTERVAL = 0.2f;
 
     /* Collision Categories */
 
@@ -469,11 +471,11 @@ public final class AppConfig {
 
     /** OK button text. **/
     public static final String OK_BUTTON_TEXT = "OK";
-    
-    
 
-    
-    
-    
-    
+
+
+
+
+
+
 }

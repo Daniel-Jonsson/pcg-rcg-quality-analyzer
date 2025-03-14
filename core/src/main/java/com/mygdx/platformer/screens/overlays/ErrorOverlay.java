@@ -79,6 +79,9 @@ public class ErrorOverlay {
         isActive = true;
     }
 
+    public static void show(String description) {
+        show("Error", description);
+    }
 
     /**
      * Hides the error dialog if it's currently shown.
@@ -93,6 +96,10 @@ public class ErrorOverlay {
                 Gdx.input.setInputProcessor(previousInputProcessor);
             }
         }
+    }
+
+    public static void render() {
+        
     }
         
 }

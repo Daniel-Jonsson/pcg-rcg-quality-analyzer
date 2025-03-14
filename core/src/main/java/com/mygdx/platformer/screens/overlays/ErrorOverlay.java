@@ -99,7 +99,10 @@ public class ErrorOverlay {
     }
 
     public static void render() {
-        
+        if (isActive) {
+            stage.act(Gdx.graphics.getDeltaTime());
+            stage.draw();
+        }
     }
         
 }

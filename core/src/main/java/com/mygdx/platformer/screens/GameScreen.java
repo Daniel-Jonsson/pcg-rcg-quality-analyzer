@@ -27,6 +27,7 @@ import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.difficulty.GameDifficultyManager;
 import com.mygdx.platformer.pcg.manager.PlatformManager;
 import com.mygdx.platformer.screens.overlays.GameOverOverlay;
+import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.AppConfig;
 
 /**
@@ -126,6 +127,8 @@ public class GameScreen extends ScreenAdapter {
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 
         initCollisionListener();
+
+        AudioManager.playBackgroundMusic();
 
     }
 

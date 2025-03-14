@@ -428,4 +428,6 @@ public final class AppConfig {
 
     /** Forward limit (in game distance units) for autoplay movement. **/
     public static final float AUTO_PLAY_FORWARD_MOVEMENT_LIMIT = 4f;
+
+    public static final float AUTO_PLAY_ENEMY_DETECTION_RANGE = 10f;
 }

@@ -161,4 +161,8 @@ public abstract class BaseAttack {
     public boolean isPlayerAttack() {
         return isPlayerAttack;
     }
+
+    public Body getBody() {
+        return body;
+    }
 }

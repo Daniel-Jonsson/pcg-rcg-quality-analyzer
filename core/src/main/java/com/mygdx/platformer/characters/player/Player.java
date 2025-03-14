@@ -358,7 +358,7 @@ public class Player extends BaseCharacter {
      */
     public boolean hasEnemiesNearby(float direction) {
         Vector2 playerPosition = body.getPosition();
-        float rayLength = 10;
+        float rayLength = AppConfig.AUTO_PLAY_ENEMY_DETECTION_RANGE;
 
         Vector2 rayStart = new Vector2(playerPosition.x, playerPosition.y);
         Vector2 rayEnd = new Vector2(playerPosition.x + (direction * rayLength), playerPosition.y);
@@ -517,14 +517,19 @@ public class Player extends BaseCharacter {
      */
     private boolean castRayForProjectile(Vector2 start, Vector2 end) {
         final boolean[] hit = { false };
+        int facing = getFacingDirection();
         gameWorld.rayCast(new RayCastCallback() {
             @Override
             public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
                 Object data = fixture.getBody().getUserData();
                 if (data instanceof BaseAttack attack) {
                     if (!attack.isPlayerAttack()) {
-                        hit[0] = true;
-                        return 0;
+
+                        Vector2 projVelocity = attack.getBody().getLinearVelocity();
+                        if ((body.getPosition().x < attack.getBody().getPosition().x && projVelocity.x < 0) || (body.getPosition().x > attack.getBody().getPosition().x && projVelocity.x > 0)) {
+                            hit[0] = true;
+                            return 0; // Stop the raycast.
+                        }
                     }
                 }
                 return -1;

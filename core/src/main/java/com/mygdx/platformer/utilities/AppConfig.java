@@ -455,15 +455,6 @@ public final class AppConfig {
 
     /** OK button text. **/
     public static final String OK_BUTTON_TEXT = "OK";
-
-    /** Button width. **/
-    public static final int ERROR_DIALOG_BUTTON_WIDTH = 150;
-
-    /** Button height. **/
-    public static final int ERROR_DIALOG_BUTTON_HEIGHT = 50;
-
-    /** Button padding. **/
-    public static final int ERROR_DIALOG_BUTTON_PADDING_BOTTOM = 10;
     
     
 

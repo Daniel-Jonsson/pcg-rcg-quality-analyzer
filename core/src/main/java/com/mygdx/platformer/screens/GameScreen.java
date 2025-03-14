@@ -128,6 +128,8 @@ public class GameScreen extends ScreenAdapter {
 
         initCollisionListener();
 
+        // init audio
+        AudioManager.loadSounds();
         AudioManager.playBackgroundMusic();
 
     }
@@ -281,6 +283,7 @@ public class GameScreen extends ScreenAdapter {
         platformManager.dispose();
         gameOverOverlay.dispose();
         healthBar.dispose();
+        AudioManager.dispose();
     }
 
     /**

@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.difficulty.GameDifficultyManager;
 import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
+import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
@@ -52,12 +53,15 @@ public class AttackManager implements GameDifficultyObserver {
         switch (attackType) {
             case PLAYER_THROWING_DAGGER:
                 attack = new PlayerAttack(world, position.x, position.y, Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
+                AudioManager.playSound("swoosh");
                 break;
             case GOBLIN_THROWING_DAGGER:
                 attack = new GoblinAttack(world, position.x, position.y, Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
+                AudioManager.playSound("swoosh2");
                 break;
             case DEATH_BOLT:
                 attack = new NecromancerAttack(world, position.x, position.y, Assets.assetManager.get(Assets.DEATH_BOLT), directionModifier, isPlayerAttack);
+                AudioManager.playSound("deathbolt");
                 break;
 
             default:

@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.MassData;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.ai.autoplay.AutoPlayAgent;
 import com.mygdx.platformer.attacks.AttackManager;
+import com.mygdx.platformer.attacks.BaseAttack;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -78,6 +81,8 @@ public class Player extends BaseCharacter {
     private boolean attackTriggered = false;
 
     private float attackAnimationTimer = 0.0f;
+
+    private boolean isDodging = false;
 
 
     /**
@@ -338,14 +343,6 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Detects incoming projectiles.
-     * @return True if a projectile is approaching.
-     */
-    public boolean detectIncomingProjectile() {
-        return false;
-    }
-
-    /**
      * Checks if the path ahead is clear.
      * @return True if the path is clear.
      */
@@ -361,7 +358,7 @@ public class Player extends BaseCharacter {
      */
     public boolean hasEnemiesNearby(float direction) {
         Vector2 playerPosition = body.getPosition();
-        float rayLength = 10;
+        float rayLength = AppConfig.AUTO_PLAY_ENEMY_DETECTION_RANGE;
 
         Vector2 rayStart = new Vector2(playerPosition.x, playerPosition.y);
         Vector2 rayEnd = new Vector2(playerPosition.x + (direction * rayLength), playerPosition.y);
@@ -477,5 +474,88 @@ public class Player extends BaseCharacter {
      */
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    /**
+     * Detects incoming projectiles in both directions using raycasting. Multiple
+     * rays are used to cover the height of the player.
+     * @return boolean indicating if an incoming projectile is detected.
+     */
+    public boolean detectIncomingProjectile() {
+        int NUM_RAYS = AppConfig.AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS;      // Number of rays along the player's height.
+        float RAY_LENGTH = AppConfig.AUTO_PLAY_PROJECTILE_DETECTION_RANGE; // How far to cast each ray (in world units).
+
+        Vector2 playerPos = getBody().getPosition();
+
+        float playerHeight = getHitBoxSize().y;
+        boolean detected = false;
+
+        for (int i = 0; i < NUM_RAYS; i++) {
+            // Distribute rays
+            float fraction =  (float) i / (NUM_RAYS - 1);
+            float offsetY = fraction * playerHeight;
+            Vector2 rayStart = new Vector2(playerPos.x, playerPos.y + offsetY);
+
+            // Check in both forward and backward directions.
+            int facingDir = getFacingDirection();
+
+            // Forward detection
+            Vector2 rayEndForward = new Vector2(rayStart.x + (facingDir * RAY_LENGTH), rayStart.y);
+            if (castRayForProjectile(rayStart, rayEndForward)) {
+                detected = true;
+                break;
+            }
+
+            // Backward detection
+            Vector2 rayEndBackward = new Vector2(rayStart.x - (facingDir * RAY_LENGTH), rayStart.y);
+            if (castRayForProjectile(rayStart, rayEndBackward)) {
+                detected = true;
+                break;
+            }
+        }
+        return detected;
+    }
+
+    /**
+     * Helper method that casts a ray between two points and returns true if an incoming projectile is detected.
+     */
+    private boolean castRayForProjectile(Vector2 start, Vector2 end) {
+        final boolean[] hit = { false };
+        int facing = getFacingDirection();
+        gameWorld.rayCast(new RayCastCallback() {
+            @Override
+            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                Object data = fixture.getBody().getUserData();
+                if (data instanceof BaseAttack attack) {
+                    if (!attack.isPlayerAttack()) {
+
+                        Vector2 projVelocity = attack.getBody().getLinearVelocity();
+                        if ((body.getPosition().x < attack.getBody().getPosition().x && projVelocity.x < 0)
+                            || (body.getPosition().x > attack.getBody().getPosition().x && projVelocity.x > 0)) {
+                            hit[0] = true;
+                            return 0; // Stop the raycast.
+                        }
+                    }
+                }
+                return -1;
+            }
+        }, start, end);
+        return hit[0];
+    }
+
+    /**
+     * Mutator for the dodging flag.
+     * @param dodging the value to set the isDodging flag to.
+     */
+    public void setDodging(boolean dodging) {
+        isDodging = dodging;
+    }
+
+    /**
+     * Accessor for the isDodging flag.
+     * @return The current value of the boolean isDodging flag.
+     */
+    public boolean isDodging() {
+        return isDodging;
     }
 }

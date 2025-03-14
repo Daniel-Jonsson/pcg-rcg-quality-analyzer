@@ -41,6 +41,9 @@ public class MoveForwardTask extends LeafTask<Player> {
 
        // System.out.println("grounded: " + player.isGrounded());
        // System.out.println("ground ahead: " + player.isGroundAhead(player.getDirection()));
+        if(player.isDodging()) {
+            return Status.RUNNING;
+        }
 
         if (player.isGrounded() && !player.isGroundAhead(player.getFacingDirection())) {
 
@@ -54,7 +57,7 @@ public class MoveForwardTask extends LeafTask<Player> {
                 player.stop();
                 isMoving = false;
             }
-            return Status.RUNNING;
+            return Status.SUCCEEDED;
         }
         // If player has stopped and moves back to the rear limit, reset front limit and allow movement
         if (reachedFrontLimit && playerPosition.x <= minX) {

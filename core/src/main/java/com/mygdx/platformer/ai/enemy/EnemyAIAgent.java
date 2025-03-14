@@ -10,10 +10,13 @@ import com.mygdx.platformer.ai.tasks.PursueTask;
 import com.mygdx.platformer.ai.tasks.PatrolTask;
 import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.BaseCharacter;
+import com.mygdx.platformer.utilities.AppConfig;
 
 public class EnemyAIAgent extends AIAgent {
     private AttackManager attackManager;
     private float attackCooldown;
+    private static final float UPDATE_INTERVAL = AppConfig.ENEMY_BT_UPDATE_INTERVAL;
+    private float timeAccumulator = 0f;
 
     public EnemyAIAgent(BaseCharacter character, float detectionRange, float attackRange, AttackManager attackManager,
             float attackCooldown) {
@@ -27,18 +30,25 @@ public class EnemyAIAgent extends AIAgent {
      * Updates the AI agent by updating the target distance and resetting the
      * behavior tree and stepping it once again to see if it needs to pursue the
      * target or attack.
-     * 
+     *
      * @param deltaTime The time since the last update.
      */
     @Override
     public void update(float deltaTime) {
-        updateTargetDistance();
-        if (behaviorTree != null) {
-            behaviorTree.resetTask();
-            behaviorTree.step();
+        timeAccumulator += deltaTime;
+        if (timeAccumulator >= UPDATE_INTERVAL) {
+            updateTargetDistance();
+            if (behaviorTree != null) {
+                behaviorTree.resetTask();
+                behaviorTree.step();
+            }
+            timeAccumulator = 0f;
         }
     }
 
+    /**
+     * Sets up the tree hierarchy of the enemy Behavior Tree AI.
+     */
     private void setupBehaviorTree() {
         Selector<AIAgent> root = new Selector<>();
 
@@ -53,7 +63,7 @@ public class EnemyAIAgent extends AIAgent {
         root.addChild(attackSequence);
         root.addChild(pursueSequence);
         root.addChild(new PatrolTask());
-        
+
         behaviorTree = new BehaviorTree<>(root);
         behaviorTree.setObject(this);
     }

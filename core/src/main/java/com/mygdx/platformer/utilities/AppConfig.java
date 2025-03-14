@@ -219,6 +219,8 @@ public final class AppConfig {
     /** Offset for enemy ground detection raycasting. **/
     public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.3f;
 
+    public static final float ENEMY_BT_UPDATE_INTERVAL = 0.2f;
+
     /* Collision Categories */
 
     /** Category bit for players. **/
@@ -461,11 +463,11 @@ public final class AppConfig {
 
     /** OK button text. **/
     public static final String OK_BUTTON_TEXT = "OK";
-    
-    
 
-    
-    
-    
-    
+
+
+
+
+
+
 }

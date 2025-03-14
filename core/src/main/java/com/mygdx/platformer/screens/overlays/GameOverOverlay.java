@@ -1,4 +1,4 @@
-package com.mygdx.platformer.screens;
+package com.mygdx.platformer.screens.overlays;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.PlatformerGame;
+import com.mygdx.platformer.screens.StartScreen;
 import com.mygdx.platformer.utilities.AppConfig;
 
 /**

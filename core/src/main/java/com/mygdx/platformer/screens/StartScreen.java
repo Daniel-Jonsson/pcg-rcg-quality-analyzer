@@ -7,11 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Settings;
 
 /**
  * This class represents the starting screen of the game, where the main game menu resides.
@@ -23,6 +26,8 @@ public class StartScreen implements Screen {
     private PlatformerGame game;
     private Skin skin;
     private Stage stage;
+
+    private float UI_SCALE = 1.0f;
 
     /**
      * Constructor for the StartScreen, which initializes the UI elements.
@@ -44,7 +49,7 @@ public class StartScreen implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, false));
+                game.setScreen(new GameScreen(game, false, UI_SCALE));
             }
         });
 
@@ -60,7 +65,24 @@ public class StartScreen implements Screen {
         autoPlayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, true));
+                game.setScreen(new GameScreen(game, true, UI_SCALE));
+            }
+        });
+
+        // UI scale slider
+        Label scaleLabel = new Label("UI Scale", skin);
+        Slider scaleSlider = new Slider(0.5f, 2.0f, 0.1f, false, skin);
+
+        UI_SCALE = Settings.getUIScale();
+
+        scaleSlider.setValue(UI_SCALE);
+
+
+        scaleSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+                UI_SCALE = scaleSlider.getValue();
+                Settings.saveUIScale(UI_SCALE);
             }
         });
 
@@ -86,7 +108,12 @@ public class StartScreen implements Screen {
             .row();
         table.add(quitButton)
             .width(AppConfig.BUTTON_WIDTH)
-            .height(AppConfig.BUTTON_HEIGHT);
+            .height(AppConfig.BUTTON_HEIGHT)
+            .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
+            .row();
+
+        table.add(scaleLabel).padTop(AppConfig.UI_SCALE_SLIDER_PADDING).row();
+        table.add(scaleSlider).width(AppConfig.UI_SCALE_SLIDER_WIDTH).padBottom(AppConfig.UI_SCALE_SLIDER_PADDING);
 
 
 

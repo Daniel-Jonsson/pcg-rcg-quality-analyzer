@@ -30,11 +30,13 @@ public class GameTimer {
      * Creates a new game timer and initializes the UI. The timer starts at 0
      * and is displayed in the top-right corner of the screen.
      */
-    public GameTimer() {
+    public GameTimer(float UIScale) {
         elapsedTime = 0;
 
+        ScreenViewport viewport = new ScreenViewport();
+        viewport.setUnitsPerPixel(1f / UIScale / AppConfig.UI_TIMER_MODIFIER);
         // Create the UI Stage
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(viewport);
 
         // Load default skin
         Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));

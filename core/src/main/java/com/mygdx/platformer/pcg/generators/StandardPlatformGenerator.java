@@ -8,7 +8,7 @@ import com.mygdx.platformer.utilities.AppConfig;
 /**
  * Standard implementation of the IPlatformGenerator interface.
  * Generates platforms with random gaps, widths, and height variations.
- * 
+ *
  * @author Robert Kullman
  * @author Daniel Jönsson
  */
@@ -29,7 +29,7 @@ public class StandardPlatformGenerator implements IPlatformGenerator {
 
     @Override
     public Platform generatePlatform(float x, float y, float width) {
-        return new Platform(world, x, y, width, platformHeight);
+        return new Platform(world, x, y, Math.round(width), platformHeight);
     }
 
     @Override

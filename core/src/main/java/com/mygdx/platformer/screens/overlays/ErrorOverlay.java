@@ -15,7 +15,8 @@ import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * A static utility class for displaying error messages in the game.
- * This overlay can be shown from anywhere in the game by calling the static methods.
+ * This overlay can be shown from anywhere in the game by calling the static
+ * methods.
  * 
  * @author Daniel Jönsson
  * @author Robert Kullman
@@ -26,20 +27,23 @@ public class ErrorOverlay {
     private static Skin skin;
     private static boolean isActive = false;
     private static InputProcessor previousInputProcessor;
+    private static boolean isFatal = false;
 
     /**
-     * Initializes the error overlay. This should be called once during the game initialization.
+     * Initializes the error overlay. This should be called once during the game
+     * initialization.
      */
     public static void initialize() {
         stage = new Stage(new ScreenViewport());
-        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     }
 
-    public static void show(String title, String description, boolean isFatal) {
+    public static void show(String title, String description, boolean fatal) {
         if (stage == null) {
             initialize();
         }
 
+        isFatal = fatal;
         previousInputProcessor = Gdx.input.getInputProcessor();
         Gdx.input.setInputProcessor(stage);
 
@@ -51,19 +55,14 @@ public class ErrorOverlay {
             @Override
             protected void result(Object object) {
                 ErrorOverlay.hide();
-            }
-        };
-
-        TextButton okButton = new TextButton(AppConfig.OK_BUTTON_TEXT, skin);
-        okButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                hide();
                 if (isFatal) {
                     Gdx.app.exit();
                 }
             }
-        });
+        };
+
+        currentDialog.setWidth(AppConfig.ERROR_DIALOG_WIDTH);
+        currentDialog.setHeight(AppConfig.ERROR_DIALOG_HEIGHT);
 
         Label descriptionLabel = new Label(description, skin);
         descriptionLabel.setWrap(true);
@@ -71,21 +70,24 @@ public class ErrorOverlay {
 
         currentDialog.getContentTable().add(descriptionLabel).width(AppConfig.ERROR_DIALOG_WIDTH).padTop(AppConfig.ERROR_DIALOG_PADDING);
 
-        currentDialog.button(okButton);
+        currentDialog.button("OK", true);
 
         currentDialog.setPosition(
-            (stage.getWidth() - currentDialog.getWidth()) / 2,
-            (stage.getHeight() - currentDialog.getHeight()) / 2);
+                (stage.getWidth() - currentDialog.getWidth()) / 2,
+                (stage.getHeight() - currentDialog.getHeight()) / 2);
 
         stage.addActor(currentDialog);
 
         isActive = true;
     }
 
+    public static void show(String title, String description) {
+        show(title, description, false);
+    }
+
     public static void show(String description) {
         show("Error", description, false);
     }
-
 
     /**
      * Shows a fatal error dialog that will exit the application when dismissed.
@@ -126,9 +128,8 @@ public class ErrorOverlay {
 
         if (currentDialog != null && isActive) {
             currentDialog.setPosition(
-                (stage.getWidth() - currentDialog.getWidth()) / 2,
-                (stage.getHeight() - currentDialog.getHeight()) / 2
-            );
+                    (stage.getWidth() - currentDialog.getWidth()) / 2,
+                    (stage.getHeight() - currentDialog.getHeight()) / 2);
         }
     }
 

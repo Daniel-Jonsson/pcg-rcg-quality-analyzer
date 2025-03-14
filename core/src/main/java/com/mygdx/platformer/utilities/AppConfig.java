@@ -182,6 +182,18 @@ public final class AppConfig {
     /** Bottom padding for buttons on the UI. */
     public static final int BUTTON_BOTTOM_PADDING = 20;
 
+    /** Base width of the player health bar. **/
+    public static final float PLAYER_HEALTHBAR_WIDTH = 4f;
+
+    /** Height of the player health bar. **/
+    public static final float PLAYER_HEALTHBAR_HEIGHT = 1f;
+
+    /** X-axis offset for the player health bar. **/
+    public static final float PLAYER_HEALTHBAR_OFFSET_X = 0.5f;
+
+    /** Y-axis offset for the player health bar. **/
+    public static final float PLAYER_HEALTHBAR_OFFSET_Y = 0.5f;
+
     /* Enemy Configuration */
 
     /** Base probability of enemy spawning. */

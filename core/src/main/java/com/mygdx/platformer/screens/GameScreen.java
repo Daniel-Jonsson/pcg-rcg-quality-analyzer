@@ -74,6 +74,7 @@ public class GameScreen extends ScreenAdapter {
 
     private float UIScale;
 
+    private float cameraXPosition;
 
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
@@ -85,6 +86,9 @@ public class GameScreen extends ScreenAdapter {
        this.gameTimer = new GameTimer(UIScale);
        this.UIScale = UIScale;
        autoPlayEnabled = autoPlay;
+
+
+        //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
    }
 
     /**
@@ -101,11 +105,13 @@ public class GameScreen extends ScreenAdapter {
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false); // invert coordinates (y = 0 at bottom of window)
+        batch.setProjectionMatrix(camera.combined);
 
         viewport = new FitViewport(AppConfig.SCREEN_WIDTH, AppConfig.SCREEN_HEIGHT, camera);
         viewport.apply();  // apply viewport settings
 
-        camera.position.set(AppConfig.SCREEN_WIDTH / 2, AppConfig.SCREEN_HEIGHT / 2, 0);
+        cameraXPosition = viewport.getWorldWidth() / 2f;
+        camera.position.set(cameraXPosition, viewport.getWorldHeight() / 2f, 0);
         camera.update();
 
         platformManager = new PlatformManager(world, enemyManager);
@@ -136,7 +142,8 @@ public class GameScreen extends ScreenAdapter {
                 player.handleInput();
             //}
             gameTimer.update(deltaTime);
-            camera.position.x += 2f * deltaTime;
+            cameraXPosition += 2f * deltaTime;
+            camera.position.set(cameraXPosition, viewport.getWorldHeight() / 2f, 0);
             camera.update();
             input();
             logic(deltaTime);
@@ -224,6 +231,13 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void resize(final int width, final int height) {
         viewport.update(width, height, true);
+
+        camera.position.set(
+            cameraXPosition,
+            viewport.getWorldHeight() / 2f,
+            0
+        );
+        camera.update();
         gameOverOverlay.resize(width, height);
     }
 

@@ -8,7 +8,7 @@ import com.mygdx.platformer.characters.player.Player;
  * This task detects incoming projectiles.
  * @author Robert Kullman, Daniel Jönsson
  */
-public class DetectProjectile extends LeafTask<Player> {
+public class DetectProjectileTask extends LeafTask<Player> {
 
     /**
      * Executes the task.
@@ -36,6 +36,6 @@ public class DetectProjectile extends LeafTask<Player> {
      */
     @Override
     protected Task<Player> copyTo(Task<Player> task) {
-        return null;
+        return new DetectProjectileTask();
     }
 }

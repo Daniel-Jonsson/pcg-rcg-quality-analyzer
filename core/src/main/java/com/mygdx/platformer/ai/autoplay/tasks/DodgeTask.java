@@ -5,9 +5,14 @@ import com.badlogic.gdx.ai.btree.Task;
 import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
 
+/**
+ * In autoplay, this task stops the player and performs a jump to
+ * dodge an incoming projectile.
+ *
+ * @author Robert Kullman, Daniel Jönsson
+ */
 public class DodgeTask extends LeafTask<Player> {
     private boolean jumpTriggered = false;
-    private static final float tolerance = AppConfig.AUTO_PLAY_PLATFORM_DETECTION_TOLERANCE;
 
     /**
      * Executes the task.
@@ -18,7 +23,6 @@ public class DodgeTask extends LeafTask<Player> {
 
         Player player = getObject();
          if (player.isGrounded() && !jumpTriggered) {
-             System.out.println("DodgeTask");
              player.stop();
             player.jump();
             player.setDodging(true);
@@ -45,6 +49,6 @@ public class DodgeTask extends LeafTask<Player> {
      */
     @Override
     protected Task<Player> copyTo(Task<Player> task) {
-        return new JumpTask();
+        return new DodgeTask();
     }
 }

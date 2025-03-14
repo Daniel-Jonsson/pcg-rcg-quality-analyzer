@@ -9,7 +9,7 @@ import com.badlogic.gdx.ai.btree.decorator.Repeat;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.platformer.ai.autoplay.tasks.AttackEnemyTask;
 import com.mygdx.platformer.ai.autoplay.tasks.DetectEnemyTask;
-import com.mygdx.platformer.ai.autoplay.tasks.DetectProjectile;
+import com.mygdx.platformer.ai.autoplay.tasks.DetectProjectileTask;
 import com.mygdx.platformer.ai.autoplay.tasks.DodgeTask;
 import com.mygdx.platformer.ai.autoplay.tasks.JumpTask;
 import com.mygdx.platformer.ai.autoplay.tasks.IdleTask;
@@ -51,7 +51,7 @@ public class AutoPlayAgent {
 
         // Survival strategy
         Sequence<Player> survivalStrategy = new Sequence<>();
-        survivalStrategy.addChild(new DetectProjectile());
+        survivalStrategy.addChild(new DetectProjectileTask());
         survivalStrategy.addChild(new DodgeTask());
 
         // Combat strategy

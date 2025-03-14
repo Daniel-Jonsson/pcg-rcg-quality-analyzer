@@ -430,4 +430,8 @@ public final class AppConfig {
     public static final float AUTO_PLAY_FORWARD_MOVEMENT_LIMIT = 4f;
 
     public static final float AUTO_PLAY_ENEMY_DETECTION_RANGE = 10f;
+
+    public static final float AUTO_PLAY_PROJECTILE_DETECTION_RANGE = 2.5f;
+
+    public static final int   AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS = 6;
 }

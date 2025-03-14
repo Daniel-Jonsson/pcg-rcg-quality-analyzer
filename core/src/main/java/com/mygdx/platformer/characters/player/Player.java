@@ -476,19 +476,23 @@ public class Player extends BaseCharacter {
         return maxHealth;
     }
 
+    /**
+     * Detects incoming projectiles in both directions using raycasting. Multiple
+     * rays are used to cover the height of the player.
+     * @return boolean indicating if an incoming projectile is detected.
+     */
     public boolean detectIncomingProjectile() {
-        int NUM_RAYS = 6;      // Number of rays along the player's height.
-        float RAY_LENGTH = 3f; // How far to cast each ray (in world units).
+        int NUM_RAYS = AppConfig.AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS;      // Number of rays along the player's height.
+        float RAY_LENGTH = AppConfig.AUTO_PLAY_PROJECTILE_DETECTION_RANGE; // How far to cast each ray (in world units).
 
         Vector2 playerPos = getBody().getPosition();
 
         float playerHeight = getHitBoxSize().y;
         boolean detected = false;
 
-        // Cast rays along the player's height (from bottom to top)
         for (int i = 0; i < NUM_RAYS; i++) {
             // Distribute rays
-            float fraction = (NUM_RAYS == 1) ? 0.5f : (float) i / (NUM_RAYS - 1);
+            float fraction =  (float) i / (NUM_RAYS - 1);
             float offsetY = fraction * playerHeight;
             Vector2 rayStart = new Vector2(playerPos.x, playerPos.y + offsetY);
 
@@ -513,7 +517,7 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Helper method that casts a ray between two points and returns true if a projectile is detected.
+     * Helper method that casts a ray between two points and returns true if an incoming projectile is detected.
      */
     private boolean castRayForProjectile(Vector2 start, Vector2 end) {
         final boolean[] hit = { false };
@@ -526,7 +530,8 @@ public class Player extends BaseCharacter {
                     if (!attack.isPlayerAttack()) {
 
                         Vector2 projVelocity = attack.getBody().getLinearVelocity();
-                        if ((body.getPosition().x < attack.getBody().getPosition().x && projVelocity.x < 0) || (body.getPosition().x > attack.getBody().getPosition().x && projVelocity.x > 0)) {
+                        if ((body.getPosition().x < attack.getBody().getPosition().x && projVelocity.x < 0)
+                            || (body.getPosition().x > attack.getBody().getPosition().x && projVelocity.x > 0)) {
                             hit[0] = true;
                             return 0; // Stop the raycast.
                         }
@@ -538,10 +543,18 @@ public class Player extends BaseCharacter {
         return hit[0];
     }
 
+    /**
+     * Mutator for the dodging flag.
+     * @param dodging the value to set the isDodging flag to.
+     */
     public void setDodging(boolean dodging) {
         isDodging = dodging;
     }
 
+    /**
+     * Accessor for the isDodging flag.
+     * @return The current value of the boolean isDodging flag.
+     */
     public boolean isDodging() {
         return isDodging;
     }

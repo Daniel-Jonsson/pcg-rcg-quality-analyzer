@@ -104,5 +104,18 @@ public class ErrorOverlay {
             stage.draw();
         }
     }
+
+    public static void resize(int width, int height) {
+        if (stage != null) {
+            stage.getViewport().update(width, height, true);
+        }
+
+        if (currentDialog != null && isActive) {
+            currentDialog.setPosition(
+                (stage.getWidth() - currentDialog.getWidth()) / 2,
+                (stage.getHeight() - currentDialog.getHeight()) / 2
+            );
+        }
+    }
         
 }

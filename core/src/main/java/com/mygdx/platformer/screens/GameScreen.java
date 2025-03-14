@@ -71,15 +71,18 @@ public class GameScreen extends ScreenAdapter {
 
     private HealthBar healthBar;
 
+    private float UIScale;
+
 
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
      * game instance.
      * @param g main Game instance.
      */
-   public GameScreen(final PlatformerGame g, boolean autoPlay) {
+   public GameScreen(final PlatformerGame g, boolean autoPlay, float UIScale) {
        this.game = g; // reference main class to enable switching to another screen
        this.gameTimer = new GameTimer();
+       this.UIScale = UIScale;
 
        autoPlayEnabled = autoPlay;
 
@@ -115,7 +118,7 @@ public class GameScreen extends ScreenAdapter {
             AppConfig.PLAYER_MOVE_SPEED,
             attackManager, autoPlayEnabled, camera);
 
-        healthBar = new HealthBar(player, camera, viewport);
+        healthBar = new HealthBar(player, camera, viewport, UIScale);
 
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 

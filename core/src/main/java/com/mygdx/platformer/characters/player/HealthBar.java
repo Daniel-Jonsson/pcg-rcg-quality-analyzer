@@ -30,15 +30,15 @@ public class HealthBar {
      * @param camera Orthographic camera instance.
      * @param viewport Viewport instance.
      */
-    public HealthBar(Player player, OrthographicCamera camera, Viewport viewport) {
+    public HealthBar(Player player, OrthographicCamera camera, Viewport viewport, float UIScale) {
         this.player = player;
         this.camera = camera;
         this.viewport = viewport;
 
         healthBarSprite = new Sprite(new Texture(Assets.HEALTHBAR_TEXTURE));
 
-        barWidth = AppConfig.PLAYER_HEALTHBAR_WIDTH;
-        barHeight = AppConfig.PLAYER_HEALTHBAR_HEIGHT;
+        barWidth = AppConfig.PLAYER_HEALTHBAR_WIDTH * UIScale;
+        barHeight = AppConfig.PLAYER_HEALTHBAR_HEIGHT * UIScale;
 
         offsetX = AppConfig.PLAYER_HEALTHBAR_OFFSET_X;
         offsetY = AppConfig.PLAYER_HEALTHBAR_OFFSET_Y;

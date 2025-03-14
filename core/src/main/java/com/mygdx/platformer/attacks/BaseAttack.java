@@ -162,6 +162,10 @@ public abstract class BaseAttack {
         return isPlayerAttack;
     }
 
+    /**
+     * Accessor for the attack body.
+     * @return The attack body.
+     */
     public Body getBody() {
         return body;
     }

@@ -7,8 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -23,6 +25,8 @@ public class StartScreen implements Screen {
     private PlatformerGame game;
     private Skin skin;
     private Stage stage;
+
+    private float UI_SCALE = 1.0f;
 
     /**
      * Constructor for the StartScreen, which initializes the UI elements.
@@ -64,6 +68,18 @@ public class StartScreen implements Screen {
             }
         });
 
+        // UI scale slider
+        Label scaleLabel = new Label("UI Scale", skin);
+        Slider scaleSlider = new Slider(0.5f, 2.0f, 0.1f, false, skin);
+        scaleSlider.setValue(UI_SCALE);
+
+        scaleSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+                UI_SCALE = scaleSlider.getValue();
+            }
+        });
+
 
 
         // Arrange UI with Table
@@ -86,7 +102,12 @@ public class StartScreen implements Screen {
             .row();
         table.add(quitButton)
             .width(AppConfig.BUTTON_WIDTH)
-            .height(AppConfig.BUTTON_HEIGHT);
+            .height(AppConfig.BUTTON_HEIGHT)
+            .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
+            .row();
+
+        table.add(scaleLabel).padTop(20).row();
+        table.add(scaleSlider).width(300).padBottom(20);
 
 
 

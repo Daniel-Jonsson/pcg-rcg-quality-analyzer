@@ -35,7 +35,7 @@ public class ErrorOverlay {
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     }
 
-    public static void show(String title, String description) {
+    public static void show(String title, String description, boolean isFatal) {
         if (stage == null) {
             initialize();
         }
@@ -59,6 +59,9 @@ public class ErrorOverlay {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 hide();
+                if (isFatal) {
+                    Gdx.app.exit();
+                }
             }
         });
 
@@ -80,7 +83,18 @@ public class ErrorOverlay {
     }
 
     public static void show(String description) {
-        show("Error", description);
+        show("Error", description, false);
+    }
+
+
+    /**
+     * Shows a fatal error dialog that will exit the application when dismissed.
+     * 
+     * @param title       The title of the error dialog
+     * @param description The error message to display
+     */
+    public static void showFatal(String title, String description) {
+        show(title, description, true);
     }
 
     /**

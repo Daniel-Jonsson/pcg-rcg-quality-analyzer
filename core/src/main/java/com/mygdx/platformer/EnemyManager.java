@@ -8,6 +8,8 @@ import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.characters.enemies.Goblin;
 import com.mygdx.platformer.characters.enemies.Necromancer;
+import com.mygdx.platformer.difficulty.GameDifficultyManager;
+import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.utilities.AppConfig;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.Random;
  *
  * @author Daniel Jönsson, Robert Kullman
  */
-public class EnemyManager {
+public class EnemyManager implements GameDifficultyObserver {
 
     /** The Box2D world where enemies exist. */
     private World world;
@@ -57,6 +59,7 @@ public class EnemyManager {
         this.random = new Random();
         this.attackManager = attackManager;
         this.targetPosition = targetPosition;
+        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**
@@ -129,6 +132,11 @@ public class EnemyManager {
 
     public void setTargetPosition(Vector2 targetPosition) {
         this.targetPosition = targetPosition;
+    }
+
+    @Override
+    public void onDifficultyChanged(int difficultyLevel) {
+        System.out.println("Difficulty on EnemyManager changed to: " + difficultyLevel);
     }
 
 }

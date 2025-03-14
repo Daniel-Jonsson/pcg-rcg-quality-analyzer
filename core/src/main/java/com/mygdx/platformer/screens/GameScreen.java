@@ -23,8 +23,9 @@ import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.attacks.BaseAttack;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.characters.player.HealthBar;
-import com.mygdx.platformer.pcg.PlatformGenerator;
 import com.mygdx.platformer.characters.player.Player;
+import com.mygdx.platformer.difficulty.GameDifficultyManager;
+import com.mygdx.platformer.pcg.manager.PlatformManager;
 import com.mygdx.platformer.utilities.AppConfig;
 
 /**
@@ -57,7 +58,7 @@ public class GameScreen extends ScreenAdapter {
     private float runTime; // tracks how long the game has run
 
     /** Manages procedural platform generation. */
-    private PlatformGenerator platformGenerator;
+    private PlatformManager platformManager;
 
     private boolean isGameOver = false;
 
@@ -107,7 +108,7 @@ public class GameScreen extends ScreenAdapter {
         camera.position.set(AppConfig.SCREEN_WIDTH / 2, AppConfig.SCREEN_HEIGHT / 2, 0);
         camera.update();
 
-        platformGenerator = new PlatformGenerator(world, enemyManager);
+        platformManager = new PlatformManager(world, enemyManager);
 
 
         player = new Player(world, spawnPosition,AppConfig.PLAYER_HP,
@@ -139,7 +140,8 @@ public class GameScreen extends ScreenAdapter {
             camera.update();
             input();
             logic(deltaTime);
-            platformGenerator.update(camera.position.x, AppConfig.SCREEN_WIDTH);
+            platformManager.update(camera.position.x, AppConfig.SCREEN_WIDTH);
+            GameDifficultyManager.getInstance().update(deltaTime);
             doPhysicsStep(deltaTime);
 
             enemyManager.setTargetPosition(player.getBody().getPosition());
@@ -151,7 +153,7 @@ public class GameScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        platformGenerator.render(batch);
+        platformManager.render(batch);
         player.render(batch);
         enemyManager.render(batch);
         attackManager.render(batch);
@@ -195,6 +197,7 @@ public class GameScreen extends ScreenAdapter {
             isGameOver = true;
             gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
             gameOverOverlay.show();
+            GameDifficultyManager.getInstance().resetDifficulty();
         }
     }
 
@@ -258,7 +261,7 @@ public class GameScreen extends ScreenAdapter {
         batch.dispose();
         world.dispose();
         player.dispose();
-        platformGenerator.dispose();
+        platformManager.dispose();
         gameOverOverlay.dispose();
         healthBar.dispose();
     }

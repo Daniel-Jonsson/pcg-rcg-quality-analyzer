@@ -3,6 +3,7 @@ package com.mygdx.platformer.screens.overlays;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -68,9 +69,23 @@ public class ErrorOverlay {
         descriptionLabel.setWrap(true);
         descriptionLabel.setAlignment(Align.center);
 
-        currentDialog.getContentTable().add(descriptionLabel).width(AppConfig.ERROR_DIALOG_WIDTH).padTop(AppConfig.ERROR_DIALOG_PADDING);
+        currentDialog.getContentTable().add(descriptionLabel).width(300).padTop(AppConfig.ERROR_DIALOG_PADDING);
 
-        currentDialog.button("OK", true);
+        TextButton okButton = new TextButton(AppConfig.OK_BUTTON_TEXT, skin);
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                hide();
+                if (isFatal) {
+                    Gdx.app.exit();
+                }
+            }
+        });
+
+        currentDialog.getButtonTable().add(okButton)
+                .width(AppConfig.BUTTON_WIDTH)
+                .height(AppConfig.BUTTON_HEIGHT)
+                .padBottom(AppConfig.BUTTON_BOTTOM_PADDING);
 
         currentDialog.setPosition(
                 (stage.getWidth() - currentDialog.getWidth()) / 2,

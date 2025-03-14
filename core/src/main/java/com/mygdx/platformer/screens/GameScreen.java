@@ -22,6 +22,7 @@ import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.attacks.BaseAttack;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
+import com.mygdx.platformer.characters.player.HealthBar;
 import com.mygdx.platformer.pcg.PlatformGenerator;
 import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -67,6 +68,8 @@ public class GameScreen extends ScreenAdapter {
 
     Boolean autoPlayEnabled = false;
 
+    private HealthBar healthBar;
+
 
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
@@ -111,6 +114,8 @@ public class GameScreen extends ScreenAdapter {
             AppConfig.PLAYER_MOVE_SPEED,
             attackManager, autoPlayEnabled, camera);
 
+        healthBar = new HealthBar(player, camera, viewport);
+
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 
         initCollisionListener();
@@ -150,6 +155,7 @@ public class GameScreen extends ScreenAdapter {
         player.render(batch);
         enemyManager.render(batch);
         attackManager.render(batch);
+        healthBar.render(batch);
         batch.end();
 
         gameTimer.render();
@@ -185,13 +191,11 @@ public class GameScreen extends ScreenAdapter {
      * .e., Player has fallen of a platform).
      */
     private void checkGameOver() {
-        if ((player.getBody().getPosition().y + AppConfig.PLAYER_HEIGHT) <= 0) {
+        if ((player.getBody().getPosition().y + AppConfig.PLAYER_HEIGHT) <= 0 || player.getCurrentHealth() <= 0) {
             isGameOver = true;
             gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
             gameOverOverlay.show();
         }
-        // TODO: Check if player health is negative or 0 (i.e., if the player
-        //  is dead)
     }
 
     /**
@@ -256,6 +260,7 @@ public class GameScreen extends ScreenAdapter {
         player.dispose();
         platformGenerator.dispose();
         gameOverOverlay.dispose();
+        healthBar.dispose();
     }
 
     /**

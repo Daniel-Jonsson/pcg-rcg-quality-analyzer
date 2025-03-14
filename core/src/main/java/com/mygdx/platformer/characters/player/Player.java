@@ -462,4 +462,20 @@ public class Player extends BaseCharacter {
     public void setFacingRight(boolean facingRight) {
         this.facingRight = facingRight;
     }
+
+    /**
+     * Accessor for player's current health.
+     * @return The current health of the player.
+     */
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
+    /**
+     * Accessor for the player's maximum health.
+     * @return The max health of the player.
+     */
+    public int getMaxHealth() {
+        return maxHealth;
+    }
 }

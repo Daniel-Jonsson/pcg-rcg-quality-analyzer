@@ -1,0 +1,164 @@
+package com.mygdx.platformer.screens.overlays;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.platformer.utilities.AppConfig;
+
+/**
+ * A static utility class for displaying error messages in the game.
+ * This overlay can be shown from anywhere in the game by calling the static
+ * methods.
+ * 
+ * @author Daniel Jönsson
+ * @author Robert Kullman
+ */
+public class ErrorOverlay {
+    private static Stage stage;
+    private static Dialog currentDialog;
+    private static Skin skin;
+    private static boolean isActive = false;
+    private static InputProcessor previousInputProcessor;
+    private static boolean isFatal = false;
+
+    /**
+     * Initializes the error overlay. This should be called once during the game
+     * initialization.
+     */
+    public static void initialize() {
+        stage = new Stage(new ScreenViewport());
+        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+    }
+
+    public static void show(String title, String description, boolean fatal) {
+        if (stage == null) {
+            initialize();
+        }
+
+        isFatal = fatal;
+        previousInputProcessor = Gdx.input.getInputProcessor();
+        Gdx.input.setInputProcessor(stage);
+
+        if (currentDialog != null) {
+            currentDialog.remove();
+        }
+
+        currentDialog = new Dialog(title, skin) {
+            @Override
+            protected void result(Object object) {
+                ErrorOverlay.hide();
+                if (isFatal) {
+                    Gdx.app.exit();
+                }
+            }
+        };
+
+        currentDialog.setWidth(AppConfig.ERROR_DIALOG_WIDTH);
+        currentDialog.setHeight(AppConfig.ERROR_DIALOG_HEIGHT);
+
+        Label descriptionLabel = new Label(description, skin);
+        descriptionLabel.setWrap(true);
+        descriptionLabel.setAlignment(Align.center);
+
+        currentDialog.getContentTable().add(descriptionLabel).width(300).padTop(AppConfig.ERROR_DIALOG_PADDING);
+
+        TextButton okButton = new TextButton(AppConfig.OK_BUTTON_TEXT, skin);
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                hide();
+                if (isFatal) {
+                    Gdx.app.exit();
+                }
+            }
+        });
+
+        currentDialog.getButtonTable().add(okButton)
+                .width(AppConfig.BUTTON_WIDTH)
+                .height(AppConfig.BUTTON_HEIGHT)
+                .padBottom(AppConfig.BUTTON_BOTTOM_PADDING);
+
+        currentDialog.setPosition(
+                (stage.getWidth() - currentDialog.getWidth()) / 2,
+                (stage.getHeight() - currentDialog.getHeight()) / 2);
+
+        stage.addActor(currentDialog);
+
+        isActive = true;
+    }
+
+    public static void show(String title, String description) {
+        show(title, description, false);
+    }
+
+    public static void show(String description) {
+        show("Error", description, false);
+    }
+
+    /**
+     * Shows a fatal error dialog that will exit the application when dismissed.
+     * 
+     * @param title       The title of the error dialog
+     * @param description The error message to display
+     */
+    public static void showFatal(String title, String description) {
+        show(title, description, true);
+    }
+
+    /**
+     * Hides the error dialog if it's currently shown.
+     */
+    public static void hide() {
+        if (isActive && currentDialog != null) {
+            currentDialog.hide();
+            currentDialog.remove();
+            currentDialog = null;
+            isActive = false;
+            if (previousInputProcessor != null) {
+                Gdx.input.setInputProcessor(previousInputProcessor);
+            }
+        }
+    }
+
+    public static void render() {
+        if (isActive) {
+            stage.act(Gdx.graphics.getDeltaTime());
+            stage.draw();
+        }
+    }
+
+    public static void resize(int width, int height) {
+        if (stage != null) {
+            stage.getViewport().update(width, height, true);
+        }
+
+        if (currentDialog != null && isActive) {
+            currentDialog.setPosition(
+                    (stage.getWidth() - currentDialog.getWidth()) / 2,
+                    (stage.getHeight() - currentDialog.getHeight()) / 2);
+        }
+    }
+
+    public static void dispose() {
+        if (stage != null) {
+            stage.dispose();
+            stage = null;
+        }
+
+        if (skin != null) {
+            skin.dispose();
+            skin = null;
+        }
+        currentDialog = null;
+        isActive = false;
+    }
+}

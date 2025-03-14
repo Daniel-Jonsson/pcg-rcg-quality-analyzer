@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.MassData;
+import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.ai.autoplay.AutoPlayAgent;
 import com.mygdx.platformer.attacks.AttackManager;
+import com.mygdx.platformer.attacks.BaseAttack;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -78,6 +81,8 @@ public class Player extends BaseCharacter {
     private boolean attackTriggered = false;
 
     private float attackAnimationTimer = 0.0f;
+
+    private boolean isDodging = false;
 
 
     /**
@@ -338,14 +343,6 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Detects incoming projectiles.
-     * @return True if a projectile is approaching.
-     */
-    public boolean detectIncomingProjectile() {
-        return false;
-    }
-
-    /**
      * Checks if the path ahead is clear.
      * @return True if the path is clear.
      */
@@ -477,5 +474,70 @@ public class Player extends BaseCharacter {
      */
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    public boolean detectIncomingProjectile() {
+        int NUM_RAYS = 6;      // Number of rays along the player's height.
+        float RAY_LENGTH = 3f; // How far to cast each ray (in world units).
+
+        Vector2 playerPos = getBody().getPosition();
+
+        float playerHeight = getHitBoxSize().y;
+        boolean detected = false;
+
+        // Cast rays along the player's height (from bottom to top)
+        for (int i = 0; i < NUM_RAYS; i++) {
+            // Distribute rays
+            float fraction = (NUM_RAYS == 1) ? 0.5f : (float) i / (NUM_RAYS - 1);
+            float offsetY = fraction * playerHeight;
+            Vector2 rayStart = new Vector2(playerPos.x, playerPos.y + offsetY);
+
+            // Check in both forward and backward directions.
+            int facingDir = getFacingDirection();
+
+            // Forward detection
+            Vector2 rayEndForward = new Vector2(rayStart.x + (facingDir * RAY_LENGTH), rayStart.y);
+            if (castRayForProjectile(rayStart, rayEndForward)) {
+                detected = true;
+                break;
+            }
+
+            // Backward detection
+            Vector2 rayEndBackward = new Vector2(rayStart.x - (facingDir * RAY_LENGTH), rayStart.y);
+            if (castRayForProjectile(rayStart, rayEndBackward)) {
+                detected = true;
+                break;
+            }
+        }
+        return detected;
+    }
+
+    /**
+     * Helper method that casts a ray between two points and returns true if a projectile is detected.
+     */
+    private boolean castRayForProjectile(Vector2 start, Vector2 end) {
+        final boolean[] hit = { false };
+        gameWorld.rayCast(new RayCastCallback() {
+            @Override
+            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                Object data = fixture.getBody().getUserData();
+                if (data instanceof BaseAttack attack) {
+                    if (!attack.isPlayerAttack()) {
+                        hit[0] = true;
+                        return 0;
+                    }
+                }
+                return -1;
+            }
+        }, start, end);
+        return hit[0];
+    }
+
+    public void setDodging(boolean dodging) {
+        isDodging = dodging;
+    }
+
+    public boolean isDodging() {
+        return isDodging;
     }
 }

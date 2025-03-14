@@ -17,9 +17,16 @@ public class DetectProjectile extends LeafTask<Player> {
     @Override
     public Status execute() {
         Player player = getObject();
-        System.out.println("Detecting projectile");
-       // return player.detectIncomingProjectile() ? Status.SUCCEEDED : Status.FAILED;
-        return Status.FAILED;
+        if (player.isGrounded()) {
+            boolean projectileDetected = player.detectIncomingProjectile();
+            if (projectileDetected) {
+
+                System.out.println("Detected incoming projectile");
+                return Status.SUCCEEDED;
+            }
+        }
+
+        return Status.RUNNING;
     }
 
     /**

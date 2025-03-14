@@ -113,7 +113,7 @@ public final class AppConfig {
     public static final int PLAYER_HP = 500;
 
     /** Offset for player ground detection raycasting. **/
-    public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.1f;
+    public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.0f;
 
     /* Procedural Content Generation (PCG) */
 

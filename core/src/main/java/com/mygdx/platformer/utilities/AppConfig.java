@@ -436,10 +436,10 @@ public final class AppConfig {
     /* ERROR OVERLAY CONFIGURATIONS */
 
     /** The width of the error dialog. **/
-    public static final int ERROR_DIALOG_WIDTH = 300;
+    public static final int ERROR_DIALOG_WIDTH = SCREEN_WIDTH_PIXELS / 2;
 
     /** The height of the error dialog. **/
-    public static final int ERROR_DIALOG_HEIGHT = 150;
+    public static final int ERROR_DIALOG_HEIGHT = SCREEN_HEIGHT_PIXELS / 2;
 
     /** The padding of the error dialog. **/
     public static final int ERROR_DIALOG_PADDING = 20;
@@ -455,6 +455,17 @@ public final class AppConfig {
 
     /** OK button text. **/
     public static final String OK_BUTTON_TEXT = "OK";
+
+    /** Button width. **/
+    public static final int ERROR_DIALOG_BUTTON_WIDTH = 150;
+
+    /** Button height. **/
+    public static final int ERROR_DIALOG_BUTTON_HEIGHT = 50;
+
+    /** Button padding. **/
+    public static final int ERROR_DIALOG_BUTTON_PADDING_BOTTOM = 10;
+    
+    
 
     
     

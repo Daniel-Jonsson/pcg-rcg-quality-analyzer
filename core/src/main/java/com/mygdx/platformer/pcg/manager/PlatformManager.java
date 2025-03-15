@@ -27,7 +27,7 @@ import java.util.Random;
  * @author Daniel Jönsson
  * @author Robert Kullman
  */
-public class PlatformManager implements GameDifficultyObserver {
+public class PlatformManager {
     private List<Platform> platforms;
     private Map<AppConfig.PlatformGeneratorType, IPlatformGenerator> generators;
     private IPlatformGenerator currentGenerator;
@@ -80,7 +80,6 @@ public class PlatformManager implements GameDifficultyObserver {
         Platform initialPlatform = currentGenerator.initialize(world);
         platforms.add(initialPlatform);
         lastPlatformX = initialPlatform.getBody().getPosition().x + initialPlatform.getWidth() / 2;
-        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**
@@ -254,8 +253,7 @@ public class PlatformManager implements GameDifficultyObserver {
         return platforms;
     }
 
-    @Override
-    public void onDifficultyChanged(int difficultyLevel) {
+    public void increaseDifficulty(int difficultyLevel) {
 
         float gapIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
         float widthDecrease = 1.0f - (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);

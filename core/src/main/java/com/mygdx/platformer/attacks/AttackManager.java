@@ -23,6 +23,7 @@ import java.util.List;
 public class AttackManager {
     private final List<BaseAttack> attacks;
     private final World world;
+    private float multiplier = 1.0f;
 
     /**
      * Constructs an instance of {@code AttackManager}, responsible for
@@ -46,18 +47,25 @@ public class AttackManager {
      */
     public void spawnAttackAt(Vector2 position, int directionModifier, boolean isPlayerAttack, AppConfig.AttackType attackType) {
         BaseAttack attack;
-
+        int dmg;
+        int speed;
         switch (attackType) {
             case PLAYER_THROWING_DAGGER:
                 attack = new PlayerAttack(world, position.x, position.y, Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
                 AudioManager.playSound("swoosh");
                 break;
             case GOBLIN_THROWING_DAGGER:
-                attack = new GoblinAttack(world, position.x, position.y, Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
+                dmg = (int) (AppConfig.GOBLIN_ATTACK_POWER * multiplier);
+                speed = (int) (AppConfig.GOBLIN_ATTACK_SPEED * multiplier);
+                attack = new GoblinAttack(world, position.x, position.y, directionModifier, dmg, speed);
                 AudioManager.playSound("swoosh2");
                 break;
             case DEATH_BOLT:
-                attack = new NecromancerAttack(world, position.x, position.y, Assets.assetManager.get(Assets.DEATH_BOLT), directionModifier, isPlayerAttack);
+                dmg =
+                    (int) (AppConfig.NECROMANCER_ATTACK_POWER * multiplier);
+                speed =
+                    (int) (AppConfig.NECROMANCER_ATTACK_SPEED * multiplier);
+                attack = new NecromancerAttack(world, position.x, position.y, directionModifier, dmg, speed);
                 AudioManager.playSound("deathbolt");
                 break;
 
@@ -109,6 +117,6 @@ public class AttackManager {
     }
 
     public void increaseDifficulty(int difficulty) {
-
+        multiplier = 1.0f + (difficulty  * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
     }
 }

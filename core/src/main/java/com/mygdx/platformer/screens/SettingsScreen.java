@@ -34,8 +34,6 @@ public class SettingsScreen extends ScreenAdapter {
     private Texture healthBarTexture;
     private Sprite healthBarSprite;
 
-
-
     /**
      * Settings screen constructor.
      * @param game The game instance.
@@ -70,6 +68,14 @@ public class SettingsScreen extends ScreenAdapter {
         Label scaleLabel = new Label("UI Scale", skin);
         Slider scaleSlider = createScaleSlider();
 
+        // music volume slider
+        Label musicVolumeLabel = new Label("Music volume", skin);
+        Slider musicVolumeSlider = createMusicVolumeSlider();
+
+        // effects volume slider
+        Label effectsVolumeLabel = new Label("Effects volume", skin);
+        Slider effectsVolumeSlider = createEffectsVolumeSlider();
+
         // fps checkbox
         CheckBox fpsCheckbox = new CheckBox("Show FPS", skin);
         fpsCheckbox.setChecked(Settings.getShowFPS());
@@ -98,6 +104,14 @@ public class SettingsScreen extends ScreenAdapter {
         table.add(scaleSlider).width(AppConfig.UI_SCALE_SLIDER_WIDTH)
             .padBottom(AppConfig.UI_SCALE_SLIDER_PADDING)
             .row();
+        table.add(musicVolumeLabel).padTop(AppConfig.UI_SCALE_SLIDER_PADDING).row();
+        table.add(musicVolumeSlider).width(AppConfig.UI_SCALE_SLIDER_WIDTH)
+            .padBottom(AppConfig.UI_SCALE_SLIDER_PADDING)
+            .row();
+        table.add(effectsVolumeLabel).padTop(AppConfig.UI_SCALE_SLIDER_PADDING).row();
+        table.add(effectsVolumeSlider).width(AppConfig.UI_SCALE_SLIDER_WIDTH)
+            .padBottom(AppConfig.UI_SCALE_SLIDER_PADDING)
+            .row();
 
         table.add(fpsCheckbox)
             .padTop(AppConfig.UI_SCALE_SLIDER_PADDING)
@@ -109,6 +123,10 @@ public class SettingsScreen extends ScreenAdapter {
         stage.addActor(table);
     }
 
+    /**
+     * Creates the UI scale slider.
+     * @return The UI scale slider.
+     */
     private Slider createScaleSlider() {
         Slider scaleSlider = new Slider(0.5f, 2.0f, 0.1f, false, skin);
         scaleSlider.setValue(Settings.getUIScale());
@@ -125,6 +143,38 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
         return scaleSlider;
+    }
+
+    /**
+     * Creates the music volume Slider.
+     * @return Slider object representing the music volume slider.
+     */
+    private Slider createMusicVolumeSlider() {
+        Slider musicVolumeSlider = new Slider(0.0f, 1.0f, 0.05f, false, skin);
+        musicVolumeSlider.setValue(Settings.getMusicVolume());
+        musicVolumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.saveMusicVolume(musicVolumeSlider.getValue());
+            }
+        });
+        return musicVolumeSlider;
+    }
+
+    /**
+     * Creates the effects volume slider.
+     * @return Slider object representing the effects volume slider.
+     */
+    private Slider createEffectsVolumeSlider() {
+        Slider effectsVolumeSlider = new Slider(0.0f, 1.0f, 0.05f, false, skin);
+        effectsVolumeSlider.setValue(Settings.getEffectsVolume());
+        effectsVolumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.saveEffectsVolume(effectsVolumeSlider.getValue());
+            }
+        });
+        return effectsVolumeSlider;
     }
 
     /**

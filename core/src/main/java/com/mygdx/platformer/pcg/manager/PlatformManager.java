@@ -134,8 +134,8 @@ public class PlatformManager {
      *
      * @return An array of all registered generator types
      */
-    public String[] getAvailableGeneratorTypes() {
-        return generators.keySet().toArray(new String[0]);
+    public AppConfig.PlatformGeneratorType[] getAvailableGeneratorTypes() {
+        return generators.keySet().toArray(new AppConfig.PlatformGeneratorType[0]);
     }
 
     /**
@@ -189,10 +189,8 @@ public class PlatformManager {
             yVariation = -random.nextFloat() * currentMaxYVariation;
         }
 
-        float absYVariation = Math.abs(yVariation);
 
-
-        float minRequiredGap = absYVariation;
+        float minRequiredGap = Math.abs(yVariation);
 
         float adjustedMinGap = Math.max(currentMinGap, minRequiredGap);
 

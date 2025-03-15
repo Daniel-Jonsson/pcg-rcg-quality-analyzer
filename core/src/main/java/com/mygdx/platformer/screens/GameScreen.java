@@ -70,7 +70,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
     EnemyManager enemyManager;
     AttackManager attackManager;
 
-    Boolean autoPlayEnabled = false;
+    Boolean autoPlayEnabled;
 
     private HealthBar healthBar;
 

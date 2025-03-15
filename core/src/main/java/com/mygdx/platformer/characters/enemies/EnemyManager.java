@@ -5,8 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.ai.enemy.EnemyAIAgent;
 import com.mygdx.platformer.attacks.AttackManager;
-import com.mygdx.platformer.difficulty.GameDifficultyManager;
-import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.utilities.AppConfig;
 
 import java.util.ArrayList;

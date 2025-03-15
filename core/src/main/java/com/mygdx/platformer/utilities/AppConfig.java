@@ -204,6 +204,8 @@ public final class AppConfig {
     public static final int UI_SCALE_SLIDER_PADDING = 20;
     public static final int UI_SCALE_SLIDER_WIDTH = 300;
 
+    public static final float GAME_TIMER_WIDTH = 80f;
+
     /* Enemy Configuration */
 
     /** Base probability of enemy spawning. */

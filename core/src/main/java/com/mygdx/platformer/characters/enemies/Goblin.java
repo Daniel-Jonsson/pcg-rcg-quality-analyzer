@@ -35,6 +35,10 @@ public class Goblin extends BaseEnemy {
             AppConfig.GOBLIN_SPEED, AppConfig.GOBLIN_WIDTH, AppConfig.GOBLIN_HEIGHT);
     }
 
+    public Goblin(World world, Vector2 position, int health, int speed) {
+        super(world, position, health, speed, AppConfig.GOBLIN_WIDTH, AppConfig.GOBLIN_HEIGHT);
+    }
+
     /**
      * Updates the goblin's behavior and animation state. The animation
      * changes based on whether the goblin is moving or idle.

@@ -1,11 +1,8 @@
 package com.mygdx.platformer.attacks;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.platformer.difficulty.GameDifficultyManager;
-import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
@@ -20,10 +17,10 @@ import java.util.List;
  *
  * @author Daniel Jönsson, Robert Kullman
  */
-public class AttackManager implements GameDifficultyObserver {
+public class AttackManager {
     private final List<BaseAttack> attacks;
-    private final Texture orbTexture;
     private final World world;
+    private float multiplier = 1.0f;
 
     /**
      * Constructs an instance of {@code AttackManager}, responsible for
@@ -34,8 +31,6 @@ public class AttackManager implements GameDifficultyObserver {
     public AttackManager(World world) {
         this.world = world;
         this.attacks = new ArrayList<>();
-        this.orbTexture = new Texture(Assets.THROWING_DAGGER_TEXTURE);
-        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**
@@ -49,18 +44,25 @@ public class AttackManager implements GameDifficultyObserver {
      */
     public void spawnAttackAt(Vector2 position, int directionModifier, boolean isPlayerAttack, AppConfig.AttackType attackType) {
         BaseAttack attack;
-
+        int dmg;
+        int speed;
         switch (attackType) {
             case PLAYER_THROWING_DAGGER:
                 attack = new PlayerAttack(world, position.x, position.y, Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
                 AudioManager.playSound("swoosh");
                 break;
             case GOBLIN_THROWING_DAGGER:
-                attack = new GoblinAttack(world, position.x, position.y, Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
+                dmg = (int) (AppConfig.GOBLIN_ATTACK_POWER * multiplier);
+                speed = (int) (AppConfig.GOBLIN_ATTACK_SPEED * multiplier);
+                attack = new GoblinAttack(world, position.x, position.y, directionModifier, dmg, speed);
                 AudioManager.playSound("swoosh2");
                 break;
             case DEATH_BOLT:
-                attack = new NecromancerAttack(world, position.x, position.y, Assets.assetManager.get(Assets.DEATH_BOLT), directionModifier, isPlayerAttack);
+                dmg =
+                    (int) (AppConfig.NECROMANCER_ATTACK_POWER * multiplier);
+                speed =
+                    (int) (AppConfig.NECROMANCER_ATTACK_SPEED * multiplier);
+                attack = new NecromancerAttack(world, position.x, position.y, directionModifier, dmg, speed);
                 AudioManager.playSound("deathbolt");
                 break;
 
@@ -111,9 +113,11 @@ public class AttackManager implements GameDifficultyObserver {
         }
     }
 
-    @Override
-    public void onDifficultyChanged(int difficultyLevel) {
-        // TODO: Implement difficulty-based attack changes
-        System.out.println("Difficulty on AttackManager changed to: " + difficultyLevel);
+    /**
+     * Increases difficulty of the enemy attacks spawned.
+     * @param difficulty The current difficulty in the game.
+     */
+    public void increaseDifficulty(int difficulty) {
+        multiplier = 1.0f + (difficulty  * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
     }
 }

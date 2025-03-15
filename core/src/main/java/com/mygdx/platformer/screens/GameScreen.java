@@ -16,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.platformer.EnemyManager;
+import com.mygdx.platformer.characters.enemies.EnemyManager;
 import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.attacks.AttackManager;
@@ -25,6 +25,7 @@ import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.characters.player.HealthBar;
 import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.difficulty.GameDifficultyManager;
+import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.pcg.manager.PlatformManager;
 import com.mygdx.platformer.screens.overlays.GameOverOverlay;
 import com.mygdx.platformer.sound.AudioManager;
@@ -35,7 +36,7 @@ import com.mygdx.platformer.utilities.AppConfig;
  * @author Robert Kullman
  * @author Daniel Jönsson
  */
-public class GameScreen extends ScreenAdapter {
+public class GameScreen extends ScreenAdapter implements GameDifficultyObserver {
     /** Reference to the main game instance to allow screen switching. */
     private final PlatformerGame game;
 
@@ -69,13 +70,15 @@ public class GameScreen extends ScreenAdapter {
     EnemyManager enemyManager;
     AttackManager attackManager;
 
-    Boolean autoPlayEnabled = false;
+    Boolean autoPlayEnabled;
 
     private HealthBar healthBar;
 
     private float UIScale;
 
     private float cameraXPosition;
+
+    private float difficultySpeed = 1.0f;
 
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
@@ -87,6 +90,7 @@ public class GameScreen extends ScreenAdapter {
        this.gameTimer = new GameTimer(UIScale);
        this.UIScale = UIScale;
        autoPlayEnabled = autoPlay;
+       GameDifficultyManager.getInstance().registerObserver(this);
 
 
         //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
@@ -147,7 +151,7 @@ public class GameScreen extends ScreenAdapter {
                 player.handleInput();
             //}
             gameTimer.update(deltaTime);
-            cameraXPosition += 2f * deltaTime;
+            cameraXPosition += 2f * deltaTime * difficultySpeed;
             camera.position.set(cameraXPosition, viewport.getWorldHeight() / 2f, 0);
             camera.update();
             input();
@@ -367,4 +371,12 @@ public class GameScreen extends ScreenAdapter {
         });
     }
 
+    @Override
+    public void onDifficultyChanged(int difficultyLevel) {
+        enemyManager.increaseDifficulty(difficultyLevel);
+        platformManager.increaseDifficulty(difficultyLevel);
+        attackManager.increaseDifficulty(difficultyLevel);
+        difficultySpeed = difficultySpeed +
+            (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
+    }
 }

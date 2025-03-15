@@ -263,7 +263,7 @@ public final class AppConfig {
     public static final float GOBLIN_ATTACK_SCALE = 1.0f;
 
     /** The maximum health points of a goblin. **/
-    public static final int GOBLIN_HEALTH = 250;
+    public static final int GOBLIN_HEALTH = 100;
 
     /** The movement speed of a goblin. **/
     public static final float GOBLIN_SPEED = 1f;
@@ -310,7 +310,7 @@ public final class AppConfig {
     public static final float NECROMANCER_ATTACK_SCALE = 2.0f;
 
     /** The maximum health points of a necromancer. **/
-    public static final int NECROMANCER_HEALTH = 400;
+    public static final int NECROMANCER_HEALTH = 200;
 
     /** The movement speed of a necromancer. **/
     public static final float NECROMANCER_SPEED = 0.5f;

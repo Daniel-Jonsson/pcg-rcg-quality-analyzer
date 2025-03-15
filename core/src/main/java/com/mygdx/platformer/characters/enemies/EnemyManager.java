@@ -1,15 +1,10 @@
-package com.mygdx.platformer;
+package com.mygdx.platformer.characters.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.ai.enemy.EnemyAIAgent;
 import com.mygdx.platformer.attacks.AttackManager;
-import com.mygdx.platformer.characters.enemies.BaseEnemy;
-import com.mygdx.platformer.characters.enemies.Goblin;
-import com.mygdx.platformer.characters.enemies.Necromancer;
-import com.mygdx.platformer.difficulty.GameDifficultyManager;
-import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.utilities.AppConfig;
 
 import java.util.ArrayList;
@@ -25,7 +20,7 @@ import java.util.Random;
  *
  * @author Daniel Jönsson, Robert Kullman
  */
-public class EnemyManager implements GameDifficultyObserver {
+public class EnemyManager {
 
     /** The Box2D world where enemies exist. */
     private World world;
@@ -46,6 +41,10 @@ public class EnemyManager implements GameDifficultyObserver {
      * spawning. */
     private Random random;
 
+    /** Multiplier that increases with difficulty */
+
+    private float multiplier = 1.0f;
+
     /**
      * Constructs an EnemyManager to handle enemy creation and management in
      * the game world.
@@ -59,7 +58,6 @@ public class EnemyManager implements GameDifficultyObserver {
         this.random = new Random();
         this.attackManager = attackManager;
         this.targetPosition = targetPosition;
-        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**
@@ -75,12 +73,16 @@ public class EnemyManager implements GameDifficultyObserver {
         float attackRange;
         float attackCooldown;
         if (random.nextBoolean()) {
-            enemy = new Goblin(world, position);
+            int hp = (int) (AppConfig.GOBLIN_HEALTH * multiplier);
+            int speed = (int) (AppConfig.GOBLIN_SPEED * multiplier);
+            enemy = new Goblin(world, position, hp, speed);
             detectionRange = AppConfig.GOBLIN_DETECTION_RANGE;
             attackRange = AppConfig.GOBLIN_ATTACK_RANGE;
             attackCooldown = AppConfig.GOBLIN_ATTACK_COOLDOWN;
         } else {
-            enemy = new Necromancer(world, position);
+            int hp = (int) (AppConfig.NECROMANCER_HEALTH * multiplier);
+            int speed = (int) (AppConfig.NECROMANCER_SPEED * multiplier);
+            enemy = new Necromancer(world, position, hp, speed);
             detectionRange = AppConfig.NECROMANCER_DETECTION_RANGE;
             attackRange = AppConfig.NECROMANCER_ATTACK_RANGE;
             attackCooldown = AppConfig.NECROMANCER_ATTACK_COOLDOWN;
@@ -134,9 +136,8 @@ public class EnemyManager implements GameDifficultyObserver {
         this.targetPosition = targetPosition;
     }
 
-    @Override
-    public void onDifficultyChanged(int difficultyLevel) {
-        System.out.println("Difficulty on EnemyManager changed to: " + difficultyLevel);
+    public void increaseDifficulty(int difficultyLevel) {
+        multiplier = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
     }
 
 }

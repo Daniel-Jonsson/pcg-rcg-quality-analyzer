@@ -3,9 +3,7 @@ package com.mygdx.platformer.pcg.manager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.platformer.EnemyManager;
-import com.mygdx.platformer.difficulty.GameDifficultyManager;
-import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
+import com.mygdx.platformer.characters.enemies.EnemyManager;
 import com.mygdx.platformer.pcg.Platform;
 import com.mygdx.platformer.pcg.factory.PlatformGeneratorFactory;
 import com.mygdx.platformer.pcg.generators.IPlatformGenerator;
@@ -27,7 +25,7 @@ import java.util.Random;
  * @author Daniel Jönsson
  * @author Robert Kullman
  */
-public class PlatformManager implements GameDifficultyObserver {
+public class PlatformManager {
     private List<Platform> platforms;
     private Map<AppConfig.PlatformGeneratorType, IPlatformGenerator> generators;
     private IPlatformGenerator currentGenerator;
@@ -80,7 +78,6 @@ public class PlatformManager implements GameDifficultyObserver {
         Platform initialPlatform = currentGenerator.initialize(world);
         platforms.add(initialPlatform);
         lastPlatformX = initialPlatform.getBody().getPosition().x + initialPlatform.getWidth() / 2;
-        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**
@@ -137,8 +134,8 @@ public class PlatformManager implements GameDifficultyObserver {
      *
      * @return An array of all registered generator types
      */
-    public String[] getAvailableGeneratorTypes() {
-        return generators.keySet().toArray(new String[0]);
+    public AppConfig.PlatformGeneratorType[] getAvailableGeneratorTypes() {
+        return generators.keySet().toArray(new AppConfig.PlatformGeneratorType[0]);
     }
 
     /**
@@ -192,10 +189,8 @@ public class PlatformManager implements GameDifficultyObserver {
             yVariation = -random.nextFloat() * currentMaxYVariation;
         }
 
-        float absYVariation = Math.abs(yVariation);
 
-
-        float minRequiredGap = absYVariation;
+        float minRequiredGap = Math.abs(yVariation);
 
         float adjustedMinGap = Math.max(currentMinGap, minRequiredGap);
 
@@ -254,8 +249,7 @@ public class PlatformManager implements GameDifficultyObserver {
         return platforms;
     }
 
-    @Override
-    public void onDifficultyChanged(int difficultyLevel) {
+    public void increaseDifficulty(int difficultyLevel) {
 
         float gapIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
         float widthDecrease = 1.0f - (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);

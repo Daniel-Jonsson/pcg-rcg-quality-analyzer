@@ -89,7 +89,7 @@ public class EnemyManager implements GameDifficultyObserver {
         enemies.add(enemy);
         aiAgents.add(new EnemyAIAgent(enemy, detectionRange, attackRange, attackManager, attackCooldown));
 
-        System.out.println("Spawned enemy at " + position);
+        //System.out.println("Spawned enemy at " + position);
     }
 
     /**
@@ -136,7 +136,7 @@ public class EnemyManager implements GameDifficultyObserver {
 
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
-        System.out.println("Difficulty on EnemyManager changed to: " + difficultyLevel);
+       // System.out.println("Difficulty on EnemyManager changed to: " + difficultyLevel);
     }
 
 }

@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.platformer.EnemyManager;
 import com.mygdx.platformer.GameTimer;
@@ -181,7 +182,15 @@ public class GameScreen extends ScreenAdapter {
      * @param deltaTime The time since the last render.
      */
     private void doPhysicsStep(final float deltaTime) {
-
+//        if(player.jumpTriggered()){
+//            long physicsResponseTime = TimeUtils.nanoTime();
+//            long latencyNanos = physicsResponseTime - player.inputTimestamp;
+//            float latencyMillis = latencyNanos / 1_000_000f;
+//
+//            Gdx.app.log("InputTest", "Latency from input to physics update: " + latencyMillis + " ms");
+//
+//            player.setJumpTriggered(false);
+//        }
         // max frame time
         float frameTime = Math.min(deltaTime * AppConfig.TIME_SCALE, AppConfig.MAX_FRAME_TIME);
         runTime += frameTime;

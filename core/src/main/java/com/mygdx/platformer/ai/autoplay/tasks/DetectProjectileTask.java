@@ -20,8 +20,6 @@ public class DetectProjectileTask extends LeafTask<Player> {
         if (player.isGrounded()) {
             boolean projectileDetected = player.detectIncomingProjectile();
             if (projectileDetected) {
-
-                System.out.println("Detected incoming projectile");
                 return Status.SUCCEEDED;
             }
         }

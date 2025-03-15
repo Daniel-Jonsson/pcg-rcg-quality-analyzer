@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.platformer.ai.autoplay.AutoPlayAgent;
 import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.attacks.BaseAttack;
@@ -84,6 +85,7 @@ public class Player extends BaseCharacter {
 
     private boolean isDodging = false;
 
+    public long inputTimestamp = 0;
 
     /**
      * Instantiates the player in the game world.
@@ -212,7 +214,9 @@ public class Player extends BaseCharacter {
            attack();
         }
 
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {
+           // inputTimestamp = TimeUtils.nanoTime();
             jumpRequested = true;
             jumpHolding = true;
         }
@@ -569,5 +573,13 @@ public class Player extends BaseCharacter {
      */
     public boolean isDodging() {
         return isDodging;
+    }
+
+    public boolean jumpTriggered() {
+        return this.jumpRequested;
+    }
+
+    public void setJumpTriggered(boolean jumpTriggered) {
+        this.jumpRequested = jumpTriggered;
     }
 }

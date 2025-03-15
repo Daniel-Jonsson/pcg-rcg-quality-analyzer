@@ -110,6 +110,6 @@ public class AttackManager implements GameDifficultyObserver {
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
         // TODO: Implement difficulty-based attack changes
-        System.out.println("Difficulty on AttackManager changed to: " + difficultyLevel);
+        //System.out.println("Difficulty on AttackManager changed to: " + difficultyLevel);
     }
 }

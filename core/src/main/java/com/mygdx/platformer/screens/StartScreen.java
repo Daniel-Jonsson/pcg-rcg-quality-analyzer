@@ -71,34 +71,13 @@ public class StartScreen implements Screen {
             }
         });
 
-        // UI scale slider
-        Label scaleLabel = new Label("UI Scale", skin);
-        Slider scaleSlider = new Slider(0.5f, 2.0f, 0.1f, false, skin);
-
-        UI_SCALE = Settings.getUIScale();
-
-        scaleSlider.setValue(UI_SCALE);
-
-
-        scaleSlider.addListener(new ChangeListener() {
+        TextButton settingsButton = new TextButton("Settings", skin);
+        settingsButton.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                UI_SCALE = scaleSlider.getValue();
-                Settings.saveUIScale(UI_SCALE);
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SettingsScreen(game));
             }
         });
-
-        CheckBox fpsCheckbox = new CheckBox("Show FPS", skin);
-        fpsCheckbox.setChecked(Settings.getShowFPS());
-
-        fpsCheckbox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                boolean showFPS = fpsCheckbox.isChecked();
-                Settings.saveShowFPS(showFPS);
-            }
-        });
-
 
 
         // Arrange UI with Table
@@ -119,20 +98,15 @@ public class StartScreen implements Screen {
             .height(AppConfig.BUTTON_HEIGHT)
             .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
             .row();
-        table.add(quitButton)
+        table.add(settingsButton)
             .width(AppConfig.BUTTON_WIDTH)
             .height(AppConfig.BUTTON_HEIGHT)
             .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
             .row();
-
-        table.add(scaleLabel).padTop(AppConfig.UI_SCALE_SLIDER_PADDING).row();
-        table.add(scaleSlider).width(AppConfig.UI_SCALE_SLIDER_WIDTH)
-            .padBottom(AppConfig.UI_SCALE_SLIDER_PADDING)
-            .row();
-
-        table.add(fpsCheckbox)
-            .padTop(AppConfig.UI_SCALE_SLIDER_PADDING)
-            .padBottom(AppConfig.UI_SCALE_SLIDER_PADDING)
+        table.add(quitButton)
+            .width(AppConfig.BUTTON_WIDTH)
+            .height(AppConfig.BUTTON_HEIGHT)
+            .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
             .row();
 
 

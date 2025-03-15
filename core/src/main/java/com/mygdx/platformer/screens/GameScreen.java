@@ -16,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.platformer.EnemyManager;
+import com.mygdx.platformer.characters.enemies.EnemyManager;
 import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.attacks.AttackManager;

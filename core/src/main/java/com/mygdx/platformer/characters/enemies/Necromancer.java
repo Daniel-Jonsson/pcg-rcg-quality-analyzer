@@ -35,6 +35,11 @@ public class Necromancer extends BaseEnemy {
             AppConfig.NECROMANCER_HEIGHT);
     }
 
+    public Necromancer(World world, Vector2 position, int health, int speed) {
+        super(world, position, health, speed, AppConfig.NECROMANCER_WIDTH,
+            AppConfig.NECROMANCER_HEIGHT);
+    }
+
     /**
      * Updates the necromancer's state and animation. The animation updates
      * based on the elapsed time.

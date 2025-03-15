@@ -43,6 +43,10 @@ public class EnemyManager {
      * spawning. */
     private Random random;
 
+    /** Multiplier that increases with difficulty */
+
+    private float multiplier = 1.0f;
+
     /**
      * Constructs an EnemyManager to handle enemy creation and management in
      * the game world.
@@ -71,12 +75,16 @@ public class EnemyManager {
         float attackRange;
         float attackCooldown;
         if (random.nextBoolean()) {
-            enemy = new Goblin(world, position);
+            int hp = (int) (AppConfig.GOBLIN_HEALTH * multiplier);
+            int speed = (int) (AppConfig.GOBLIN_SPEED * multiplier);
+            enemy = new Goblin(world, position, hp, speed);
             detectionRange = AppConfig.GOBLIN_DETECTION_RANGE;
             attackRange = AppConfig.GOBLIN_ATTACK_RANGE;
             attackCooldown = AppConfig.GOBLIN_ATTACK_COOLDOWN;
         } else {
-            enemy = new Necromancer(world, position);
+            int hp = (int) (AppConfig.NECROMANCER_HEALTH * multiplier);
+            int speed = (int) (AppConfig.NECROMANCER_SPEED * multiplier);
+            enemy = new Necromancer(world, position, hp, speed);
             detectionRange = AppConfig.NECROMANCER_DETECTION_RANGE;
             attackRange = AppConfig.NECROMANCER_ATTACK_RANGE;
             attackCooldown = AppConfig.NECROMANCER_ATTACK_COOLDOWN;
@@ -131,7 +139,7 @@ public class EnemyManager {
     }
 
     public void increaseDifficulty(int difficultyLevel) {
-        System.out.println("Difficulty on EnemyManager changed to: " + difficultyLevel);
+        multiplier = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
     }
 
 }

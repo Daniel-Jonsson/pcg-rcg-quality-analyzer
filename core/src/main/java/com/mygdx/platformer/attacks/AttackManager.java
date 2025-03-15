@@ -20,9 +20,8 @@ import java.util.List;
  *
  * @author Daniel Jönsson, Robert Kullman
  */
-public class AttackManager implements GameDifficultyObserver {
+public class AttackManager {
     private final List<BaseAttack> attacks;
-    private final Texture orbTexture;
     private final World world;
 
     /**
@@ -111,9 +110,7 @@ public class AttackManager implements GameDifficultyObserver {
         }
     }
 
-    @Override
-    public void onDifficultyChanged(int difficultyLevel) {
-        // TODO: Implement difficulty-based attack changes
-        System.out.println("Difficulty on AttackManager changed to: " + difficultyLevel);
+    public void increaseDifficulty(int difficulty) {
+
     }
 }

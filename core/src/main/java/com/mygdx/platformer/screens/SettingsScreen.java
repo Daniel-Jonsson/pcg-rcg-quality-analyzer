@@ -2,19 +2,19 @@ package com.mygdx.platformer.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
-import com.mygdx.platformer.characters.player.HealthBar;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Settings;
 
@@ -29,7 +29,10 @@ public class SettingsScreen extends ScreenAdapter {
     private Skin skin;
 
     private GameTimer timerPreview;
-    private HealthBar previewHealthBar;
+
+    private SpriteBatch batch;
+    private Texture healthBarTexture;
+    private Sprite healthBarSprite;
 
 
 
@@ -47,17 +50,25 @@ public class SettingsScreen extends ScreenAdapter {
         // Preview timer
         timerPreview = new GameTimer(Settings.getUIScale());
 
+        batch = new SpriteBatch();
+        healthBarTexture = new Texture(Gdx.files.internal("textures/healthbar.png"));
+        healthBarSprite = new Sprite(healthBarTexture);
+
+        healthBarSprite.setSize(
+            AppConfig.HEALTHBAR_SPRITE_WIDTH * AppConfig.PPM * Settings.getUIScale(),
+            AppConfig.HEALTHBAR_SPRITE_HEIGHT * AppConfig.PPM * Settings.getUIScale()
+        );
+
+        float barX = stage.getViewport().getWorldWidth() / 2f;
+        float barY = stage.getViewport().getWorldHeight() / 2f;
+
+
+        healthBarSprite.setPosition(barX, barY);
+
+
         // UI scale slider
         Label scaleLabel = new Label("UI Scale", skin);
-        Slider scaleSlider = new Slider(0.5f, 2.0f, 0.1f, false, skin);
-        scaleSlider.setValue(Settings.getUIScale());
-        scaleSlider.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Settings.saveUIScale(scaleSlider.getValue());
-                timerPreview = new GameTimer(Settings.getUIScale());
-            }
-        });
+        Slider scaleSlider = createScaleSlider();
 
         // fps checkbox
         CheckBox fpsCheckbox = new CheckBox("Show FPS", skin);
@@ -98,6 +109,24 @@ public class SettingsScreen extends ScreenAdapter {
         stage.addActor(table);
     }
 
+    private Slider createScaleSlider() {
+        Slider scaleSlider = new Slider(0.5f, 2.0f, 0.1f, false, skin);
+        scaleSlider.setValue(Settings.getUIScale());
+        scaleSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.saveUIScale(scaleSlider.getValue());
+                float scale = scaleSlider.getValue();
+                timerPreview = new GameTimer(scale);
+                healthBarSprite.setSize(
+                    AppConfig.HEALTHBAR_SPRITE_WIDTH * AppConfig.PPM * scale,
+                    AppConfig.HEALTHBAR_SPRITE_HEIGHT * AppConfig.PPM * scale
+                );
+            }
+        });
+        return scaleSlider;
+    }
+
     /**
      * Renders the screen.
      * @param delta The time in seconds since the last render.
@@ -108,6 +137,27 @@ public class SettingsScreen extends ScreenAdapter {
         stage.act(delta);
         stage.draw();
         timerPreview.render();
+
+        // draw dummy healthbar sprite
+        batch.setProjectionMatrix(stage.getCamera().combined);
+        batch.begin();
+
+        float UIScale = Settings.getUIScale();
+
+        float barWidth = AppConfig.PLAYER_HEALTHBAR_WIDTH * UIScale * AppConfig.PPM;
+        float barHeight = AppConfig.PLAYER_HEALTHBAR_HEIGHT * UIScale * AppConfig.PPM;
+
+        float offsetX = AppConfig.PLAYER_HEALTHBAR_OFFSET_X * AppConfig.PPM;
+        float offsetY = AppConfig.PLAYER_HEALTHBAR_OFFSET_Y * AppConfig.PPM;
+
+        float barX = stage.getCamera().position.x - (stage.getViewport().getWorldWidth() / 2f) + offsetX;
+        float barY = stage.getCamera().position.y + (stage.getViewport().getWorldHeight() / 2f) - offsetY - barHeight;
+
+        healthBarSprite.setSize(barWidth, barHeight);
+        healthBarSprite.setPosition(barX, barY);
+
+        healthBarSprite.draw(batch);
+        batch.end();
     }
 
     /**
@@ -128,6 +178,6 @@ public class SettingsScreen extends ScreenAdapter {
         stage.dispose();
         skin.dispose();
         timerPreview.dispose();
-        previewHealthBar.dispose();
+        healthBarTexture.dispose();
     }
 }

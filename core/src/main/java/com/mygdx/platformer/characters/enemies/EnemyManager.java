@@ -22,7 +22,7 @@ import java.util.Random;
  *
  * @author Daniel Jönsson, Robert Kullman
  */
-public class EnemyManager implements GameDifficultyObserver {
+public class EnemyManager {
 
     /** The Box2D world where enemies exist. */
     private World world;
@@ -56,7 +56,6 @@ public class EnemyManager implements GameDifficultyObserver {
         this.random = new Random();
         this.attackManager = attackManager;
         this.targetPosition = targetPosition;
-        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**
@@ -131,8 +130,7 @@ public class EnemyManager implements GameDifficultyObserver {
         this.targetPosition = targetPosition;
     }
 
-    @Override
-    public void onDifficultyChanged(int difficultyLevel) {
+    public void increaseDifficulty(int difficultyLevel) {
         System.out.println("Difficulty on EnemyManager changed to: " + difficultyLevel);
     }
 

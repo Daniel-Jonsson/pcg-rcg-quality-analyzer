@@ -29,8 +29,6 @@ public class StartScreen implements Screen {
     private Skin skin;
     private Stage stage;
 
-    private float UI_SCALE = 1.0f;
-
     /**
      * Constructor for the StartScreen, which initializes the UI elements.
      *
@@ -51,7 +49,7 @@ public class StartScreen implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, false, UI_SCALE));
+                game.setScreen(new GameScreen(game, false));
             }
         });
 
@@ -67,7 +65,7 @@ public class StartScreen implements Screen {
         autoPlayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, true, UI_SCALE));
+                game.setScreen(new GameScreen(game, true));
             }
         });
 

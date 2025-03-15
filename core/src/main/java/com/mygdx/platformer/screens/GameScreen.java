@@ -29,6 +29,7 @@ import com.mygdx.platformer.pcg.manager.PlatformManager;
 import com.mygdx.platformer.screens.overlays.GameOverOverlay;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Settings;
 
 /**
  * This class represents the main game screen.
@@ -82,14 +83,12 @@ public class GameScreen extends ScreenAdapter {
      * game instance.
      * @param g main Game instance.
      */
-   public GameScreen(final PlatformerGame g, boolean autoPlay, float UIScale) {
+   public GameScreen(final PlatformerGame g, boolean autoPlay) {
        this.game = g; // reference main class to enable switching to another screen
+       this.UIScale = Settings.getUIScale();
        this.gameTimer = new GameTimer(UIScale);
-       this.UIScale = UIScale;
        autoPlayEnabled = autoPlay;
 
-
-        //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
    }
 
     /**

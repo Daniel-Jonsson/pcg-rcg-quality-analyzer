@@ -78,6 +78,8 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
     private float cameraXPosition;
 
+    private float difficultySpeed = 1.0f;
+
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
      * game instance.
@@ -88,6 +90,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
        this.gameTimer = new GameTimer(UIScale);
        this.UIScale = UIScale;
        autoPlayEnabled = autoPlay;
+       GameDifficultyManager.getInstance().registerObserver(this);
 
 
         //Gdx.app.log(this.getClass().getSimpleName(), "Loaded");
@@ -148,7 +151,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
                 player.handleInput();
             //}
             gameTimer.update(deltaTime);
-            cameraXPosition += 2f * deltaTime;
+            cameraXPosition += 2f * deltaTime * difficultySpeed;
             camera.position.set(cameraXPosition, viewport.getWorldHeight() / 2f, 0);
             camera.update();
             input();
@@ -370,6 +373,10 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
-        // TODO: Fix enemy difficulty, Platform difficulty, camera speed, etc.
+        enemyManager.increaseDifficulty(difficultyLevel);
+        platformManager.increaseDifficulty(difficultyLevel);
+        attackManager.increaseDifficulty(difficultyLevel);
+        difficultySpeed = difficultySpeed +
+            (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
     }
 }

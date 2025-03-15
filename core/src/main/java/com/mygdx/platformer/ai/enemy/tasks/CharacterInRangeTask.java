@@ -1,4 +1,4 @@
-package com.mygdx.platformer.ai.tasks;
+package com.mygdx.platformer.ai.enemy.tasks;
 
 import com.badlogic.gdx.ai.btree.LeafTask;
 import com.badlogic.gdx.ai.btree.Task;

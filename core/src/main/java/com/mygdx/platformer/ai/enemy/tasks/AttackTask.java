@@ -1,4 +1,4 @@
-package com.mygdx.platformer.ai.tasks;
+package com.mygdx.platformer.ai.enemy.tasks;
 
 import java.util.HashMap;
 import java.util.Map;

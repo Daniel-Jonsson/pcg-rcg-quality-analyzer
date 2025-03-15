@@ -25,6 +25,7 @@ import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.characters.player.HealthBar;
 import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.difficulty.GameDifficultyManager;
+import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.pcg.manager.PlatformManager;
 import com.mygdx.platformer.screens.overlays.GameOverOverlay;
 import com.mygdx.platformer.sound.AudioManager;
@@ -35,7 +36,7 @@ import com.mygdx.platformer.utilities.AppConfig;
  * @author Robert Kullman
  * @author Daniel Jönsson
  */
-public class GameScreen extends ScreenAdapter {
+public class GameScreen extends ScreenAdapter implements GameDifficultyObserver {
     /** Reference to the main game instance to allow screen switching. */
     private final PlatformerGame game;
 
@@ -367,4 +368,8 @@ public class GameScreen extends ScreenAdapter {
         });
     }
 
+    @Override
+    public void onDifficultyChanged(int difficultyLevel) {
+        // TODO: Fix enemy difficulty, Platform difficulty, camera speed, etc.
+    }
 }

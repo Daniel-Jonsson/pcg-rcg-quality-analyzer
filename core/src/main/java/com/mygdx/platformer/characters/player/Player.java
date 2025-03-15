@@ -360,7 +360,7 @@ public class Player extends BaseCharacter {
         Vector2 playerPosition = body.getPosition();
         float rayLength = AppConfig.AUTO_PLAY_ENEMY_DETECTION_RANGE;
 
-        Vector2 rayStart = new Vector2(playerPosition.x-1, playerPosition.y);
+        Vector2 rayStart = new Vector2(playerPosition.x, playerPosition.y);
         Vector2 rayEnd = new Vector2(playerPosition.x + (direction * rayLength), playerPosition.y);
 
         return checkForEnemy(rayStart, rayEnd);

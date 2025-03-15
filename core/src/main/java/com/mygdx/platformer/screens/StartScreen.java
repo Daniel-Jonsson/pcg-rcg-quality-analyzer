@@ -3,8 +3,10 @@ package com.mygdx.platformer.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -86,6 +88,17 @@ public class StartScreen implements Screen {
             }
         });
 
+        CheckBox fpsCheckbox = new CheckBox("Show FPS", skin);
+        fpsCheckbox.setChecked(Settings.getShowFPS());
+
+        fpsCheckbox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                boolean showFPS = fpsCheckbox.isChecked();
+                Settings.saveShowFPS(showFPS);
+            }
+        });
+
 
 
         // Arrange UI with Table
@@ -113,7 +126,14 @@ public class StartScreen implements Screen {
             .row();
 
         table.add(scaleLabel).padTop(AppConfig.UI_SCALE_SLIDER_PADDING).row();
-        table.add(scaleSlider).width(AppConfig.UI_SCALE_SLIDER_WIDTH).padBottom(AppConfig.UI_SCALE_SLIDER_PADDING);
+        table.add(scaleSlider).width(AppConfig.UI_SCALE_SLIDER_WIDTH)
+            .padBottom(AppConfig.UI_SCALE_SLIDER_PADDING)
+            .row();
+
+        table.add(fpsCheckbox)
+            .padTop(AppConfig.UI_SCALE_SLIDER_PADDING)
+            .padBottom(AppConfig.UI_SCALE_SLIDER_PADDING)
+            .row();
 
 
 

@@ -5,8 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Settings;
 
 /**
  * Manages the in-game timer, displaying elapsed time in minutes and seconds.
@@ -46,13 +48,17 @@ public class GameTimer {
 
         timerLabel = new Label("Time: 00:00", skin);
         fpsLabel = new Label("FPS: 60", skin);
+        timerLabel.setAlignment(Align.left);
+        fpsLabel.setAlignment(Align.left);
 
 
         Table table = new Table();
         table.top().right();
         table.setFillParent(true);
-        table.add(timerLabel).pad(AppConfig.TIMER_PADDING).row();
-        table.add(fpsLabel).pad(AppConfig.TIMER_PADDING);
+        table.add(timerLabel).width(AppConfig.GAME_TIMER_WIDTH).pad(AppConfig.TIMER_PADDING).row();
+        table.add(fpsLabel).width(AppConfig.GAME_TIMER_WIDTH);
+
+        fpsLabel.setVisible(Settings.getShowFPS()); // set fps meter visibility
 
         stage.addActor(table);
     }
@@ -94,5 +100,9 @@ public class GameTimer {
      */
     public float getElapsedTime() {
         return elapsedTime;
+    }
+
+    public void setFPSVisible(boolean visible) {
+        fpsLabel.setVisible(visible);
     }
 }

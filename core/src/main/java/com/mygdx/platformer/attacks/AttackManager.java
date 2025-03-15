@@ -33,8 +33,6 @@ public class AttackManager {
     public AttackManager(World world) {
         this.world = world;
         this.attacks = new ArrayList<>();
-        this.orbTexture = new Texture(Assets.THROWING_DAGGER_TEXTURE);
-        GameDifficultyManager.getInstance().registerObserver(this);
     }
 
     /**

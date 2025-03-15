@@ -26,6 +26,9 @@ public class GameTimer {
     /** Label displaying the elapsed time. */
     private Label timerLabel;
 
+    /** Label for displaying framerate. **/
+    private Label fpsLabel;
+
     /**
      * Creates a new game timer and initializes the UI. The timer starts at 0
      * and is displayed in the top-right corner of the screen.
@@ -42,12 +45,14 @@ public class GameTimer {
         Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
         timerLabel = new Label("Time: 00:00", skin);
+        fpsLabel = new Label("FPS: 60", skin);
 
 
         Table table = new Table();
         table.top().right();
         table.setFillParent(true);
-        table.add(timerLabel).pad(AppConfig.TIMER_PADDING);
+        table.add(timerLabel).pad(AppConfig.TIMER_PADDING).row();
+        table.add(fpsLabel).pad(AppConfig.TIMER_PADDING);
 
         stage.addActor(table);
     }
@@ -64,6 +69,8 @@ public class GameTimer {
         String timeString = String.format("Time: %02d:%02d", minutes, seconds);
 
         timerLabel.setText(timeString);
+
+        fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
     }
 
     /**

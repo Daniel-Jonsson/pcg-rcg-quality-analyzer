@@ -14,6 +14,9 @@ public class Settings {
     private static final String UI_SCALE_KEY = "uiScale";
     private static final float DEFAULT_UI_SCALE = AppConfig.DEFAULT_UI_SCALE;
 
+    private static final String SHOW_FPS_KEY = "showFPS";
+    private static final boolean DEFAULT_SHOW_FPS = true;
+
     private static Preferences preferences;
 
     static {
@@ -37,5 +40,14 @@ public class Settings {
      */
     public static float getUIScale() {
         return preferences.getFloat(UI_SCALE_KEY, DEFAULT_UI_SCALE);
+    }
+
+    public static void saveShowFPS(boolean showFPS) {
+        preferences.putBoolean(SHOW_FPS_KEY, showFPS);
+        preferences.flush();
+    }
+
+    public static boolean getShowFPS() {
+        return preferences.getBoolean(SHOW_FPS_KEY, DEFAULT_SHOW_FPS);
     }
 }

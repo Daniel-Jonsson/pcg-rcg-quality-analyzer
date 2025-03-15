@@ -34,6 +34,18 @@ public class NecromancerAttack extends BaseAttack {
         super.body.setUserData(this);
     }
 
+    /**
+     * Creates an Necromancer attack instance that moves in the specified
+     * direction.
+     * @param world The Box2D world where the attack exists.
+     * @param x The initial x-coordinate of the attack.
+     * @param y The initial y-coordinate of the attack.
+     * @param directionModifier The direction in which the attack moves (e.g.,
+     *                          -1 for left, 1 for right).
+     * @param dmg The damage the attack causes when hitting target
+     * @param speed The speed of which the attack moves.
+     */
+
     public NecromancerAttack(World world, float x, float y,
                              int directionModifier, int dmg, int speed) {
         super(world, dmg, speed * directionModifier,

@@ -116,6 +116,10 @@ public class AttackManager {
         }
     }
 
+    /**
+     * Increases difficulty of the enemy attacks spawned.
+     * @param difficulty The current difficulty in the game.
+     */
     public void increaseDifficulty(int difficulty) {
         multiplier = 1.0f + (difficulty  * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
     }

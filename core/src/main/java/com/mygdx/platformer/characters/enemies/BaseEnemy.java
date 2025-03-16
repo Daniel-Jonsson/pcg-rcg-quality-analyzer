@@ -215,7 +215,7 @@ public abstract class BaseEnemy extends BaseCharacter {
      */
     public boolean canJumpToPlatform(float direction) {
         Vector2 enemyPosition = getBody().getPosition();
-        float jumpCheckDistance = 6f;
+        float jumpCheckDistance = AppConfig.JUMP_CHECK_DISTANCE;
 
         Vector2 rayStart = new Vector2(enemyPosition.x + (direction * jumpCheckDistance), enemyPosition.y);
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - 1.0f);

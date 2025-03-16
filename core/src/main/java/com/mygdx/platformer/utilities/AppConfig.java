@@ -222,6 +222,11 @@ public final class AppConfig {
     /** Enemy mass for physics calculations. */
     public static final float ENEMY_MASS = 5f;
 
+    /**
+     * The distance to cast ray for checking next platform.
+     */
+    public static final float JUMP_CHECK_DISTANCE = 6f;
+
     /** Forward in-air speed multiplier for enemy jumps. **/
     public static final int ENEMY_JUMP_FORWARD_BOOST_MULTIPLIER = 3;
 

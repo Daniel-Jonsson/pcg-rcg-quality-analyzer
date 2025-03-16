@@ -23,16 +23,25 @@ import com.mygdx.platformer.characters.player.Player;
  * @author Robert Kullman, Daniel Jönsson
  */
 public class AutoPlayAgent {
+    /**
+     * The game camera used for determining player position relative to the
+     * viewport.
+     */
     OrthographicCamera camera;
+
+    /** The behavior tree that controls the AI decision making process. */
     private BehaviorTree behaviorTree;
 
+    /** Timer used to control how often the behavior tree is updated. */
     private float aiStepTimer = 0;
-    private final float stepInterval = 0.05f;
 
+    /** The time interval between behavior tree updates in seconds. */
+    private final float stepInterval = 0.05f;
 
     /**
      * Constructor for the AutoPlayAgent class, which initializes the
      * AI with a behavior tree.
+     * 
      * @param player The player character which is to be controlled by the AI.
      */
     public AutoPlayAgent(Player player, OrthographicCamera camera) {
@@ -42,12 +51,12 @@ public class AutoPlayAgent {
 
     /**
      * Creates the tree structure for the autoplay AI.
+     * 
      * @return The root task of the tree.
      */
     private Task<Player> createTree() {
         Selector<Player> root = new Selector<>();
         Parallel<Player> parallel = new Parallel<>();
-
 
         // Survival strategy
         Sequence<Player> survivalStrategy = new Sequence<>();
@@ -78,6 +87,7 @@ public class AutoPlayAgent {
 
     /**
      * Updates the AI behavior tree on each time frame.
+     * 
      * @param delta time since last frame.
      */
     public void update(float delta) {

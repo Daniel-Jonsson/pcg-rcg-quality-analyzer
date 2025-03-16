@@ -22,6 +22,7 @@ public final class Assets {
     /** File path for the player texture. */
     public static final String PLAYER_TEXTURE = "textures/player.png";
 
+    /** File path for the healthbar texture. */
     public static final String HEALTHBAR_TEXTURE = "textures/healthbar.png";
 
     /** File path for the throwing dagger texture. */
@@ -42,8 +43,8 @@ public final class Assets {
     /** File path for the middle segment of a platform. */
     public static final String PLATFORM_MIDDLE = "textures/platform/platform_middle.png";
 
+    /** File path for the background image texture. */
     public static final String BACKGROUND_IMAGE_TEXTURE = "textures/background.png";
-
 
     /** File path for the player sprite atlas. */
     public static final String PLAYER_ATLAS = "atlas/player_sprites.atlas";
@@ -54,10 +55,13 @@ public final class Assets {
     /** File path for the necromancer sprite atlas. */
     public static final String NECROMANCER_ATLAS = "atlas/necromancer_sprites.atlas";
 
+    /** File path for the death bolt texture. */
     public static final String DEATH_BOLT = "textures/projectiles/death_bolt.png";
 
+    /** File path for the UI skin. */
     public static final String UI_PATH = "ui/uiskin.json";
 
+    /** File path for the background music. */
     public static final String BACKGROUND_MUSIC = "sound/background.mp3";
 
 

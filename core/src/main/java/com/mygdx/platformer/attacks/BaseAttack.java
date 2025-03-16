@@ -153,9 +153,9 @@ public abstract class BaseAttack {
     }
 
     /**
-     * Checks if the attack is a player attack.
+     * Checks if the attack is a enemy attack.
      *
-     * @return {@code true} if the attack is a player attack, otherwise {@code
+     * @return {@code true} if the attack is a enemy attack, otherwise {@code
      * false}.
      */
     public boolean isEnemyAttack() {

@@ -79,21 +79,6 @@ public abstract class BaseAttack {
     }
 
     /**
-     * Constructs a new attack instance with default damage and speed values.
-     *
-     * @param world The Box2D world where the attack is created.
-     * @param x The initial x-coordinate of the attack.
-     * @param y The initial y-coordinate of the attack.
-     * @param texture The texture used for the attack's sprite.
-     * @param isPlayerAttack Whether the attack is a player attack.
-     */
-    public BaseAttack(World world, float x, float y, Texture texture, boolean isPlayerAttack) {
-        this(world, AppConfig.BASE_ATTACK_DEFAULT_DMG,
-            AppConfig.BASE_ATTACK_DEFAULT_SPEED, x, y,
-            texture, isPlayerAttack);
-    }
-
-    /**
      * Updates the attack's position and determines if it should be removed.
      * The attack is removed if it moves outside the camera's viewport.
      *

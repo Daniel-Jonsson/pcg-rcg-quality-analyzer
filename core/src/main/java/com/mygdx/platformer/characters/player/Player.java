@@ -17,6 +17,7 @@ import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.attacks.BaseAttack;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
+import com.mygdx.platformer.pcg.Platform;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
@@ -516,7 +517,7 @@ public class Player extends BaseCharacter {
         gameWorld.rayCast((fixture, point, normal, fraction) -> {
             // Check if the fixture belongs to a platform
             if (fixture.getBody().getUserData() != null &&
-                    fixture.getBody().getUserData().equals("ground")) {
+                    fixture.getBody().getUserData().getClass().equals(Platform.class)) {
                 platformPos[0] = new Vector2(point.x, point.y);
                 return 0; // Stop the raycast after the first hit
             }

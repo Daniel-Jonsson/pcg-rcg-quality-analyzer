@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.characters.player.Player;
+import com.mygdx.platformer.pcg.Platform;
 import com.mygdx.platformer.utilities.AppConfig;
 
 /**
@@ -199,7 +200,7 @@ public abstract class BaseCharacter implements CharacterActions {
         final boolean[] isGrounded = {false};
 
         world.rayCast((fixture, point, normal, fraction) -> {
-            if (fixture.getBody().getUserData() != null && fixture.getBody().getUserData().equals("ground")) {
+            if (fixture.getBody().getUserData() != null && fixture.getBody().getUserData().getClass().equals(Platform.class)) {
                 isGrounded[0] = true;
 
                 return 0;

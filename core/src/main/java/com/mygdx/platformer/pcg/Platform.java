@@ -20,29 +20,23 @@ import com.mygdx.platformer.utilities.Assets;
  */
 public class Platform {
 
-    /** Texture for the start, middle, and end segment of the platform. */
-    private Texture startTexture, middleTexture, endTexture;
-
     /** Sprite for the start, middle, and end segment of the platform. */
-    private Sprite startSprite, middleSprite, endSprite;
+    private final Sprite startSprite, middleSprite, endSprite;
 
     /** Width of each middle segment of the platform. */
-    private float segmentWidth;
+    private final float segmentWidth;
 
     /** Number of middle segments forming the platform. */
-    private float segmentCount;
+    private final float segmentCount;
 
     /** Total width of the platform. */
-    private float platformWidth;
-
-    /** Texture used to render the platform. */
-    private Texture texture;
+    private final float platformWidth;
 
     /** Sprite representation of the platform for rendering. */
-    private Sprite sprite;
+    private final Sprite sprite;
 
     /** Box2D body representing the platform in the physics world. */
-    private Body body;
+    private final Body body;
 
     /**
      * Constructs a new platform at the given position with the specified dimensions.
@@ -54,7 +48,7 @@ public class Platform {
      * @param height The height of the platform in world units.
      */
     public Platform(World world, float x, float y, float width, float height) {
-        texture = Assets.assetManager.get(Assets.PLATFORM_MIDDLE, Texture.class);
+        Texture texture = Assets.assetManager.get(Assets.PLATFORM_MIDDLE, Texture.class);
         sprite = new Sprite(texture);
         sprite.setSize(width, height);
 
@@ -63,9 +57,9 @@ public class Platform {
         segmentCount = width / segmentWidth;
 
         // textures
-        startTexture = Assets.assetManager.get(Assets.PLATFORM_START, Texture.class);
-        middleTexture = Assets.assetManager.get(Assets.PLATFORM_MIDDLE, Texture.class);
-        endTexture = Assets.assetManager.get(Assets.PLATFORM_END, Texture.class);
+        Texture startTexture = Assets.assetManager.get(Assets.PLATFORM_START, Texture.class);
+        Texture middleTexture = Assets.assetManager.get(Assets.PLATFORM_MIDDLE, Texture.class);
+        Texture endTexture = Assets.assetManager.get(Assets.PLATFORM_END, Texture.class);
 
         startSprite = new Sprite(startTexture);
         middleSprite = new Sprite(middleTexture);
@@ -96,7 +90,7 @@ public class Platform {
 
         body.createFixture(fixtureDef);
         shape.dispose();
-        body.setUserData("ground"); // enables ground detection via raycasting.
+        body.setUserData(this); // enables ground detection via raycasting.
 
     }
 

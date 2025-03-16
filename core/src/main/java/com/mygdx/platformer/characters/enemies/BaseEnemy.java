@@ -21,12 +21,17 @@ import com.mygdx.platformer.utilities.Assets;
  * @author Daniel Jönsson, Robert Kullman
  */
 public abstract class BaseEnemy extends BaseCharacter {
+
+    /** The Box2D world where the {@code BaseEnemy} exist.*/
     World world;
-
+    /** The health bar sprite of the {@code BaseEnemy}.*/
     private final Sprite healthBarSprite;
-
+    /** Indicates whether the enemy is attacking or not.*/
     protected boolean isAttacking = false;
+    /**Indicates the elapsed time during enemy attack. Used to display
+     * correct animation.*/
     private float attackAnimationTime;
+    /** Indicates if the enemy has jumped or not.*/
     private boolean hasJumped = false;
 
 

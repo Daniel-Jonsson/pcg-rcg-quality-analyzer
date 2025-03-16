@@ -302,6 +302,12 @@ public final class AppConfig {
     /** The cooldown time (in seconds) between goblin attacks. **/
     public static final float GOBLIN_ATTACK_COOLDOWN = 1f;
 
+    public static final String GOBLIN_IDLE = "goblin_idle";
+
+    public static final String GOBLIN_WALK = "goblin_walk";
+
+    public static final String GOBLIN_ATTACK = "goblin_attack";
+
     /* Necromancer Enemy Configuration */
 
     /** The attack power of a necromancer. **/

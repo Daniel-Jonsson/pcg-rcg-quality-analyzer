@@ -54,11 +54,11 @@ public class Goblin extends BaseEnemy {
         TextureAtlas textureAtlas = Assets.getGoblinAtlas();
 
         idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
-            textureAtlas.findRegions("goblin_idle"), Animation.PlayMode.LOOP);
+            textureAtlas.findRegions(AppConfig.GOBLIN_IDLE), Animation.PlayMode.LOOP);
         walkAnimation = new Animation<>(AppConfig.WALK_FRAME_DURATION,
-            textureAtlas.findRegions("goblin_walk"), Animation.PlayMode.LOOP);
+            textureAtlas.findRegions(AppConfig.GOBLIN_WALK), Animation.PlayMode.LOOP);
         attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION,
-            textureAtlas.findRegions("goblin_attack"), Animation.PlayMode.LOOP);
+            textureAtlas.findRegions(AppConfig.GOBLIN_ATTACK), Animation.PlayMode.LOOP);
         currentFrame = idleAnimation.getKeyFrame(0);
     }
 

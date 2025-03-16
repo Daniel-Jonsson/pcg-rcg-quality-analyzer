@@ -70,6 +70,7 @@ public class AudioManager {
         loadSoundEffect("buttonHover", "sound/button-hover.mp3");
         loadSoundEffect("buttonClick", "sound/button-click.mp3");
         loadSoundEffect("checkboxClicked", "sound/checkbox-clicked.mp3");
+        loadSoundEffect("sliderChanged", "sound/slider-changed.mp3");
     }
 
     /**

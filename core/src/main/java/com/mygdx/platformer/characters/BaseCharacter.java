@@ -147,17 +147,6 @@ public abstract class BaseCharacter implements CharacterActions {
     }
 
     /**
-     * Checks if the character is dead.
-     *
-     * @return {@code true} if the character has 0 or negative maxHealth,
-     * otherwise {@code false}.
-     */
-    @Override
-    public boolean isDead() {
-        return isDead;
-    }
-
-    /**
      * Gets the character's physics body.
      *
      * @return The Box2D body.

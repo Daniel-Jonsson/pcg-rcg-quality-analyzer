@@ -395,6 +395,20 @@ public final class AppConfig {
     /** Animation key for necromancer attack state. */
     public static final String NECROMANCER_ATTACK = "necromancer_attack";
 
+    /* Player Animation Region Names */
+
+    /** Region name for player idle animation. */
+    public static final String PLAYER_IDLE_REGION = "player_idle";
+
+    /** Region name for player walk animation. */
+    public static final String PLAYER_WALK_REGION = "player_walk";
+
+    /** Region name for player jump animation. */
+    public static final String PLAYER_JUMP_REGION = "player_jump";
+
+    /** Region name for player attack animation. */
+    public static final String PLAYER_ATTACK_REGION = "player_attack";
+
     /* UI Text Strings */
 
     /** UI text for quitting the game. **/

@@ -214,16 +214,15 @@ public class Player extends BaseCharacter {
         playerAtlas = Assets.getPlayerAtlas();
 
         idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
-                playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
+                playerAtlas.findRegions(AppConfig.PLAYER_IDLE_REGION), Animation.PlayMode.LOOP);
         walkAnimation = new Animation<>(AppConfig.WALK_FRAME_DURATION,
-                playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
+                playerAtlas.findRegions(AppConfig.PLAYER_WALK_REGION), Animation.PlayMode.LOOP);
         jumpAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
-                playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
+                playerAtlas.findRegions(AppConfig.PLAYER_JUMP_REGION), Animation.PlayMode.NORMAL);
         attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION,
-                playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
+                playerAtlas.findRegions(AppConfig.PLAYER_ATTACK_REGION), Animation.PlayMode.NORMAL);
 
         currentFrame = idleAnimation.getKeyFrame(0);
-
     }
 
     /**

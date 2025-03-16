@@ -10,7 +10,7 @@ import com.mygdx.platformer.utilities.AppConfig;
  * @author Robert Kullman, Daniel Jönsson
  */
 public class AttackEnemyTask extends LeafTask<Player> {
-    private float attackCooldown = AppConfig.AUTO_PLAY_ATTACK_COOLDOWN;
+    private final float attackCooldown = AppConfig.AUTO_PLAY_ATTACK_COOLDOWN;
     private float lastAttackTime = -attackCooldown;
 
     /**

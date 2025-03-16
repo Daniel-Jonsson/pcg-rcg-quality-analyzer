@@ -55,7 +55,7 @@ public class PatrolTask extends LeafTask<AIAgent> {
 
         BaseEnemy enemy = (BaseEnemy) character;
 
-        if (!enemy.isGroundAhead(moveDirection)) {
+        if (enemy.isNotGroundAhead(moveDirection)) {
             moveDirection *= -1; // Turn around
             patrolTime = 0; // Reset patrol timer
             return Status.RUNNING;

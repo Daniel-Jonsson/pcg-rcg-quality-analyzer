@@ -60,13 +60,13 @@ public class PursueTask extends LeafTask<AIAgent> {
         float distanceToTarget = enemyPosition.dst(targetPosition);
         float targetDirection = targetPosition.x > enemyPosition.x ? 1f : -1f;
 
-        if (enemy instanceof Goblin && !enemy.isGroundAhead(targetDirection) && enemy.canJumpToPlatform(targetDirection)
+        if (enemy instanceof Goblin && enemy.isNotGroundAhead(targetDirection) && enemy.canJumpToPlatform(targetDirection)
                 && enemy.isGrounded()) {
             enemy.jump();
             return Status.RUNNING;
         }
 
-        if (distanceToTarget <= 1.5f || !enemy.isGroundAhead(targetDirection)) {
+        if (distanceToTarget <= 1.5f || enemy.isNotGroundAhead(targetDirection)) {
             enemy.setMoveDirection(0);
             enemy.setFacingDirection(targetPosition.x > enemyPosition.x ? 1f : -1f);
             return Status.RUNNING;

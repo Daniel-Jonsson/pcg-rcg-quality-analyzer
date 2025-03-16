@@ -150,14 +150,14 @@ public abstract class BaseEnemy extends BaseCharacter {
      * @param direction indicates the direction in which to check for ground.
      * @return
      */
-    public boolean isGroundAhead(float direction) {
+    public boolean isNotGroundAhead(float direction) {
         Vector2 enemyPosition = getBody().getPosition();
         float rayLength = 1f;
 
         Vector2 rayStart = new Vector2(enemyPosition.x + (direction * AppConfig.ENEMY_GROUNDCHECK_FORWARD_OFFSET), enemyPosition.y - (height / 2));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
-        return checkForGround(world, rayStart, rayEnd);
+        return !checkForGround(world, rayStart, rayEnd);
     }
 
     /**

@@ -35,59 +35,240 @@ import com.mygdx.platformer.utilities.Assets;
 import com.mygdx.platformer.utilities.Settings;
 
 /**
- * This class represents the main game screen.
+ * The main gameplay screen of the platformer game.
+ * <p>
+ * This class manages the core gameplay experience, including:
+ * <ul>
+ * <li>Physics simulation using Box2D</li>
+ * <li>Procedural platform generation</li>
+ * <li>Player movement and controls</li>
+ * <li>Enemy spawning and AI behavior</li>
+ * <li>Attack mechanics and collision detection</li>
+ * <li>Camera movement and parallax scrolling background</li>
+ * <li>Game difficulty progression</li>
+ * <li>Game over conditions and UI</li>
+ * </ul>
+ * </p>
+ * <p>
+ * The screen implements the GameDifficultyObserver interface to respond to
+ * changes in game difficulty, adjusting gameplay elements accordingly to
+ * increase challenge as the player progresses.
+ * </p>
  *
  * @author Robert Kullman
  * @author Daniel Jönsson
  */
 public class GameScreen extends ScreenAdapter implements GameDifficultyObserver {
-    /** Reference to the main game instance to allow screen switching. */
+    /**
+     * Reference to the main game instance to allow screen switching.
+     * <p>
+     * This reference is used to transition between different screens,
+     * such as returning to the main menu when the game ends.
+     * </p>
+     */
     private final PlatformerGame game;
 
-    /** The Box2D physics world for managing physics interactions. */
+    /**
+     * The Box2D physics world for managing physics interactions.
+     * <p>
+     * This world handles all physics simulations including gravity,
+     * collisions between entities, and movement of dynamic bodies.
+     * </p>
+     */
     private World world;
 
-    /** SpriteBatch for rendering game elements. */
+    /**
+     * SpriteBatch for rendering game elements.
+     * <p>
+     * Used to efficiently batch and render all game sprites including
+     * the player, enemies, platforms, and background.
+     * </p>
+     */
     private SpriteBatch batch;
 
-    /** Camera for viewing the game world. */
+    /**
+     * Camera for viewing the game world.
+     * <p>
+     * An orthographic camera that follows the player horizontally
+     * as they progress through the level. The camera's position
+     * determines what portion of the game world is visible.
+     * </p>
+     */
     private OrthographicCamera camera;
 
-    /** Viewport. */
+    /**
+     * Viewport that manages the game's display area.
+     * <p>
+     * A FitViewport that maintains the game's aspect ratio regardless
+     * of the window size, ensuring consistent gameplay across different
+     * screen dimensions.
+     * </p>
+     */
     private FitViewport viewport;
 
-    /** The player character. */
+    /**
+     * The player character controlled by the user.
+     * <p>
+     * Contains the player's physics body, health, movement logic,
+     * and attack capabilities.
+     * </p>
+     */
     private Player player;
 
+    /**
+     * Overlay displayed when the player dies.
+     * <p>
+     * Shows the game over screen with the player's survival time
+     * and options to return to the main menu or quit the game.
+     * </p>
+     */
     private GameOverOverlay gameOverOverlay;
 
-    /** Tracks run time, for physics updates. */
-    private float runTime; // tracks how long the game has run
+    /**
+     * Tracks accumulated time for physics updates.
+     * <p>
+     * Used to ensure physics simulations run at a fixed timestep
+     * regardless of the actual frame rate.
+     * </p>
+     */
+    private float runTime;
 
-    /** Manages procedural platform generation. */
+    /**
+     * Manages procedural platform generation.
+     * <p>
+     * Responsible for creating, updating, and removing platforms
+     * as the player progresses through the level. Adjusts platform
+     * parameters based on difficulty level.
+     * </p>
+     */
     private PlatformManager platformManager;
 
+    /**
+     * Flag indicating whether the game has ended.
+     * <p>
+     * When true, gameplay stops and the game over overlay is displayed.
+     * Set to true when the player dies by falling off platforms or
+     * losing all health.
+     * </p>
+     */
     private boolean isGameOver = false;
 
+    /**
+     * Tracks and displays the player's survival time.
+     * <p>
+     * Updates continuously during gameplay and is displayed
+     * on the game over screen when the player dies.
+     * </p>
+     */
     GameTimer gameTimer;
 
+    /**
+     * Manages enemy spawning, behavior, and lifecycle.
+     * <p>
+     * Handles creating enemies, updating their AI behavior,
+     * and removing them when they are defeated or off-screen.
+     * </p>
+     */
     EnemyManager enemyManager;
+
+    /**
+     * Manages attack creation, movement, and collision.
+     * <p>
+     * Handles attacks from both the player and enemies,
+     * including their physics bodies, movement, and damage effects.
+     * </p>
+     */
     AttackManager attackManager;
 
+    /**
+     * Flag indicating whether AI-controlled play is enabled.
+     * <p>
+     * When true, the player character is controlled by an AI agent
+     * rather than user input, useful for testing or demonstration.
+     * </p>
+     */
     Boolean autoPlayEnabled;
 
+    /**
+     * Visual representation of the player's health.
+     * <p>
+     * Displays the player's current health as a bar on the screen,
+     * updating in real-time as the player takes damage.
+     * </p>
+     */
     private HealthBar healthBar;
 
+    /**
+     * Scaling factor for UI elements.
+     * <p>
+     * Determined by user settings, this value affects the size
+     * of UI elements like the health bar and timer.
+     * </p>
+     */
     private final float UIScale;
 
+    /**
+     * The camera's current X position in the world.
+     * <p>
+     * Increases continuously as the game progresses, creating
+     * the effect of the camera moving forward through the level.
+     * </p>
+     */
     private float cameraXPosition;
 
+    /**
+     * Multiplier for movement speed based on difficulty.
+     * <p>
+     * Increases as the game's difficulty level rises, making
+     * the camera move faster and requiring quicker reactions
+     * from the player.
+     * </p>
+     */
     private float difficultySpeed = 1.0f;
 
+    /**
+     * First background texture for parallax scrolling.
+     * <p>
+     * Part of the pair of textures used to create an infinite
+     * scrolling background effect.
+     * </p>
+     */
     private Texture background1;
+
+    /**
+     * Second background texture for parallax scrolling.
+     * <p>
+     * Positioned adjacent to background1 and loops seamlessly
+     * to create a continuous background.
+     * </p>
+     */
     private Texture background2;
+
+    /**
+     * X-coordinate offset for background scrolling.
+     * <p>
+     * Updated continuously to create the parallax scrolling effect,
+     * making the background move at a different rate than the camera.
+     * </p>
+     */
     private float backgroundX;
+
+    /**
+     * Width of the background textures in world units.
+     * <p>
+     * Matches the viewport width to ensure the background
+     * covers the entire visible area.
+     * </p>
+     */
     private float backgroundWidth;
+
+    /**
+     * Height of the background textures in world units.
+     * <p>
+     * Matches the viewport height to ensure the background
+     * covers the entire visible area.
+     * </p>
+     */
     private float backgroundHeight;
 
     /**
@@ -418,7 +599,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
         platformManager.increaseDifficulty(difficultyLevel);
         attackManager.increaseDifficulty(difficultyLevel);
         float newSpeed = difficultySpeed +
-            (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
+                (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
         float cameraMaxSpeed = 2.0f;
         difficultySpeed = Math.min(newSpeed, cameraMaxSpeed);
         System.out.println(difficultySpeed);

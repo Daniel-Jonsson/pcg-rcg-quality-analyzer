@@ -11,7 +11,6 @@ import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.utilities.AppConfig;
-import com.mygdx.platformer.utilities.AppConfig.CharacterType;
 
 /**
  * Represents a behavior tree task for executing an attack.

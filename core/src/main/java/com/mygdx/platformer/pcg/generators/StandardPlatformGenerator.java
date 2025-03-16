@@ -13,8 +13,12 @@ import com.mygdx.platformer.utilities.AppConfig;
  * @author Daniel Jönsson
  */
 public class StandardPlatformGenerator implements IPlatformGenerator {
+
+    /** The Box2D world where {@link Platform} platforms should be generated. */
     private World world;
-    private float platformHeight = AppConfig.PLATFORM_HEIGHT;
+
+    /** The height of the platform. */
+    private final float platformHeight = AppConfig.PLATFORM_HEIGHT;
 
     @Override
     public Platform initialize(World world) {

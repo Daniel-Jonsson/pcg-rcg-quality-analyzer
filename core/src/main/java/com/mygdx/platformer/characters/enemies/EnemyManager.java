@@ -89,7 +89,7 @@ public class EnemyManager {
         }
 
         enemies.add(enemy);
-        aiAgents.add(new EnemyAIAgent(enemy, detectionRange, attackRange, attackManager, attackCooldown));
+        aiAgents.add(new EnemyAIAgent(enemy, detectionRange, attackRange, attackManager, attackCooldown, world));
 
         System.out.println("Spawned enemy at " + position);
     }

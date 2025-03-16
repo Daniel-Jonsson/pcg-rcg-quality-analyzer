@@ -20,8 +20,6 @@ public class Necromancer extends BaseEnemy {
     private Animation<TextureRegion> idleAnimation;
     private Animation<TextureRegion> attackAnimation;
 
-    private TextureAtlas textureAtlas;
-
     /**
      * Creates a new Necromancer enemy at the specified position in the game
      * world.
@@ -62,7 +60,7 @@ public class Necromancer extends BaseEnemy {
      */
     @Override
     protected void setupAnimations() {
-        textureAtlas = Assets.getNecromancerAtlas();
+        TextureAtlas textureAtlas = Assets.getNecromancerAtlas();
 
         idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
             textureAtlas.findRegions("necromancer_idle"),

@@ -68,6 +68,7 @@ public class AudioManager {
         loadSoundEffect("swoosh", "sound/swoosh.mp3");
         loadSoundEffect("swoosh2", "sound/swoosh2.mp3");
         loadSoundEffect("buttonHover", "sound/button-hover.mp3");
+        loadSoundEffect("buttonClick", "sound/button-click.mp3");
     }
 
     /**

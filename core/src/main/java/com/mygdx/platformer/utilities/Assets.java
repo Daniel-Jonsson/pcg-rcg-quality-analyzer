@@ -44,6 +44,7 @@ public final class Assets {
 
     public static final String BACKGROUND_IMAGE_TEXTURE = "textures/background.png";
 
+
     /** File path for the player sprite atlas. */
     public static final String PLAYER_ATLAS = "atlas/player_sprites.atlas";
 
@@ -56,6 +57,8 @@ public final class Assets {
     public static final String DEATH_BOLT = "textures/projectiles/death_bolt.png";
 
     public static final String UI_PATH = "ui/uiskin.json";
+
+
 
     /**
      * Load all game assets using asset manager. This method enqueues assets

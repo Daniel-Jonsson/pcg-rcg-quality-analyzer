@@ -22,6 +22,7 @@ import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.sound.SoundType;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Assets;
 import com.mygdx.platformer.utilities.Settings;
 import com.mygdx.platformer.ui.GameButton;
 
@@ -36,9 +37,9 @@ public class SettingsScreen extends ScreenAdapter {
 
     private final GameTimer timerPreview;
 
-    private SpriteBatch batch;
-    private Texture healthBarTexture;
-    private Sprite healthBarSprite;
+    private final SpriteBatch batch;
+    private final Texture healthBarTexture;
+    private final Sprite healthBarSprite;
 
     /**
      * Settings screen constructor.
@@ -48,13 +49,13 @@ public class SettingsScreen extends ScreenAdapter {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        skin = new Skin(Gdx.files.internal(Assets.UI_PATH));
 
         // Preview timer
         timerPreview = new GameTimer(Settings.getUIScale());
 
         batch = new SpriteBatch();
-        healthBarTexture = new Texture(Gdx.files.internal("textures/healthbar.png"));
+        healthBarTexture = new Texture(Gdx.files.internal(Assets.HEALTHBAR_TEXTURE));
         healthBarSprite = new Sprite(healthBarTexture);
 
         healthBarSprite.setSize(
@@ -70,19 +71,19 @@ public class SettingsScreen extends ScreenAdapter {
 
 
         // UI scale slider
-        Label scaleLabel = new Label("UI Scale", skin);
+        Label scaleLabel = new Label(AppConfig.UI_SCALE_LABEL, skin);
         Slider scaleSlider = createScaleSlider();
 
         // music volume slider
-        Label musicVolumeLabel = new Label("Music volume", skin);
+        Label musicVolumeLabel = new Label(AppConfig.MUSIC_VOLUME_LABEL, skin);
         Slider musicVolumeSlider = createMusicVolumeSlider();
 
         // effects volume slider
-        Label effectsVolumeLabel = new Label("Effects volume", skin);
+        Label effectsVolumeLabel = new Label(AppConfig.EFFECTS_VOLUME_LABEL, skin);
         Slider effectsVolumeSlider = createEffectsVolumeSlider();
 
         // fps checkbox
-        CheckBox fpsCheckbox = new CheckBox("Show FPS", skin);
+        CheckBox fpsCheckbox = new CheckBox(AppConfig.FPS_CHECKBOX_LABEL, skin);
         fpsCheckbox.setChecked(Settings.getShowFPS());
         fpsCheckbox.addListener(new ChangeListener() {
             @Override
@@ -93,7 +94,7 @@ public class SettingsScreen extends ScreenAdapter {
         });
 
         // back button
-        GameButton backButton = new GameButton("Back", skin);
+        GameButton backButton = new GameButton(AppConfig.BACK_BUTTON_LABEL, skin);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -134,7 +135,9 @@ public class SettingsScreen extends ScreenAdapter {
      * @return The UI scale slider.
      */
     private Slider createScaleSlider() {
-        Slider scaleSlider = new Slider(0.5f, 2.0f, 0.1f, false, skin);
+        Slider scaleSlider = new Slider(AppConfig.SETTING_SCALE_SLIDER_MIN_VALUE,
+                AppConfig.SETTING_SCALE_SLIDER_MAX_VALUE
+                , AppConfig.SETTING_SCALE_SLIDER_STEP_VALUE, false, skin);
         scaleSlider.setValue(Settings.getUIScale());
         scaleSlider.addListener(new ChangeListener() {
             @Override
@@ -157,7 +160,11 @@ public class SettingsScreen extends ScreenAdapter {
      * @return Slider object representing the music volume slider.
      */
     private Slider createMusicVolumeSlider() {
-        Slider musicVolumeSlider = new Slider(0.0f, 1.0f, 0.05f, false, skin);
+        Slider musicVolumeSlider =
+                new Slider(AppConfig.SETTING_MUSIC_SLIDER_MIN_VALUE,
+                        AppConfig.SETTING_MUSIC_SLIDER_MAX_VALUE,
+                        AppConfig.SETTING_MUSIC_SLIDER_STEP_VALUE, false,
+                skin);
         musicVolumeSlider.setValue(Settings.getMusicVolume());
         musicVolumeSlider.addListener(new ChangeListener() {
             @Override
@@ -174,7 +181,10 @@ public class SettingsScreen extends ScreenAdapter {
      * @return Slider object representing the effects volume slider.
      */
     private Slider createEffectsVolumeSlider() {
-        Slider effectsVolumeSlider = new Slider(0.0f, 1.0f, 0.05f, false, skin);
+        Slider effectsVolumeSlider =
+                new Slider(AppConfig.SETTING_MUSIC_SLIDER_MIN_VALUE,
+                        AppConfig.SETTING_MUSIC_SLIDER_MAX_VALUE, AppConfig.SETTING_MUSIC_SLIDER_STEP_VALUE,
+                false, skin);
         effectsVolumeSlider.setValue(Settings.getEffectsVolume());
         effectsVolumeSlider.addListener(new ChangeListener() {
             @Override

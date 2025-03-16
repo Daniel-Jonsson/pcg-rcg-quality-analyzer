@@ -1,7 +1,5 @@
 package com.mygdx.platformer.utilities;
 
-import com.badlogic.gdx.graphics.Color;
-
 /**
  * A configuration class that defines constants used throughout the game.
  * It includes settings for screen dimensions, physics properties,
@@ -484,6 +482,20 @@ public final class AppConfig {
     public static final float AUTO_PLAY_PROJECTILE_DETECTION_RANGE = 2.5f;
 
     public static final int AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS = 6;
+
+
+    /* SETTINGS SCREEN CONFIGURATIONS */
+    public static final String UI_SCALE_LABEL = "UI scale";
+    public static final String MUSIC_VOLUME_LABEL = "Music volume";
+    public static final String EFFECTS_VOLUME_LABEL = "Effects volume";
+    public static final String FPS_CHECKBOX_LABEL = "Show FPS";
+    public static final String BACK_BUTTON_LABEL = "Back";
+    public static final float SETTING_SCALE_SLIDER_MIN_VALUE = 0.5f;
+    public static final float SETTING_SCALE_SLIDER_MAX_VALUE = 2.0f;
+    public static final float SETTING_SCALE_SLIDER_STEP_VALUE = 0.1f;
+    public static final float SETTING_MUSIC_SLIDER_MIN_VALUE = 0.0f;
+    public static final float SETTING_MUSIC_SLIDER_MAX_VALUE = 1.0f;
+    public static final float SETTING_MUSIC_SLIDER_STEP_VALUE = 0.05f;
 
     /* ERROR OVERLAY CONFIGURATIONS */
 

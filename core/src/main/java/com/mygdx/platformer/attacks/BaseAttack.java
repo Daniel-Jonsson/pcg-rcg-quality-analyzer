@@ -158,8 +158,8 @@ public abstract class BaseAttack {
      * @return {@code true} if the attack is a player attack, otherwise {@code
      * false}.
      */
-    public boolean isPlayerAttack() {
-        return isPlayerAttack;
+    public boolean isEnemyAttack() {
+        return !isPlayerAttack;
     }
 
     /**

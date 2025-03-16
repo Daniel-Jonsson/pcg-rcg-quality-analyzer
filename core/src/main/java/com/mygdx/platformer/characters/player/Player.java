@@ -549,7 +549,7 @@ public class Player extends BaseCharacter {
             public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
                 Object data = fixture.getBody().getUserData();
                 if (data instanceof BaseAttack attack) {
-                    if (!attack.isPlayerAttack()) {
+                    if (attack.isEnemyAttack()) {
 
                         Vector2 projVelocity = attack.getBody().getLinearVelocity();
                         if ((body.getPosition().x < attack.getBody().getPosition().x && projVelocity.x < 0)

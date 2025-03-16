@@ -378,7 +378,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
                     BaseAttack attack = (aUserData instanceof BaseAttack) ? (BaseAttack) aUserData
                             : (BaseAttack) bUserData;
 
-                    if (!attack.isPlayerAttack()) {
+                    if (attack.isEnemyAttack()) {
                         attack.setShouldRemove(true);
                         player.takeDamage(attack.getDamage());
                     }

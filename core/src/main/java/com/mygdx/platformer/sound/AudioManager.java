@@ -10,7 +10,14 @@ import com.mygdx.platformer.utilities.Settings;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.mygdx.platformer.sound.SoundType.*;
+import static com.mygdx.platformer.sound.SoundType.SWOOSH;
+import static com.mygdx.platformer.sound.SoundType.SWOOSH2;
+import static com.mygdx.platformer.sound.SoundType.BUTTONHOVER;
+import static com.mygdx.platformer.sound.SoundType.BUTTONCLICK;
+import static com.mygdx.platformer.sound.SoundType.CHECKBOXCLICK;
+import static com.mygdx.platformer.sound.SoundType.SLIDERCHANGE;
+import static com.mygdx.platformer.sound.SoundType.DEATHBOLT;
+
 
 /**
  * A centralized audio management system for the platformer game.
@@ -32,17 +39,17 @@ import static com.mygdx.platformer.sound.SoundType.*;
  * </p>
  * <p>
  * Usage example:
- * 
+ *
  * <pre>
  * // Initialize sounds at game startup
  * AudioManager.loadSounds();
- * 
+ *
  * // Start background music
  * AudioManager.playBackgroundMusic();
- * 
+ *
  * // Play a sound effect
  * AudioManager.playSound(SoundType.BUTTONCLICK);
- * 
+ *
  * // Clean up resources when done
  * AudioManager.dispose();
  * </pre>

@@ -417,7 +417,10 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
         enemyManager.increaseDifficulty(difficultyLevel);
         platformManager.increaseDifficulty(difficultyLevel);
         attackManager.increaseDifficulty(difficultyLevel);
-        difficultySpeed = difficultySpeed +
-                (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
+        float newSpeed = difficultySpeed +
+            (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
+        float cameraMaxSpeed = 2.0f;
+        difficultySpeed = Math.min(newSpeed, cameraMaxSpeed);
+        System.out.println(difficultySpeed);
     }
 }

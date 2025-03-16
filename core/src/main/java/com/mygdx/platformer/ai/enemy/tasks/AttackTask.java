@@ -47,7 +47,7 @@ public class AttackTask extends LeafTask<AIAgent> {
     public Status execute() {
         AIAgent agent = getObject();
         BaseCharacter character = agent.getCharacter();
-        BaseEnemy enemy = (BaseEnemy) agent.getCharacter();
+        BaseEnemy enemy = (BaseEnemy) character;
         long lastAttackTime = attackCooldowns.getOrDefault(character, 0L);
 
         long currentTime = System.currentTimeMillis();
@@ -71,11 +71,10 @@ public class AttackTask extends LeafTask<AIAgent> {
 
         AppConfig.AttackType attackType;
 
-        String enemyType = enemy.getClass().getSimpleName();
 
-        attackType = switch (enemyType) {
-            case "Goblin" -> AppConfig.AttackType.GOBLIN_THROWING_DAGGER;
-            case "Necromancer" -> AppConfig.AttackType.DEATH_BOLT;
+        attackType = switch (character.getCharacterType()) {
+            case AppConfig.CharacterType.GOBLIN -> AppConfig.AttackType.GOBLIN_THROWING_DAGGER;
+            case AppConfig.CharacterType.NECROMANCER -> AppConfig.AttackType.DEATH_BOLT;
             default -> AppConfig.AttackType.PLAYER_THROWING_DAGGER;
         };
 

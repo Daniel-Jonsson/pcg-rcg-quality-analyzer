@@ -43,7 +43,7 @@ public class AudioManager {
      * @param filePath Path to the sound file.
      */
     public static void loadSoundEffect(String soundName, String filePath) {
-        if (!sounds.containsKey(sounds)) {
+        if (!sounds.containsKey(soundName)) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal(filePath));
             sounds.put(soundName, sound);
         }
@@ -67,6 +67,7 @@ public class AudioManager {
         loadSoundEffect("deathbolt", "sound/deathbolt.mp3");
         loadSoundEffect("swoosh", "sound/swoosh.mp3");
         loadSoundEffect("swoosh2", "sound/swoosh2.mp3");
+        loadSoundEffect("buttonHover", "sound/button-hover.mp3");
     }
 
     /**

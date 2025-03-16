@@ -18,6 +18,7 @@ import com.mygdx.platformer.utilities.AppConfig;
  * This class provides common functionality for creating and managing dialogs.
  *
  * @author Daniel Jönsson
+ * @author Robert Kullman
  */
 public class DialogOverlay {
     private static Stage stage;

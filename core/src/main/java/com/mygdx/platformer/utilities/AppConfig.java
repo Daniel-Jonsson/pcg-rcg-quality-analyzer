@@ -355,6 +355,10 @@ public final class AppConfig {
     /** The cooldown time (in seconds) between necromancer attacks. **/
     public static final float NECROMANCER_ATTACK_COOLDOWN = 4f;
 
+    public static final String NECROMANCER_IDLE = "necromancer_idle";
+
+    public static final String NECROMANCER_ATTACK = "necromancer_attack";
+
     /* UI Text Strings */
 
     /** UI text for quitting the game. **/

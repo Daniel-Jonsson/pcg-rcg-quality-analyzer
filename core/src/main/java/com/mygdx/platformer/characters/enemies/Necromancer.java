@@ -61,10 +61,10 @@ public class Necromancer extends BaseEnemy {
         TextureAtlas textureAtlas = Assets.getNecromancerAtlas();
 
         idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
-            textureAtlas.findRegions("necromancer_idle"),
+            textureAtlas.findRegions(AppConfig.NECROMANCER_IDLE),
             Animation.PlayMode.LOOP);
         attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION,
-            textureAtlas.findRegions("necromancer_attack"),
+            textureAtlas.findRegions(AppConfig.NECROMANCER_ATTACK),
             Animation.PlayMode.NORMAL);
         currentFrame = idleAnimation.getKeyFrame(0);
     }

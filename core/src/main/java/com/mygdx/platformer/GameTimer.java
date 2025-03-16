@@ -31,6 +31,8 @@ public class GameTimer {
     /** Label for displaying framerate. **/
     private Label fpsLabel;
 
+    ScreenViewport viewport;
+
     /**
      * Creates a new game timer and initializes the UI. The timer starts at 0
      * and is displayed in the top-right corner of the screen.
@@ -38,7 +40,7 @@ public class GameTimer {
     public GameTimer(float UIScale) {
         elapsedTime = 0;
 
-        ScreenViewport viewport = new ScreenViewport();
+        viewport = new ScreenViewport();
         viewport.setUnitsPerPixel(1f / UIScale / AppConfig.UI_TIMER_MODIFIER);
         // Create the UI Stage
         stage = new Stage(viewport);
@@ -104,5 +106,12 @@ public class GameTimer {
 
     public void setFPSVisible(boolean visible) {
         fpsLabel.setVisible(visible);
+    }
+
+    public void setUIScale(float UIScale) {
+        viewport.setUnitsPerPixel(1f / UIScale / AppConfig.UI_TIMER_MODIFIER);
+        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+            true);
+        stage.setViewport(viewport);
     }
 }

@@ -112,7 +112,6 @@ public class EnemyAIAgent extends AIAgent {
         root.addChild(pursueSequence);
         root.addChild(new PatrolTask());
 
-        behaviorTree = new BehaviorTree<>(root);
-        behaviorTree.setObject(this);
+        behaviorTree = new BehaviorTree<>(root, this);
     }
 }

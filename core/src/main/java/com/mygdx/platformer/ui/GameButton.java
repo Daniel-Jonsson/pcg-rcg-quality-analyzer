@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygdx.platformer.sound.AudioManager;
+import com.mygdx.platformer.sound.SoundType;
 
 public class GameButton extends TextButton {
 
@@ -23,7 +24,7 @@ public class GameButton extends TextButton {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 hover = true;
                 Gdx.graphics.setSystemCursor(SystemCursor.Hand);
-                AudioManager.playSound("buttonHover");
+                AudioManager.playSound(SoundType.BUTTONHOVER);
             }
 
             @Override
@@ -35,7 +36,7 @@ public class GameButton extends TextButton {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchDown(event, x, y, pointer, button);
-                AudioManager.playSound("buttonClick");
+                AudioManager.playSound(SoundType.BUTTONCLICK);
                 return true;
             }
 

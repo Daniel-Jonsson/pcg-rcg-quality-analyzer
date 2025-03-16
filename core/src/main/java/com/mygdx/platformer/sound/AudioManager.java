@@ -8,6 +8,8 @@ import com.mygdx.platformer.utilities.Settings;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.mygdx.platformer.sound.SoundType.*;
+
 /**
  * This utility class assists in playing music and sound effects.
  *
@@ -18,7 +20,7 @@ public class AudioManager {
 
     private static float effectsVolume = Settings.getEffectsVolume();
 
-    private static Map<String, Sound> sounds = new HashMap<>();
+    private static Map<SoundType, Sound> sounds = new HashMap<>();
 
     /**
      * Starts playing the background music.
@@ -39,22 +41,22 @@ public class AudioManager {
 
     /**
      * Loads the specified sound effect.
-     * @param soundName Map key for the sound effect.
+     * @param soundType Map key for the sound effect.
      * @param filePath Path to the sound file.
      */
-    public static void loadSoundEffect(String soundName, String filePath) {
-        if (!sounds.containsKey(soundName)) {
+    public static void loadSoundEffect(SoundType soundType, String filePath) {
+        if (!sounds.containsKey(soundType)) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal(filePath));
-            sounds.put(soundName, sound);
+            sounds.put(soundType, sound);
         }
     }
 
     /**
      * Plays the sound corresponding to the string key parameter.
-     * @param soundName Sound key.
+     * @param soundType Sound key.
      */
-    public static void playSound(String soundName) {
-        Sound sound = sounds.get(soundName);
+    public static void playSound(SoundType soundType) {
+        Sound sound = sounds.get(soundType);
         if (sound != null) {
             sound.play(effectsVolume);
         }
@@ -64,13 +66,13 @@ public class AudioManager {
      * Loads sound effects in to the map.
      */
     public static void loadSounds() {
-        loadSoundEffect("deathbolt", "sound/deathbolt.mp3");
-        loadSoundEffect("swoosh", "sound/swoosh.mp3");
-        loadSoundEffect("swoosh2", "sound/swoosh2.mp3");
-        loadSoundEffect("buttonHover", "sound/button-hover.mp3");
-        loadSoundEffect("buttonClick", "sound/button-click.mp3");
-        loadSoundEffect("checkboxClicked", "sound/checkbox-clicked.mp3");
-        loadSoundEffect("sliderChanged", "sound/slider-changed.mp3");
+        loadSoundEffect(DEATHBOLT, "sound/deathbolt.mp3");
+        loadSoundEffect(SWOOSH, "sound/swoosh.mp3");
+        loadSoundEffect(SWOOSH2, "sound/swoosh2.mp3");
+        loadSoundEffect(BUTTONHOVER, "sound/button-hover.mp3");
+        loadSoundEffect(BUTTONCLICK, "sound/button-click.mp3");
+        loadSoundEffect(CHECKBOXCLICK, "sound/checkbox-clicked.mp3");
+        loadSoundEffect(SLIDERCHANGE, "sound/slider-changed.mp3");
     }
 
     /**

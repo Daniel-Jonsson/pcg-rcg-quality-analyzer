@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.sound.AudioManager;
+import com.mygdx.platformer.sound.SoundType;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Settings;
 import com.mygdx.platformer.ui.GameButton;
@@ -85,7 +86,7 @@ public class SettingsScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveShowFPS(fpsCheckbox.isChecked());
-                AudioManager.playSound("checkboxClicked");
+                AudioManager.playSound(SoundType.CHECKBOXCLICK);
             }
         });
 
@@ -143,7 +144,7 @@ public class SettingsScreen extends ScreenAdapter {
                     AppConfig.HEALTHBAR_SPRITE_WIDTH * AppConfig.PPM * scale,
                     AppConfig.HEALTHBAR_SPRITE_HEIGHT * AppConfig.PPM * scale
                 );
-                AudioManager.playSound("sliderChanged");
+                AudioManager.playSound(SoundType.SLIDERCHANGE);
             }
         });
         return scaleSlider;
@@ -160,7 +161,7 @@ public class SettingsScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveMusicVolume(musicVolumeSlider.getValue());
-                AudioManager.playSound("sliderChanged");
+                AudioManager.playSound(SoundType.SLIDERCHANGE);
             }
         });
         return musicVolumeSlider;
@@ -177,7 +178,7 @@ public class SettingsScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveEffectsVolume(effectsVolumeSlider.getValue());
-                AudioManager.playSound("sliderChanged");
+                AudioManager.playSound(SoundType.SLIDERCHANGE);
             }
         });
         return effectsVolumeSlider;

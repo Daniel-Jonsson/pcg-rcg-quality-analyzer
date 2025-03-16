@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.sound.AudioManager;
+import com.mygdx.platformer.sound.SoundType;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
@@ -93,19 +94,19 @@ public class AttackManager {
             case PLAYER_THROWING_DAGGER:
                 attack = new PlayerAttack(world, position.x, position.y,
                         Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
-                AudioManager.playSound("swoosh");
+                AudioManager.playSound(SoundType.SWOOSH);
                 break;
             case GOBLIN_THROWING_DAGGER:
                 dmg = (int) (AppConfig.GOBLIN_ATTACK_POWER * multiplier);
                 speed = (int) (AppConfig.GOBLIN_ATTACK_SPEED * multiplier);
                 attack = new GoblinAttack(world, position.x, position.y, directionModifier, dmg, speed);
-                AudioManager.playSound("swoosh2");
+                AudioManager.playSound(SoundType.SWOOSH2);
                 break;
             case DEATH_BOLT:
                 dmg = (int) (AppConfig.NECROMANCER_ATTACK_POWER * multiplier);
                 speed = (int) (AppConfig.NECROMANCER_ATTACK_SPEED * multiplier);
                 attack = new NecromancerAttack(world, position.x, position.y, directionModifier, dmg, speed);
-                AudioManager.playSound("deathbolt");
+                AudioManager.playSound(SoundType.DEATHBOLT);
                 break;
 
             default:

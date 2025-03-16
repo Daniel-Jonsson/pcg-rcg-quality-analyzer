@@ -58,6 +58,8 @@ public final class Assets {
 
     public static final String UI_PATH = "ui/uiskin.json";
 
+    public static final String BACKGROUND_MUSIC = "sound/background.mp3";
+
 
 
     /**

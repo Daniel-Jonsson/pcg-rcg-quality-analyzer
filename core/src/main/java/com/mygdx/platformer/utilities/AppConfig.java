@@ -489,6 +489,14 @@ public final class AppConfig {
 
     public static final int AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS = 6;
 
+    public static final String SOUND_DEATHBOLT = "sound/deathbolt.mp3";
+    public static final String SOUND_SWOOSH = "sound/swoosh.mp3";
+    public static final String SOUND_SWOOSH2 = "sound/swoosh2.mp3";
+    public static final String SOUND_BUTTON_HOVER = "sound/button-hover.mp3";
+    public static final String SOUND_BUTTON_CLICK = "sound/button-click.mp3";
+    public static final String SOUND_CHECKBOX_CLICKED = "sound/checkbox-clicked.mp3";
+    public static final String SOUND_SLIDER_CHANGED = "sound/slider-changed.mp3";
+
 
     /* SETTINGS SCREEN CONFIGURATIONS */
     public static final String UI_SCALE_LABEL = "UI scale";

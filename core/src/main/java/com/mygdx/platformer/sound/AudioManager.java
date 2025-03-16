@@ -3,6 +3,8 @@ package com.mygdx.platformer.sound;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Assets;
 import com.mygdx.platformer.utilities.Settings;
 
 import java.util.HashMap;
@@ -18,15 +20,15 @@ import static com.mygdx.platformer.sound.SoundType.*;
 public class AudioManager {
     private static Music backgroundMusic;
 
-    private static float effectsVolume = Settings.getEffectsVolume();
+    private static final float effectsVolume = Settings.getEffectsVolume();
 
-    private static Map<SoundType, Sound> sounds = new HashMap<>();
+    private static final Map<SoundType, Sound> sounds = new HashMap<>();
 
     /**
      * Starts playing the background music.
      */
     public static void playBackgroundMusic() {
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sound/background.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal(Assets.BACKGROUND_MUSIC));
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(Settings.getMusicVolume());
         backgroundMusic.play();
@@ -66,13 +68,13 @@ public class AudioManager {
      * Loads sound effects in to the map.
      */
     public static void loadSounds() {
-        loadSoundEffect(DEATHBOLT, "sound/deathbolt.mp3");
-        loadSoundEffect(SWOOSH, "sound/swoosh.mp3");
-        loadSoundEffect(SWOOSH2, "sound/swoosh2.mp3");
-        loadSoundEffect(BUTTONHOVER, "sound/button-hover.mp3");
-        loadSoundEffect(BUTTONCLICK, "sound/button-click.mp3");
-        loadSoundEffect(CHECKBOXCLICK, "sound/checkbox-clicked.mp3");
-        loadSoundEffect(SLIDERCHANGE, "sound/slider-changed.mp3");
+        loadSoundEffect(DEATHBOLT, AppConfig.SOUND_DEATHBOLT);
+        loadSoundEffect(SWOOSH, AppConfig.SOUND_SWOOSH);
+        loadSoundEffect(SWOOSH2, AppConfig.SOUND_SWOOSH2);
+        loadSoundEffect(BUTTONHOVER, AppConfig.SOUND_BUTTON_HOVER);
+        loadSoundEffect(BUTTONCLICK, AppConfig.SOUND_BUTTON_CLICK);
+        loadSoundEffect(CHECKBOXCLICK, AppConfig.SOUND_CHECKBOX_CLICKED);
+        loadSoundEffect(SLIDERCHANGE, AppConfig.SOUND_SLIDER_CHANGED);
     }
 
     /**

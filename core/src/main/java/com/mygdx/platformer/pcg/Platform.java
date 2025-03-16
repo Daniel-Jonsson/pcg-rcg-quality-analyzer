@@ -65,9 +65,9 @@ public class Platform {
         middleSprite = new Sprite(middleTexture);
         endSprite = new Sprite(endTexture);
 
-        startSprite.setSize(.1f, AppConfig.PLATFORM_HEIGHT);
+        startSprite.setSize(AppConfig.PLATFORM_START_SPRITE_WIDTH, AppConfig.PLATFORM_HEIGHT);
         middleSprite.setSize(segmentWidth, AppConfig.PLATFORM_HEIGHT);
-        endSprite.setSize(.1f, AppConfig.PLATFORM_HEIGHT);
+        endSprite.setSize(AppConfig.PLATFORM_END_SPRITE_WIDTH, AppConfig.PLATFORM_HEIGHT);
 
         // physics body
         BodyDef bodyDef = new BodyDef();
@@ -100,7 +100,7 @@ public class Platform {
      */
     public void render(SpriteBatch batch) {
         // start segment
-        startSprite.setPosition(body.getPosition().x - platformWidth / 2 -0.05f,
+        startSprite.setPosition(body.getPosition().x - platformWidth / 2 - AppConfig.PLATFORM_START_SPRITE_OFFSET,
             body.getPosition().y - AppConfig.PLATFORM_HEIGHT / 2);
 
         // middle segments

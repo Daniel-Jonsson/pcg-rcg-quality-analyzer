@@ -134,6 +134,11 @@ public final class AppConfig {
     /** Height of platforms. */
     public static final float PLATFORM_HEIGHT = 0.5f;
 
+    public static final float PLATFORM_START_SPRITE_WIDTH = 0.1f;
+    public static final float PLATFORM_END_SPRITE_WIDTH = 0.1f;
+
+    public static final float PLATFORM_START_SPRITE_OFFSET = 0.05f;
+
     /** Base y-position for platforms. */
     public static final float PLATFORM_BASE_Y_POSITION = 5f;
 

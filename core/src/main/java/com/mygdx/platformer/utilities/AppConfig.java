@@ -446,6 +446,8 @@ public final class AppConfig {
      */
     public static final int MAX_DIFFICULTY_LEVEL = 20;
 
+    public static final float DIFFICULTY_INCREASE_INTERVAL = 10f;
+
     /**
      * The time interval (in seconds) for difficulty level increase.
      */

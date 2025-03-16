@@ -26,7 +26,7 @@ import com.mygdx.platformer.utilities.AppConfig;
  * Game components that need to respond to difficulty changes should implement
  * the {@link GameDifficultyObserver} interface and register with this manager.
  * </p>
- * 
+ *
  * @author Daniel Jönsson
  * @author Robert Kullman
  */
@@ -36,12 +36,6 @@ public class GameDifficultyManager {
 
     /** Current difficulty level of the game. */
     private int difficultyLevel;
-
-    /** Maximum difficulty level the game can reach. */
-    private int maxDifficultyLevel = AppConfig.MAX_DIFFICULTY_LEVEL;
-
-    /** Time interval in seconds between automatic difficulty increases. */
-    private float difficultyIncreaseInterval = 10f;
 
     /** List of observers that will be notified when difficulty changes. */
     private final List<GameDifficultyObserver> observers = new ArrayList<>();
@@ -75,6 +69,8 @@ public class GameDifficultyManager {
      */
     public void update(float deltaTime) {
         timeSinceLastDifficultyIncrease += deltaTime;
+        int maxDifficultyLevel = AppConfig.MAX_DIFFICULTY_LEVEL;
+        float difficultyIncreaseInterval = AppConfig.DIFFICULTY_INCREASE_INTERVAL;
         if (timeSinceLastDifficultyIncrease >= difficultyIncreaseInterval && difficultyLevel < maxDifficultyLevel) {
             increaseDifficulty();
             timeSinceLastDifficultyIncrease = 0f;

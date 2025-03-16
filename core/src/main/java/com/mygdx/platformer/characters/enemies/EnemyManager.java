@@ -132,10 +132,19 @@ public class EnemyManager {
     }
 
 
+    /**
+     * Mutator method for setting the target position
+     * @param targetPosition The {@link Vector2} representing targets position.
+     */
     public void setTargetPosition(Vector2 targetPosition) {
         this.targetPosition = targetPosition;
     }
 
+    /**
+     * Increases difficulty level of enemies.
+     *
+     * @param difficultyLevel The current difficulty level.
+     */
     public void increaseDifficulty(int difficultyLevel) {
         multiplier = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
     }

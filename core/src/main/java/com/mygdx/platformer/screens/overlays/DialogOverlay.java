@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.ui.GameButton;
+import com.mygdx.platformer.utilities.Assets;
 
 /**
  * A static utility class for displaying dialog overlays in the game.
@@ -36,7 +37,7 @@ public class DialogOverlay {
     public static void initialize() {
         if (stage == null) {
             stage = new Stage(new ScreenViewport());
-            skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+            skin = new Skin(Gdx.files.internal(Assets.UI_PATH));
         }
     }
 
@@ -70,9 +71,9 @@ public class DialogOverlay {
             }
         };
 
-        boolean isUserGuide = title != null && title.equals(AppConfig.USER_GUIDE_TITLE);
+        boolean isUserGuide = title.equals(AppConfig.USER_GUIDE_TITLE);
 
-        currentDialog.setWidth(AppConfig.ERROR_DIALOG_WIDTH * 1.10f);
+        currentDialog.setWidth(AppConfig.ERROR_DIALOG_WIDTH * AppConfig.ERROR_DIALOG_SCROLL_SCALE);
         currentDialog.setHeight(AppConfig.ERROR_DIALOG_HEIGHT);
 
         Label descriptionLabel = new Label(description, skin);
@@ -82,7 +83,7 @@ public class DialogOverlay {
             descriptionLabel.setAlignment(Align.left);
 
             Table contentTable = new Table();
-            contentTable.add(descriptionLabel).width(AppConfig.ERROR_DIALOG_WIDTH * 1.10f).padLeft(30);
+            contentTable.add(descriptionLabel).width(AppConfig.ERROR_DIALOG_WIDTH * AppConfig.ERROR_DIALOG_SCROLL_SCALE).padLeft(AppConfig.ERROR_DIALOG_PADDING_LEFT);
 
             com.badlogic.gdx.scenes.scene2d.ui.ScrollPane scrollPane = new com.badlogic.gdx.scenes.scene2d.ui.ScrollPane(
                     contentTable, skin);
@@ -92,14 +93,14 @@ public class DialogOverlay {
             scrollPane.setScrollbarsVisible(true);
 
             currentDialog.getContentTable().add(scrollPane)
-                    .width(AppConfig.ERROR_DIALOG_WIDTH * 1.10f)
-                    .height(AppConfig.ERROR_DIALOG_HEIGHT * 0.7f)
-                    .padTop(AppConfig.ERROR_DIALOG_PADDING);
+                    .width(AppConfig.ERROR_DIALOG_WIDTH * AppConfig.ERROR_DIALOG_SCROLL_SCALE)
+                    .height(AppConfig.ERROR_DIALOG_HEIGHT * AppConfig.ERROR_DIALOG_SCROLL_WIDTH)
+                    .padTop(AppConfig.ERROR_DIALOG_PADDING_TOP);
         } else {
             descriptionLabel.setAlignment(Align.center);
             currentDialog.getContentTable().add(descriptionLabel)
                     .width(AppConfig.ERROR_DIALOG_WIDTH)
-                    .padTop(AppConfig.ERROR_DIALOG_PADDING);
+                    .padTop(AppConfig.ERROR_DIALOG_PADDING_TOP);
         }
 
         GameButton okButton = new GameButton(buttonText, skin);

@@ -55,6 +55,8 @@ public final class Assets {
 
     public static final String DEATH_BOLT = "textures/projectiles/death_bolt.png";
 
+    public static final String UI_PATH = "ui/uiskin.json";
+
     /**
      * Load all game assets using asset manager. This method enqueues assets
      * for loading and blocks until they are fully loaded.

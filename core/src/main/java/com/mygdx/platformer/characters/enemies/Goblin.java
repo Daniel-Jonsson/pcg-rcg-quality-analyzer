@@ -76,6 +76,16 @@ public class Goblin extends BaseEnemy {
     }
 
     /**
+     * Gets the character type.
+     *
+     * @return The character type.
+     */
+    @Override
+    public AppConfig.CharacterType getCharacterType() {
+        return AppConfig.CharacterType.GOBLIN;
+    }
+
+    /**
      * Returns the size of the goblin's hitbox.
      *
      * @return A {@code Vector2} representing the width and height of the

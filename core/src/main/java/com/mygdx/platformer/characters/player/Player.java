@@ -197,6 +197,15 @@ public class Player extends BaseCharacter {
     }
 
     /**
+     * {@inheritDoc}
+     * @return
+     */
+    @Override
+    public AppConfig.CharacterType getCharacterType() {
+        return AppConfig.CharacterType.PLAYER;
+    }
+
+    /**
      * Handles player input.
      */
     public void handleInput() {

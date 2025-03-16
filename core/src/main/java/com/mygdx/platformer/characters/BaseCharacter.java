@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.characters.player.Player;
+import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * Abstract class representing a base character with shared logic for both
@@ -239,4 +240,11 @@ public abstract class BaseCharacter implements CharacterActions {
 
         return isLineOfSight[0];
     }
+
+    /**
+     * Gets the character type.
+     *
+     * @return The character type.
+     */
+    public abstract AppConfig.CharacterType getCharacterType();
 }

@@ -418,6 +418,12 @@ public final class AppConfig {
         STANDARD,
     }
 
+    public enum CharacterType {
+        PLAYER,
+        GOBLIN,
+        NECROMANCER,
+    }
+
     /**
      * The maximum difficulty level in the game.
      */
@@ -497,7 +503,7 @@ public final class AppConfig {
             Survive as long as possible, your survival time is tracked and displayed.
 
             Game Elements:
-            
+
             - Player: Has a health bar at the top of the screen if it reaches 0 the game is over
             - Platforms: Procedurally generated, falling off results in game over
             - Enemies: Goblins are fast and jumpy, Necromancers are slow but strong

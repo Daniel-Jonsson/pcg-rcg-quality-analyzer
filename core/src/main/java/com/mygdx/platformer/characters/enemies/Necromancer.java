@@ -74,6 +74,16 @@ public class Necromancer extends BaseEnemy {
     }
 
     /**
+     * Gets the character type.
+     *
+     * @return The character type.
+     */
+    @Override
+    public AppConfig.CharacterType getCharacterType() {
+        return AppConfig.CharacterType.NECROMANCER;
+    }
+
+    /**
      * Returns the size of the necromancer's hitbox.
      *
      * @return A {@code Vector2} representing the width and height of the

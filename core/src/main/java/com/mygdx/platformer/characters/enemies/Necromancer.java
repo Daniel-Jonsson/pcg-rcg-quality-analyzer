@@ -17,22 +17,20 @@ import com.mygdx.platformer.utilities.Assets;
  */
 public class Necromancer extends BaseEnemy {
 
+    /** The animation for idling */
     private Animation<TextureRegion> idleAnimation;
+    /** The animation for attacking*/
     private Animation<TextureRegion> attackAnimation;
 
     /**
-     * Creates a new Necromancer enemy at the specified position in the game
-     * world.
+     * Creates a new Necromancer enemy at the specified position, health, and
+     * speed in the game world.
      *
      * @param world The Box2D world where the necromancer exists.
      * @param position The initial position of the necromancer.
+     * @param health The Necromancers health.
+     * @param speed The Necromancers speed.
      */
-    public Necromancer(World world, Vector2 position) {
-        super(world, position, AppConfig.NECROMANCER_HEALTH,
-            AppConfig.NECROMANCER_SPEED, AppConfig.NECROMANCER_WIDTH,
-            AppConfig.NECROMANCER_HEIGHT);
-    }
-
     public Necromancer(World world, Vector2 position, int health, float speed) {
         super(world, position, health, speed, AppConfig.NECROMANCER_WIDTH,
             AppConfig.NECROMANCER_HEIGHT);

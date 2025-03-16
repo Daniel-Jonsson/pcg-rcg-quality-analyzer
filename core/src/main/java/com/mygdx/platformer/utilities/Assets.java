@@ -13,7 +13,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
  */
 public final class Assets {
 
-    private Assets() { }  // Private constructor to prevent instantiation
+    private Assets() {
+    } // Private constructor to prevent instantiation
 
     /** The asset manager responsible for loading and managing game assets. */
     public static final AssetManager assetManager = new AssetManager();
@@ -41,6 +42,8 @@ public final class Assets {
     /** File path for the middle segment of a platform. */
     public static final String PLATFORM_MIDDLE = "textures/platform/platform_middle.png";
 
+    public static final String BACKGROUND_IMAGE_TEXTURE = "textures/background.png";
+
     /** File path for the player sprite atlas. */
     public static final String PLAYER_ATLAS = "atlas/player_sprites.atlas";
 
@@ -51,6 +54,7 @@ public final class Assets {
     public static final String NECROMANCER_ATLAS = "atlas/necromancer_sprites.atlas";
 
     public static final String DEATH_BOLT = "textures/projectiles/death_bolt.png";
+
     /**
      * Load all game assets using asset manager. This method enqueues assets
      * for loading and blocks until they are fully loaded.
@@ -65,13 +69,14 @@ public final class Assets {
         assetManager.load(GOBLIN_IDLE, Texture.class);
         assetManager.load(PLATFORM_TEXTURE, Texture.class);
         assetManager.load(DEATH_BOLT, Texture.class);
+        assetManager.load(BACKGROUND_IMAGE_TEXTURE, Texture.class);
 
         assetManager.load(PLATFORM_START, Texture.class);
         assetManager.load(PLATFORM_END, Texture.class);
         assetManager.load(PLATFORM_MIDDLE, Texture.class);
 
         assetManager.update();
-        assetManager.finishLoading();  // Block to ensure assets are loaded
+        assetManager.finishLoading(); // Block to ensure assets are loaded
     }
 
     /**
@@ -99,6 +104,16 @@ public final class Assets {
      */
     public static TextureAtlas getNecromancerAtlas() {
         return assetManager.get(NECROMANCER_ATLAS, TextureAtlas.class);
+    }
+
+    /**
+     * Retrieves a texture from the asset manager.
+     *
+     * @param texturePath The path of the texture to retrieve.
+     * @return The {@link Texture} from the asset manager.
+     */
+    public static Texture getTexture(String texturePath) {
+        return assetManager.get(texturePath, Texture.class);
     }
 
     /**

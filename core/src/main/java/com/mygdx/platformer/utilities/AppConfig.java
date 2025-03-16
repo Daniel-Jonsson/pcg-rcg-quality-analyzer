@@ -206,6 +206,8 @@ public final class AppConfig {
 
     public static final float GAME_TIMER_WIDTH = 80f;
 
+    public static final float BACKGROUND_IMAGE_SCROLL_SPEED = 0.3f;
+
     /* Enemy Configuration */
 
     /** Base probability of enemy spawning. */

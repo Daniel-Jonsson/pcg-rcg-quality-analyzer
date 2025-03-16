@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -30,10 +31,12 @@ import com.mygdx.platformer.pcg.manager.PlatformManager;
 import com.mygdx.platformer.screens.overlays.GameOverOverlay;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Assets;
 import com.mygdx.platformer.utilities.Settings;
 
 /**
  * This class represents the main game screen.
+ *
  * @author Robert Kullman
  * @author Daniel Jönsson
  */
@@ -81,19 +84,26 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
     private float difficultySpeed = 1.0f;
 
+    private Texture background1;
+    private Texture background2;
+    private float backgroundX;
+    private float backgroundWidth;
+    private float backgroundHeight;
+
     /**
      * Constructor for the GameScreen class, which initializes a reference to the
      * game instance.
+     *
      * @param g main Game instance.
      */
-   public GameScreen(final PlatformerGame g, boolean autoPlay) {
-       this.game = g; // reference main class to enable switching to another screen
-       this.UIScale = Settings.getUIScale();
-       this.gameTimer = new GameTimer(UIScale);
-       autoPlayEnabled = autoPlay;
-       GameDifficultyManager.getInstance().registerObserver(this);
+    public GameScreen(final PlatformerGame g, boolean autoPlay) {
+        this.game = g; // reference main class to enable switching to another screen
+        this.UIScale = Settings.getUIScale();
+        this.gameTimer = new GameTimer(UIScale);
+        autoPlayEnabled = autoPlay;
+        GameDifficultyManager.getInstance().registerObserver(this);
 
-   }
+    }
 
     /**
      * Executes when this screen is set as the active screen.
@@ -112,7 +122,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
         batch.setProjectionMatrix(camera.combined);
 
         viewport = new FitViewport(AppConfig.SCREEN_WIDTH, AppConfig.SCREEN_HEIGHT, camera);
-        viewport.apply();  // apply viewport settings
+        viewport.apply(); // apply viewport settings
 
         cameraXPosition = viewport.getWorldWidth() / 2f;
         camera.position.set(cameraXPosition, viewport.getWorldHeight() / 2f, 0);
@@ -120,16 +130,16 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
         platformManager = new PlatformManager(world, enemyManager);
 
-
-        player = new Player(world, spawnPosition,AppConfig.PLAYER_HP,
-            AppConfig.PLAYER_MOVE_SPEED,
-            attackManager, autoPlayEnabled, camera);
+        player = new Player(world, spawnPosition, AppConfig.PLAYER_HP,
+                AppConfig.PLAYER_MOVE_SPEED,
+                attackManager, autoPlayEnabled, camera);
 
         healthBar = new HealthBar(player, camera, viewport, UIScale);
 
         gameOverOverlay = new GameOverOverlay(game, gameTimer.getElapsedTime());
 
         initCollisionListener();
+        initBackgroundImage();
 
         // init audio
         AudioManager.loadSounds();
@@ -137,18 +147,27 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
     }
 
+    private void initBackgroundImage() {
+        background1 = Assets.getTexture(Assets.BACKGROUND_IMAGE_TEXTURE);
+        background2 = Assets.getTexture(Assets.BACKGROUND_IMAGE_TEXTURE);
+        backgroundWidth = viewport.getWorldWidth();
+        backgroundHeight = viewport.getWorldHeight();
+        backgroundX = 0;
+    }
+
     /**
-     * This method essentially serves as the game loop, rendering objects, performing physics
-     * updates, and logic updates.
+     * This method essentially serves as the game loop, rendering objects,
+     * performing physics updates, and logic updates.
+     *
      * @param deltaTime The time since the last render.
      */
     @Override
     public void render(final float deltaTime) {
         if (!isGameOver) {
             checkGameOver();
-            //if(!autoPlayEnabled) {
-                player.handleInput();
-            //}
+            // if(!autoPlayEnabled) {
+            player.handleInput();
+            // }
             gameTimer.update(deltaTime);
             cameraXPosition += 2f * deltaTime * difficultySpeed;
             camera.position.set(cameraXPosition, viewport.getWorldHeight() / 2f, 0);
@@ -159,6 +178,8 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
             GameDifficultyManager.getInstance().update(deltaTime);
             doPhysicsStep(deltaTime);
 
+            updateBackgroundPosition(deltaTime);
+
             enemyManager.setTargetPosition(player.getBody().getPosition());
         }
 
@@ -168,6 +189,13 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
+
+        float leftEdge = camera.position.x - viewport.getWorldWidth() / 2;
+        float firstBgX = leftEdge + backgroundX;
+
+        batch.draw(background1, firstBgX, 0, backgroundWidth, backgroundHeight);
+        batch.draw(background2, firstBgX + backgroundWidth, 0, backgroundWidth, backgroundHeight);
+
         platformManager.render(batch);
         player.render(batch);
         enemyManager.render(batch);
@@ -183,9 +211,22 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
     }
 
     /**
+     * Updates the background position to create an infinite scrolling effect.
+     * The background scrolls at a different rate than the camera to create a
+     * parallax effect.
+     */
+    private void updateBackgroundPosition(float deltaTime) {
+        float backgroundVelocity = AppConfig.BACKGROUND_IMAGE_SCROLL_SPEED;
+        backgroundX -= backgroundVelocity * deltaTime * difficultySpeed;
+        backgroundX = backgroundX % backgroundWidth;
+    }
+
+    /**
      * Performs physics simulations in fixed time steps. These updates are decoupled
-     * from the render() update frequency, to allow more freedom for physics updates, not
+     * from the render() update frequency, to allow more freedom for physics
+     * updates, not
      * having to adhere to the monitor update frequency.
+     *
      * @param deltaTime The time since the last render.
      */
     private void doPhysicsStep(final float deltaTime) {
@@ -197,7 +238,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
             player.update(AppConfig.TIME_STEP);
             enemyManager.update(AppConfig.TIME_STEP);
             attackManager.update(camera.position.x,
-                AppConfig.SCREEN_WIDTH);
+                    AppConfig.SCREEN_WIDTH);
             world.step(AppConfig.TIME_STEP, AppConfig.VELOCITY_ITERATIONS, AppConfig.POSITION_ITERATIONS);
             runTime -= AppConfig.TIME_STEP;
         }
@@ -225,6 +266,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
     /**
      * Handles logix. (currently empty, will be expanded later).
+     *
      * @param deltaTime Time passed since last update.
      */
     private void logic(final float deltaTime) {
@@ -233,7 +275,8 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
     /**
      * Handles resizing the screen, updating the viewport with the new size.
-     * @param width The new screen width.
+     *
+     * @param width  The new screen width.
      * @param height The new screen height.
      */
     @Override
@@ -241,14 +284,12 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
         viewport.update(width, height, true);
 
         camera.position.set(
-            cameraXPosition,
-            viewport.getWorldHeight() / 2f,
-            0
-        );
+                cameraXPosition,
+                viewport.getWorldHeight() / 2f,
+                0);
         camera.update();
         gameOverOverlay.resize(width, height);
     }
-
 
     /**
      * Executes when the game loses focus, e.g. when minimized
@@ -287,6 +328,10 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
         gameOverOverlay.dispose();
         healthBar.dispose();
         AudioManager.dispose();
+        // Don't dispose of background textures here as they're managed by the
+        // AssetManager
+        // background1.dispose();
+        // background2.dispose();
     }
 
     /**
@@ -305,37 +350,36 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
                 if (a.getBody() == playerBody || b.getBody() == playerBody) {
                     if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
-                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
-                        || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
-                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
+                            || b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
+                            || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
+                            || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
                         player.setGrounded(true);
                     }
                 }
 
                 // Attack -> Enemy collision
                 if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
-                    && b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)
-                    || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
-                    && a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)) {
+                        && b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)
+                        || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
+                                && a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)) {
 
                     if (aUserData instanceof BaseAttack || bUserData instanceof BaseAttack) {
-                        BaseAttack attack =
-                            (aUserData instanceof BaseAttack) ?
-                                (BaseAttack) aUserData : (BaseAttack) bUserData;
+                        BaseAttack attack = (aUserData instanceof BaseAttack) ? (BaseAttack) aUserData
+                                : (BaseAttack) bUserData;
 
                         attack.setShouldRemove(true);
-                        BaseEnemy enemy = (aUserData instanceof BaseEnemy) ?
-                            (BaseEnemy) aUserData : (BaseEnemy) bUserData;
+                        BaseEnemy enemy = (aUserData instanceof BaseEnemy) ? (BaseEnemy) aUserData
+                                : (BaseEnemy) bUserData;
 
                         enemy.takeDamage(attack.getDamage());
                     }
                 }
 
                 if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
-                    && b.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)
-                    || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
-                    && a.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)) {
-                        BaseAttack attack = (aUserData instanceof BaseAttack) ? (BaseAttack)aUserData
+                        && b.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)
+                        || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
+                                && a.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)) {
+                    BaseAttack attack = (aUserData instanceof BaseAttack) ? (BaseAttack) aUserData
                             : (BaseAttack) bUserData;
 
                     if (!attack.isPlayerAttack()) {
@@ -354,19 +398,21 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
                 if (a.getBody() == playerBody || b.getBody() == playerBody) {
                     if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM ||
-                        b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
-                        || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
-                        || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
+                            b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
+                            || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
+                            || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
                         player.setGrounded(false);
                     }
                 }
             }
 
             @Override
-            public void preSolve(final Contact contact, final Manifold manifold) { }
+            public void preSolve(final Contact contact, final Manifold manifold) {
+            }
 
             @Override
-            public void postSolve(final Contact contact, final ContactImpulse contactImpulse) { }
+            public void postSolve(final Contact contact, final ContactImpulse contactImpulse) {
+            }
         });
     }
 
@@ -376,6 +422,6 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
         platformManager.increaseDifficulty(difficultyLevel);
         attackManager.increaseDifficulty(difficultyLevel);
         difficultySpeed = difficultySpeed +
-            (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
+                (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
     }
 }

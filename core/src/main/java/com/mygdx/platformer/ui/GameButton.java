@@ -14,11 +14,9 @@ import com.mygdx.platformer.sound.SoundType;
 public class GameButton extends TextButton {
 
     private boolean hover;
-    private Skin skin;
 
     public GameButton(String text, Skin skin) {
         super(text, skin);
-        this.skin = skin;
         addListener(new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -50,7 +48,7 @@ public class GameButton extends TextButton {
 
     @Override
     public Color getColor() {
-        return hover ? skin.getColor("red") : super.getColor();
+        return hover ? Color.RED : super.getColor();
     }
 
 }

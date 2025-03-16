@@ -159,6 +159,7 @@ public class SettingsScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveMusicVolume(musicVolumeSlider.getValue());
+                AudioManager.playSound("sliderChanged");
             }
         });
         return musicVolumeSlider;
@@ -175,6 +176,7 @@ public class SettingsScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveEffectsVolume(effectsVolumeSlider.getValue());
+                AudioManager.playSound("sliderChanged");
             }
         });
         return effectsVolumeSlider;

@@ -21,21 +21,32 @@ import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
 /**
- * This class represents the player character in the game.
+ * Represents the player character in the game world.
+ * <p>
+ * The Player class extends BaseCharacter and implements all functionality
+ * specific
+ * to the player-controlled character, including:
+ * <ul>
+ * <li>Movement controls and physics</li>
+ * <li>Variable-height jumping mechanics</li>
+ * <li>Attack capabilities</li>
+ * <li>Animation state management</li>
+ * <li>Collision detection with platforms and enemies</li>
+ * <li>Auto-play AI integration for demo mode</li>
+ * </ul>
+ * </p>
+ * <p>
+ * The player can be controlled either through keyboard input or via the
+ * AutoPlayAgent when auto-play mode is enabled.
+ * </p>
+ *
  * @author Robert Kullman
  * @author Daniel Jönsson
  */
 public class Player extends BaseCharacter {
 
-    /** The force applied when the player jumps. */
-    private float jumpForce = AppConfig.PLAYER_JUMP_FORCE;
-
     /** Tracks whether the player is currently on the ground. */
     private boolean isGrounded = false;
-
-    /** Tracks whether the player is currently jumping or not. i.e if the
-     * spacebar is being held down.*/
-    private boolean isJumping = false;
 
     /** Whether a jump request has been triggered. */
     private boolean jumpRequested = false;
@@ -50,7 +61,7 @@ public class Player extends BaseCharacter {
     private float jumpHoldTime = 0;
 
     /** Manages the player's attacks. */
-    private AttackManager attackManager;
+    private final AttackManager attackManager;
 
     /** Animation for the idle state. */
     private Animation<TextureRegion> idleAnimation;
@@ -67,36 +78,45 @@ public class Player extends BaseCharacter {
     /** The texture atlas containing the player's animations. */
     private TextureAtlas playerAtlas;
 
-    /** Indicates whether auto-play is enabled**/
-    private boolean autoPlayEnabled;
+    /** Indicates whether auto-play is enabled. */
+    private final boolean autoPlayEnabled;
 
+    /** The AI agent that controls the player in auto-play mode. */
     private AutoPlayAgent autoPlayAgent;
 
+    /** Reference to the game world for physics and raycasting operations. */
     World gameWorld;
 
+    /** Tracks the total game time for various time-based effects. */
     private float gameTime = 0.0f;
 
+    /** Reference to the game camera for positioning and viewport calculations. */
     OrthographicCamera camera;
 
+    /** Flag indicating whether an attack has been triggered. */
     private boolean attackTriggered = false;
 
+    /** Timer for controlling attack animation duration. */
     private float attackAnimationTimer = 0.0f;
 
+    /** Flag indicating whether the player is currently dodging. */
     private boolean isDodging = false;
-
 
     /**
      * Instantiates the player in the game world.
-     * @param world The Box2D world.
-     * @param position The player position.
-     * @param health The player maxHealth.
+     *
+     * @param world         The Box2D world for physics simulation.
+     * @param position      The initial position of the player.
+     * @param health        The player's maximum health.
      * @param movementSpeed The movement speed of the player.
-     * @param manager the AttackManager for spawning attacks.
+     * @param manager       The AttackManager for spawning attacks.
+     * @param autoPlay      Whether auto-play mode is enabled.
+     * @param camera        The game camera for viewport calculations.
      */
     public Player(World world, Vector2 position,
-                  int health, float movementSpeed, AttackManager manager, boolean autoPlay, OrthographicCamera camera) {
+            int health, float movementSpeed, AttackManager manager, boolean autoPlay, OrthographicCamera camera) {
         super(world, position, health, movementSpeed, AppConfig.PLAYER_WIDTH,
-            AppConfig.PLAYER_HEIGHT);
+                AppConfig.PLAYER_HEIGHT);
         this.attackManager = manager;
         this.camera = camera;
         body.setUserData(this);
@@ -115,8 +135,13 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Updates the player state.
-     * @param deltaTime time since last frame.
+     * Updates the player state for the current frame.
+     * <p>
+     * This method handles animation updates, jump mechanics, and delegates to
+     * the auto-play agent when enabled.
+     * </p>
+     *
+     * @param deltaTime Time elapsed since the last frame in seconds.
      */
     @Override
     public void update(float deltaTime) {
@@ -124,16 +149,15 @@ public class Player extends BaseCharacter {
 
         gameTime += deltaTime;
 
-
         if (gameTime > 10000f) {
             gameTime = 0;
         }
 
-        if(autoPlayEnabled && autoPlayAgent != null) {
+        if (autoPlayEnabled && autoPlayAgent != null) {
             autoPlayAgent.update(deltaTime);
         }
 
-       checkJumpStatus(deltaTime);
+        checkJumpStatus(deltaTime);
 
         // Determine animation state
         if (attackTriggered) {
@@ -145,7 +169,7 @@ public class Player extends BaseCharacter {
             }
         } else if (!isGrounded) {
             currentFrame = jumpAnimation.getKeyFrame(stateTime);
-        }  else if (moveDirection != 0) {
+        } else if (moveDirection != 0) {
             currentFrame = walkAnimation.getKeyFrame(stateTime);
         } else {
             currentFrame = idleAnimation.getKeyFrame(stateTime);
@@ -158,10 +182,12 @@ public class Player extends BaseCharacter {
      * execute the jump. Because jump height is variable, a check is also performed
      * to determine whether the jump button is being held down, and
      * additional force should be applied.
-     * @param deltaTime Time passed since last physics update.
+     *
+     * @param deltaTime Time passed since last physics update in seconds.
      */
     private void checkJumpStatus(float deltaTime) {
         if (jumpRequested) {
+            float jumpForce = AppConfig.PLAYER_JUMP_FORCE;
             body.applyLinearImpulse(new Vector2(0, jumpForce), body.getWorldCenter(), true);
             jumpRequested = false;
             jumpHoldTime = 0;
@@ -176,29 +202,33 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Sets up the animations for the Player. Loads the sprite regions
-     * specified in the atlas.
+     * Sets up the animations for the Player.
+     * <p>
+     * Loads the sprite regions from the texture atlas and initializes
+     * animations for different player states (idle, walking, jumping, attacking).
+     * </p>
      */
     @Override
     protected void setupAnimations() {
         playerAtlas = Assets.getPlayerAtlas();
 
         idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
-            playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
+                playerAtlas.findRegions("player_idle"), Animation.PlayMode.LOOP);
         walkAnimation = new Animation<>(AppConfig.WALK_FRAME_DURATION,
-            playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
+                playerAtlas.findRegions("player_walk"), Animation.PlayMode.LOOP);
         jumpAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
-            playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
+                playerAtlas.findRegions("player_jump"), Animation.PlayMode.NORMAL);
         attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION,
-            playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
+                playerAtlas.findRegions("player_attack"), Animation.PlayMode.NORMAL);
 
         currentFrame = idleAnimation.getKeyFrame(0);
 
     }
 
     /**
-     * {@inheritDoc}
-     * @return
+     * Returns the character type of this entity.
+     *
+     * @return The character type, which is {@link AppConfig.CharacterType#PLAYER}.
      */
     @Override
     public AppConfig.CharacterType getCharacterType() {
@@ -206,7 +236,11 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Handles player input.
+     * Handles player input from keyboard.
+     * <p>
+     * Processes key presses for movement (A/D), jumping (SPACE), and
+     * attacking (R). This method is only effective when auto-play is disabled.
+     * </p>
      */
     public void handleInput() {
         if (!autoPlayEnabled) {
@@ -216,10 +250,10 @@ public class Player extends BaseCharacter {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             moveBackward();
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-           moveForward();
+            moveForward();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-           attack();
+            attack();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {
@@ -235,7 +269,11 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Disposes the player texture to free resources.
+     * Releases resources used by the player.
+     * <p>
+     * This method should be called when the player is no longer needed
+     * to prevent memory leaks.
+     * </p>
      */
     public void dispose() {
         playerAtlas.dispose();
@@ -243,6 +281,7 @@ public class Player extends BaseCharacter {
 
     /**
      * Sets whether the player is on the ground or not.
+     *
      * @param grounded Boolean indicating whether the player is on the ground.
      */
     public void setGrounded(boolean grounded) {
@@ -251,6 +290,7 @@ public class Player extends BaseCharacter {
 
     /**
      * Accessor for the player's physics body.
+     *
      * @return The Box2D physics body of the player.
      */
     public Body getBody() {
@@ -258,18 +298,18 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Must be implemented by subclasses to define their hitbox size.
+     * Defines the hitbox size for the player character.
      *
      * @return A {@code Vector2} representing the hitbox width and height.
      */
     @Override
     protected Vector2 getHitBoxSize() {
         return new Vector2(AppConfig.PLAYER_HITBOX_SIZE_X,
-            AppConfig.PLAYER_HITBOX_SIZE_Y);
+                AppConfig.PLAYER_HITBOX_SIZE_Y);
     }
 
     /**
-     * Returns the collision category for the character.
+     * Returns the collision category for the player character.
      *
      * @return A short representing the collision category.
      */
@@ -279,9 +319,9 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Returns the collision mask for the character.
+     * Returns the collision mask for the player character.
      *
-     * @return A short representing what the character can collide with.
+     * @return A short representing what the player can collide with.
      */
     @Override
     protected short getCollisionMask() {
@@ -290,7 +330,8 @@ public class Player extends BaseCharacter {
 
     /**
      * Returns the player scale used for rendering sprites.
-     * @return The player scale.
+     *
+     * @return The player scale factor.
      */
     @Override
     protected float getScale() {
@@ -299,6 +340,9 @@ public class Player extends BaseCharacter {
 
     /**
      * Triggers a jump by setting the pertinent flags.
+     * <p>
+     * This method will only initiate a jump if the player is currently grounded.
+     * </p>
      */
     public void jump() {
         if (isGrounded) {
@@ -308,21 +352,26 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Performs an attack by spawning an attack via the attackManager instance. The method also
-     * sets the attackTriggered flag to allow correct animation handling in the update() method.
+     * Performs an attack by spawning a projectile.
+     * <p>
+     * This method uses the attackManager to create a throwing dagger projectile
+     * and sets the attackTriggered flag to trigger the attack animation.
+     * </p>
      */
     public void attack() {
         attackManager.spawnAttackAt(
-            new Vector2(body.getPosition().x, body.getPosition().y + AppConfig.PLAYER_ATTACK_Y_OFFSET),
-            getFacingDirection(),
-            true,
-            AppConfig.AttackType.PLAYER_THROWING_DAGGER
-        );
+                new Vector2(body.getPosition().x, body.getPosition().y + AppConfig.PLAYER_ATTACK_Y_OFFSET),
+                getFacingDirection(),
+                true,
+                AppConfig.AttackType.PLAYER_THROWING_DAGGER);
         attackTriggered = true;
     }
 
     /**
-     * Moves the player forward.
+     * Moves the player forward (right).
+     * <p>
+     * Sets the movement direction and updates the facing direction.
+     * </p>
      */
     public void moveForward() {
         moveDirection = 1;
@@ -331,7 +380,10 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Moves the player backward.
+     * Moves the player backward (left).
+     * <p>
+     * Sets the movement direction and updates the facing direction.
+     * </p>
      */
     public void moveBackward() {
         moveDirection = -1;
@@ -340,6 +392,9 @@ public class Player extends BaseCharacter {
 
     /**
      * Stops player movement.
+     * <p>
+     * Sets the movement direction to zero, causing the player to stop moving.
+     * </p>
      */
     public void stop() {
         moveDirection = 0;
@@ -347,24 +402,32 @@ public class Player extends BaseCharacter {
 
     /**
      * Makes the player dodge an incoming projectile.
+     * <p>
+     * This method is used by the auto-play AI to avoid enemy attacks.
+     * </p>
      */
     public void dodge() {
-
+        // Implementation to be added
     }
 
     /**
-     * Checks if the path ahead is clear.
-     * @return True if the path is clear.
+     * Checks if the path ahead is clear of obstacles.
+     * <p>
+     * This method is used by the auto-play AI for navigation.
+     * </p>
+     *
+     * @return True if the path is clear, false otherwise.
      */
     public boolean isPathClear() {
-
+        // Implementation to be added
         return false;
     }
 
     /**
      * Uses raycasting to check if an enemy is within sight range.
+     *
      * @param direction The direction to check (1 for right, -1 for left).
-     * @return True if an enemy is detected in the direction.
+     * @return True if an enemy is detected in the specified direction.
      */
     public boolean hasEnemiesNearby(float direction) {
         Vector2 playerPosition = body.getPosition();
@@ -378,12 +441,13 @@ public class Player extends BaseCharacter {
 
     /**
      * Casts a ray in a given direction to detect enemies.
+     *
      * @param start The start position of the ray.
-     * @param end The end position of the ray.
+     * @param end   The end position of the ray.
      * @return True if an enemy is detected.
      */
     private boolean checkForEnemy(Vector2 start, Vector2 end) {
-        final boolean[] enemyDetected = {false};
+        final boolean[] enemyDetected = { false };
 
         gameWorld.rayCast((fixture, point, normal, fraction) -> {
             if (fixture.getBody().getUserData() instanceof BaseEnemy) {
@@ -397,114 +461,134 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Accessor method for the facingRight flag.
-     * @return The current value of the boolean facingRight flag.
+     * Gets the player's facing direction as an integer.
+     *
+     * @return 1 if facing right, -1 if facing left.
      */
     public int getFacingDirection() {
         return facingRight ? 1 : -1;
     }
 
     /**
-     * Accessor method for the gameTime field.
-     * @return The current value of the gameTime field.
+     * Gets the current game time.
+     *
+     * @return The current game time in seconds.
      */
     public float getGameTime() {
         return gameTime;
     }
 
     /**
-     * Uses raycasting to check if the enemy unit is nearing an edge.
-     * @param direction indicates the direction in which to check for ground.
-     * @return
+     * Uses raycasting to check if there is ground ahead in the specified direction.
+     * <p>
+     * This method is used to detect edges and prevent the player from walking off
+     * platforms.
+     * </p>
+     *
+     * @param direction The direction to check (1 for right, -1 for left).
+     * @return True if ground is detected ahead, false otherwise.
      */
-    public boolean isGroundAhead(float direction) {
+    public boolean isNotGroundAhead(float direction) {
         Vector2 position = body.getPosition();
         float rayLength = 3f;
 
         boolean isGround = false;
         // first ray
-        Vector2 rayStart = new Vector2(position.x + AppConfig.PLAYER_GROUNDCHECK_FORWARD_OFFSET, position.y - (height / 2));
+        Vector2 rayStart = new Vector2(position.x + AppConfig.PLAYER_GROUNDCHECK_FORWARD_OFFSET,
+                position.y - (height / 2));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
         Vector2 rayStart2 = new Vector2(position.x, position.y - (height / 2));
         Vector2 rayEnd2 = new Vector2(rayStart.x, rayStart.y - rayLength);
 
-
-        if(checkForGround(gameWorld, rayStart, rayEnd) && checkForGround(gameWorld, rayStart2, rayEnd2)){
+        if (checkForGround(gameWorld, rayStart, rayEnd) && checkForGround(gameWorld, rayStart2, rayEnd2)) {
             isGround = true;
         }
 
-
-
-        return isGround;
+        return !isGround;
     }
 
     /**
-     * Accessor method for the isGrounded flag.
-     * @return The current value of the boolean flag indicating grounding.
+     * Checks if the player is currently on the ground.
+     *
+     * @return True if the player is grounded, false if in the air.
      */
     public boolean isGrounded() {
         return isGrounded;
     }
 
     /**
-     * Uses raycasting to detect the edge of the next platform. This method serves
-     * to stop the player in air during auto-play to ensure a safe landing when jumping.
-     * @return A Vector2 position indicating the point where the ray hits a platform.
+     * Uses raycasting to detect the edge of the next platform.
+     * <p>
+     * This method serves to stop the player in air during auto-play to ensure
+     * a safe landing when jumping.
+     * </p>
+     *
+     * @return A Vector2 position indicating the point where the ray hits a
+     *         platform,
+     *         or null if no platform is detected.
      */
     public Vector2 getNextPlatformPosition() {
         Vector2 playerPos = getBody().getPosition();
 
         Vector2 rayStart = new Vector2(playerPos.x, playerPos.y);
 
-        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y-10);
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - 10);
 
         final Vector2[] platformPos = { null };
 
         gameWorld.rayCast((fixture, point, normal, fraction) -> {
             // Check if the fixture belongs to a platform
             if (fixture.getBody().getUserData() != null &&
-                fixture.getBody().getUserData().equals("ground")) {
+                    fixture.getBody().getUserData().equals("ground")) {
                 platformPos[0] = new Vector2(point.x, point.y);
                 return 0; // Stop the raycast after the first hit
             }
             return -1; // Continue raycasting
-        }, rayStart, rayEnd);;
+        }, rayStart, rayEnd);
 
         return platformPos[0];
     }
 
     /**
-     * Mutator for the facingRight flag.
-     * @param facingRight The new value to be set to the facingRight boolean.
+     * Sets the player's facing direction.
+     *
+     * @param facingRight True to face right, false to face left.
      */
     public void setFacingRight(boolean facingRight) {
         this.facingRight = facingRight;
     }
 
     /**
-     * Accessor for player's current health.
-     * @return The current health of the player.
+     * Gets the player's current health.
+     *
+     * @return The current health value.
      */
     public int getCurrentHealth() {
         return currentHealth;
     }
 
     /**
-     * Accessor for the player's maximum health.
-     * @return The max health of the player.
+     * Gets the player's maximum health.
+     *
+     * @return The maximum health value.
      */
     public int getMaxHealth() {
         return maxHealth;
     }
 
     /**
-     * Detects incoming projectiles in both directions using raycasting. Multiple
-     * rays are used to cover the height of the player.
-     * @return boolean indicating if an incoming projectile is detected.
+     * Detects incoming projectiles using raycasting.
+     * <p>
+     * Multiple rays are used to cover the height of the player, checking in both
+     * forward and backward directions for enemy projectiles.
+     * </p>
+     *
+     * @return True if an incoming projectile is detected, false otherwise.
      */
     public boolean detectIncomingProjectile() {
-        int NUM_RAYS = AppConfig.AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS;      // Number of rays along the player's height.
+        int NUM_RAYS = AppConfig.AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS; // Number of rays along the player's
+                                                                                // height.
         float RAY_LENGTH = AppConfig.AUTO_PLAY_PROJECTILE_DETECTION_RANGE; // How far to cast each ray (in world units).
 
         Vector2 playerPos = getBody().getPosition();
@@ -514,7 +598,7 @@ public class Player extends BaseCharacter {
 
         for (int i = 0; i < NUM_RAYS; i++) {
             // Distribute rays
-            float fraction =  (float) i / (NUM_RAYS - 1);
+            float fraction = (float) i / (NUM_RAYS - 1);
             float offsetY = fraction * playerHeight;
             Vector2 rayStart = new Vector2(playerPos.x, playerPos.y + offsetY);
 
@@ -539,7 +623,15 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Helper method that casts a ray between two points and returns true if an incoming projectile is detected.
+     * Helper method that casts a ray to detect enemy projectiles.
+     * <p>
+     * This method checks if there are any enemy attacks along the ray path
+     * that are moving toward the player.
+     * </p>
+     *
+     * @param start The start position of the ray.
+     * @param end   The end position of the ray.
+     * @return True if an incoming projectile is detected, false otherwise.
      */
     private boolean castRayForProjectile(Vector2 start, Vector2 end) {
         final boolean[] hit = { false };
@@ -553,7 +645,7 @@ public class Player extends BaseCharacter {
 
                         Vector2 projVelocity = attack.getBody().getLinearVelocity();
                         if ((body.getPosition().x < attack.getBody().getPosition().x && projVelocity.x < 0)
-                            || (body.getPosition().x > attack.getBody().getPosition().x && projVelocity.x > 0)) {
+                                || (body.getPosition().x > attack.getBody().getPosition().x && projVelocity.x > 0)) {
                             hit[0] = true;
                             return 0; // Stop the raycast.
                         }
@@ -566,16 +658,18 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Mutator for the dodging flag.
-     * @param dodging the value to set the isDodging flag to.
+     * Sets whether the player is currently dodging.
+     *
+     * @param dodging True if the player is dodging, false otherwise.
      */
     public void setDodging(boolean dodging) {
         isDodging = dodging;
     }
 
     /**
-     * Accessor for the isDodging flag.
-     * @return The current value of the boolean isDodging flag.
+     * Checks if the player is currently dodging.
+     *
+     * @return True if the player is dodging, false otherwise.
      */
     public boolean isDodging() {
         return isDodging;

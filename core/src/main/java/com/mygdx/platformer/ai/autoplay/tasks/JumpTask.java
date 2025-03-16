@@ -34,7 +34,7 @@ public class JumpTask extends LeafTask<Player> {
             }
         }
 
-        if (!player.isGroundAhead(direction) && player.isGrounded() && !jumpTriggered) {
+        if (player.isNotGroundAhead(direction) && player.isGrounded() && !jumpTriggered) {
             player.jump();
             jumpTriggered = true;
             return Status.RUNNING;

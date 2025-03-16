@@ -76,7 +76,7 @@ public class EnemyManager {
         float attackCooldown;
         if (random.nextBoolean()) {
             int hp = (int) (AppConfig.GOBLIN_HEALTH * multiplier);
-            int speed = (int) (AppConfig.GOBLIN_SPEED * multiplier);
+            float speed = AppConfig.GOBLIN_SPEED * multiplier;
             enemy = new Goblin(world, position, hp, speed);
             detectionRange = AppConfig.GOBLIN_DETECTION_RANGE;
             attackRange = AppConfig.GOBLIN_ATTACK_RANGE;
@@ -92,8 +92,6 @@ public class EnemyManager {
 
         enemies.add(enemy);
         aiAgents.add(new EnemyAIAgent(enemy, detectionRange, attackRange, attackManager, attackCooldown, world));
-
-        System.out.println("Spawned enemy at " + position);
     }
 
     /**

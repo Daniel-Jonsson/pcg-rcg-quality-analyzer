@@ -22,20 +22,7 @@ public class Goblin extends BaseEnemy {
     private Animation<TextureRegion> walkAnimation;
     private Animation<TextureRegion> attackAnimation;
 
-    private TextureAtlas textureAtlas;
-
-    /**
-     * Creates a new Goblin enemy at the specified position in the game world.
-     *
-     * @param world The Box2D world where the goblin exists.
-     * @param position The initial position of the goblin.
-     */
-    public Goblin(World world, Vector2 position) {
-        super(world, position, AppConfig.GOBLIN_HEALTH,
-            AppConfig.GOBLIN_SPEED, AppConfig.GOBLIN_WIDTH, AppConfig.GOBLIN_HEIGHT);
-    }
-
-    public Goblin(World world, Vector2 position, int health, int speed) {
+    public Goblin(World world, Vector2 position, int health, float speed) {
         super(world, position, health, speed, AppConfig.GOBLIN_WIDTH, AppConfig.GOBLIN_HEIGHT);
     }
 
@@ -64,7 +51,7 @@ public class Goblin extends BaseEnemy {
      */
     @Override
     protected void setupAnimations() {
-        textureAtlas = Assets.getGoblinAtlas();
+        TextureAtlas textureAtlas = Assets.getGoblinAtlas();
 
         idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
             textureAtlas.findRegions("goblin_idle"), Animation.PlayMode.LOOP);

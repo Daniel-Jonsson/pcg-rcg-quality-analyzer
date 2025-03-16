@@ -12,6 +12,7 @@ import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.screens.StartScreen;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.ui.GameButton;
 
 /**
  * Represents the Game Over overlay that appears when the player dies.
@@ -40,7 +41,7 @@ public class GameOverOverlay {
         Label timeLabel = new Label(AppConfig.SURVIVAL_TIME + String.format("%.2f seconds",
             survivalTime), skin);
 
-        TextButton restartButton = new TextButton(AppConfig.MAIN_MENU, skin);
+        GameButton restartButton = new GameButton(AppConfig.MAIN_MENU, skin);
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
@@ -48,7 +49,7 @@ public class GameOverOverlay {
             }
         });
 
-        TextButton quitButton = new TextButton(AppConfig.QUIT, skin);
+        GameButton quitButton = new GameButton(AppConfig.QUIT, skin);
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {

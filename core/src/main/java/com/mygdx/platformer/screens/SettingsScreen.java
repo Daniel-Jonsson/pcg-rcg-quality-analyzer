@@ -17,6 +17,7 @@ import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Settings;
+import com.mygdx.ui.GameButton;
 
 /**
  * Settings screen.
@@ -87,7 +88,7 @@ public class SettingsScreen extends ScreenAdapter {
         });
 
         // back button
-        TextButton backButton = new TextButton("Back", skin);
+        GameButton backButton = new GameButton("Back", skin);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

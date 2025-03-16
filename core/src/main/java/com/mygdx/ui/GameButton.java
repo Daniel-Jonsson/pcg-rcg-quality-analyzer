@@ -31,6 +31,13 @@ public class GameButton extends TextButton {
                 hover = false;
                 Gdx.graphics.setSystemCursor(SystemCursor.Arrow);
             }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchDown(event, x, y, pointer, button);
+                AudioManager.playSound("buttonClick");
+                return true;
+            }
         });
     }
 

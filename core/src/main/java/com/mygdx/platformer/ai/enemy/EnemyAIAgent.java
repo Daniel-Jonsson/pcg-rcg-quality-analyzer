@@ -35,10 +35,10 @@ import com.mygdx.platformer.utilities.AppConfig;
  */
 public class EnemyAIAgent extends AIAgent {
     /** Manager responsible for spawning and handling attacks. */
-    private AttackManager attackManager;
+    private final AttackManager attackManager;
 
     /** The cooldown time between attacks in seconds. */
-    private float attackCooldown;
+    private final float attackCooldown;
 
     /** The fixed time interval between behavior tree updates in seconds. */
     private static final float UPDATE_INTERVAL = AppConfig.ENEMY_BT_UPDATE_INTERVAL;

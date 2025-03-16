@@ -30,7 +30,7 @@ public class AutoPlayAgent {
     OrthographicCamera camera;
 
     /** The behavior tree that controls the AI decision making process. */
-    private BehaviorTree behaviorTree;
+    private BehaviorTree<Player> behaviorTree;
 
     /** Timer used to control how often the behavior tree is updated. */
     private float aiStepTimer = 0;

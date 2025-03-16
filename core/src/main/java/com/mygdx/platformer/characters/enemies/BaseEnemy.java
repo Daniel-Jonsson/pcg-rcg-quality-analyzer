@@ -23,7 +23,7 @@ import com.mygdx.platformer.utilities.Assets;
 public abstract class BaseEnemy extends BaseCharacter {
     World world;
 
-    private Sprite healthBarSprite;
+    private final Sprite healthBarSprite;
 
     protected boolean isAttacking = false;
     private float attackAnimationTime;

@@ -15,11 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.platformer.PlatformerGame;
+import com.mygdx.platformer.screens.overlays.UserGuideOverlay;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Settings;
 
 /**
- * This class represents the starting screen of the game, where the main game menu resides.
+ * This class represents the starting screen of the game, where the main game
+ * menu resides.
  *
  * @author Robert Kullman
  * @author Daniel Jönsson
@@ -77,6 +79,13 @@ public class StartScreen implements Screen {
             }
         });
 
+        TextButton userGuideButton = new TextButton("User Guide", skin);
+        userGuideButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                UserGuideOverlay.show(AppConfig.USER_GUIDE_TITLE, AppConfig.USER_GUIDE_DESCRIPTION);
+            }
+        });
 
         // Arrange UI with Table
         Table table = new Table();
@@ -87,27 +96,30 @@ public class StartScreen implements Screen {
         table.add(titleLabel).padBottom(AppConfig.TITLE_BOTTOM_PADDING).row();
 
         table.add(startButton)
-            .width(AppConfig.BUTTON_WIDTH)
-            .height(AppConfig.BUTTON_HEIGHT)
-            .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
-            .row();
+                .width(AppConfig.BUTTON_WIDTH)
+                .height(AppConfig.BUTTON_HEIGHT)
+                .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
+                .row();
         table.add(autoPlayButton)
-            .width(AppConfig.BUTTON_WIDTH)
-            .height(AppConfig.BUTTON_HEIGHT)
-            .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
-            .row();
+                .width(AppConfig.BUTTON_WIDTH)
+                .height(AppConfig.BUTTON_HEIGHT)
+                .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
+                .row();
         table.add(settingsButton)
-            .width(AppConfig.BUTTON_WIDTH)
-            .height(AppConfig.BUTTON_HEIGHT)
-            .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
-            .row();
+                .width(AppConfig.BUTTON_WIDTH)
+                .height(AppConfig.BUTTON_HEIGHT)
+                .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
+                .row();
+        table.add(userGuideButton)
+                .width(AppConfig.BUTTON_WIDTH)
+                .height(AppConfig.BUTTON_HEIGHT)
+                .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
+                .row();
         table.add(quitButton)
-            .width(AppConfig.BUTTON_WIDTH)
-            .height(AppConfig.BUTTON_HEIGHT)
-            .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
-            .row();
-
-
+                .width(AppConfig.BUTTON_WIDTH)
+                .height(AppConfig.BUTTON_HEIGHT)
+                .padBottom(AppConfig.BUTTON_BOTTOM_PADDING)
+                .row();
 
         stage.addActor(table);
     }
@@ -130,6 +142,8 @@ public class StartScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
+
+        UserGuideOverlay.render();
     }
 
     /**
@@ -141,6 +155,8 @@ public class StartScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+
+        UserGuideOverlay.resize(width, height);
     }
 
     /**
@@ -174,5 +190,7 @@ public class StartScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+
+        UserGuideOverlay.dispose();
     }
 }

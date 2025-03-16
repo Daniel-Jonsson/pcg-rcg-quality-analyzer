@@ -602,6 +602,5 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
                 (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
         float cameraMaxSpeed = 2.0f;
         difficultySpeed = Math.min(newSpeed, cameraMaxSpeed);
-        System.out.println(difficultySpeed);
     }
 }

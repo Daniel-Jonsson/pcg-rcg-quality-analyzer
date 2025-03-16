@@ -11,6 +11,7 @@ import com.mygdx.platformer.attacks.AttackManager;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.AppConfig.CharacterType;
 
 /**
  * Represents a behavior tree task for executing an attack.
@@ -73,8 +74,8 @@ public class AttackTask extends LeafTask<AIAgent> {
 
 
         attackType = switch (character.getCharacterType()) {
-            case AppConfig.CharacterType.GOBLIN -> AppConfig.AttackType.GOBLIN_THROWING_DAGGER;
-            case AppConfig.CharacterType.NECROMANCER -> AppConfig.AttackType.DEATH_BOLT;
+            case GOBLIN -> AppConfig.AttackType.GOBLIN_THROWING_DAGGER;
+            case NECROMANCER -> AppConfig.AttackType.DEATH_BOLT;
             default -> AppConfig.AttackType.PLAYER_THROWING_DAGGER;
         };
 

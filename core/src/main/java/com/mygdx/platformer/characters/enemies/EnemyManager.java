@@ -81,7 +81,7 @@ public class EnemyManager {
             attackCooldown = AppConfig.GOBLIN_ATTACK_COOLDOWN;
         } else {
             int hp = (int) (AppConfig.NECROMANCER_HEALTH * multiplier);
-            int speed = (int) (AppConfig.NECROMANCER_SPEED * multiplier);
+            float speed = AppConfig.NECROMANCER_SPEED * multiplier;
             enemy = new Necromancer(world, position, hp, speed);
             detectionRange = AppConfig.NECROMANCER_DETECTION_RANGE;
             attackRange = AppConfig.NECROMANCER_ATTACK_RANGE;

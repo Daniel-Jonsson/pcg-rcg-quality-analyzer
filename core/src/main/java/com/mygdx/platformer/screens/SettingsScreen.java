@@ -18,7 +18,7 @@ import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Settings;
-import com.mygdx.ui.GameButton;
+import com.mygdx.platformer.ui.GameButton;
 
 /**
  * Settings screen.
@@ -138,11 +138,12 @@ public class SettingsScreen extends ScreenAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveUIScale(scaleSlider.getValue());
                 float scale = scaleSlider.getValue();
-                timerPreview = new GameTimer(scale);
+                timerPreview.setUIScale(scale);
                 healthBarSprite.setSize(
                     AppConfig.HEALTHBAR_SPRITE_WIDTH * AppConfig.PPM * scale,
                     AppConfig.HEALTHBAR_SPRITE_HEIGHT * AppConfig.PPM * scale
                 );
+                AudioManager.playSound("sliderChanged");
             }
         });
         return scaleSlider;

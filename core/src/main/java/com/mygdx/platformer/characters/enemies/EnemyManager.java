@@ -23,23 +23,23 @@ import java.util.Random;
 public class EnemyManager {
 
     /** The Box2D world where enemies exist. */
-    private World world;
+    private final World world;
 
     /** The attack manager for the game. */
-    private AttackManager attackManager;
+    private final AttackManager attackManager;
 
     /** List of active enemies in the game. */
-    private List<BaseEnemy> enemies;
+    private final List<BaseEnemy> enemies;
 
     /** List of active AI agents in the game. */
-    private List<EnemyAIAgent> aiAgents;
+    private final List<EnemyAIAgent> aiAgents;
 
     /** The target position for the enemies to pursue. */
     private Vector2 targetPosition;
 
     /** Random number generator used for determining enemy types when
      * spawning. */
-    private Random random;
+    private final Random random;
 
     /** Multiplier that increases with difficulty */
 
@@ -50,6 +50,8 @@ public class EnemyManager {
      * the game world.
      *
      * @param world The Box2D world where enemies will be spawned and updated.
+     * @param attackManager The attack manager within the game
+     * @param targetPosition The position of the target
      */
     public EnemyManager(World world, AttackManager attackManager, Vector2 targetPosition) {
         this.world = world;

@@ -37,6 +37,12 @@ public final class AppConfig {
     /** Gravity strength in the game world. */
     public static final float GRAVITY = -20f;
 
+    public static final String APP_NAME = "VEM VARE SOM KASTA?";
+
+    public static final String START_GAME_LABEL = "Start Game";
+    public static final String AUTO_PLAY = "Auto-Play";
+    public static final String SETTINGS = "Settings";
+
     /* Screen Configuration */
 
     /** Screen width in pixels. */

@@ -61,8 +61,6 @@ public final class AppConfig {
     /** Initial spawn x-coordinate of the player. */
     public static final int PLAYER_SPAWN_X = 1;
 
-
-
     /** Player movement speed. */
     public static final float PLAYER_MOVE_SPEED = 5f;
 
@@ -143,10 +141,15 @@ public final class AppConfig {
     /** Width of a middle segment of a platform. */
     public static final float PLATFORM_MIDDLE_SEGMENT_WIDTH = 0.5f;
 
-    /** Maximum allowed variation in platform y-coordinates at the start of a game. */
+    /**
+     * Maximum allowed variation in platform y-coordinates at the start of a game.
+     */
     public static final float INITIAL_MAX_Y_VARIATION = 1.5f;
 
-    /** Maximum allowed variation in platform y-coordinates at the maximum difficulty level. */
+    /**
+     * Maximum allowed variation in platform y-coordinates at the maximum difficulty
+     * level.
+     */
     public static final float FINAL_MAX_Y_VARIATION = 3f;
 
     /** Right margin offscreen for platform spawning. */
@@ -236,16 +239,16 @@ public final class AppConfig {
     /* Collision Categories */
 
     /** Category bit for players. **/
-    public static final short CATEGORY_PLAYER = 0x0001;   // 0001
+    public static final short CATEGORY_PLAYER = 0x0001; // 0001
 
     /** Category bit for enemies. **/
-    public static final short CATEGORY_ENEMY = 0x0002;    // 0010
+    public static final short CATEGORY_ENEMY = 0x0002; // 0010
 
     /** Category bit for platforms. **/
     public static final short CATEGORY_PLATFORM = 0x0004; // 0100
 
     /** Category bit for attacks. **/
-    public static final short CATEGORY_ATTACK = 0x0008;   // 1000
+    public static final short CATEGORY_ATTACK = 0x0008; // 1000
 
     /* Goblin Enemy Configuration */
 
@@ -408,7 +411,8 @@ public final class AppConfig {
     /* DIFFICULTY ADJUSTMENT CONFIGURATIONS */
 
     /**
-     * Enum representing different types of platform generators available in the game.
+     * Enum representing different types of platform generators available in the
+     * game.
      */
     public enum PlatformGeneratorType {
         STANDARD,
@@ -449,9 +453,7 @@ public final class AppConfig {
 
     public static final float AUTO_PLAY_PROJECTILE_DETECTION_RANGE = 2.5f;
 
-    public static final int   AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS = 6;
-
-
+    public static final int AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS = 6;
 
     /* ERROR OVERLAY CONFIGURATIONS */
 
@@ -476,10 +478,32 @@ public final class AppConfig {
     /** OK button text. **/
     public static final String OK_BUTTON_TEXT = "OK";
 
+    /** User Guide Dialog */
 
+    public static final String USER_GUIDE_TITLE = "User Guide";
 
+    public static final String USER_GUIDE_DESCRIPTION = """
+            Platformer Game User Guide
 
+            Controls:
 
+            - Movement Left: A
+            - Movement Right: D
+            - Jump: Space
+            - Attack: R
 
+            Objective:
+
+            Survive as long as possible, your survival time is tracked and displayed.
+
+            Game Elements:
+            
+            - Player: Has a health bar at the top of the screen if it reaches 0 the game is over
+            - Platforms: Procedurally generated, falling off results in game over
+            - Enemies: Goblins are fast and jumpy, Necromancers are slow but strong
+            - Difficulty: Increases over time with more challenging platforms and enemies
+
+            Good luck!
+            """;
 
 }

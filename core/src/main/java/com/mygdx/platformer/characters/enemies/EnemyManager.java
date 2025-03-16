@@ -119,7 +119,7 @@ public class EnemyManager {
         while (iterator.hasNext() && aiIterator.hasNext()) {
             BaseEnemy enemy = iterator.next();
             EnemyAIAgent aiAgent = aiIterator.next();
-            if (enemy.isDead()) {
+            if (enemy.getBody().getPosition().y < 0) {
                 world.destroyBody(enemy.getBody());
                 iterator.remove();
                 aiIterator.remove();

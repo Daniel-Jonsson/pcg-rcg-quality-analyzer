@@ -137,6 +137,11 @@ public abstract class BaseCharacter implements CharacterActions {
         if (currentHealth < 0) {
             currentHealth = 0;
             isDead = true;
+            // make enemy fall if dead
+            if (!body.getFixtureList().isEmpty()) {
+                body.getFixtureList().first().getFilterData().maskBits = 0;
+                body.getFixtureList().first().setFilterData(body.getFixtureList().first().getFilterData());
+            }
         }
     }
 

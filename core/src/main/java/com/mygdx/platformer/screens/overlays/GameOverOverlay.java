@@ -11,6 +11,7 @@ import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.screens.StartScreen;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.ui.GameButton;
+import com.mygdx.platformer.utilities.Assets;
 
 /**
  * Represents the Game Over overlay that appears when the player dies.
@@ -20,7 +21,7 @@ import com.mygdx.platformer.ui.GameButton;
  * @author Daniel Jönsson, Robert Kullman
  */
 public class GameOverOverlay {
-    private Stage stage;
+    private final Stage stage;
     private boolean isActive = false;
 
     /**
@@ -33,7 +34,7 @@ public class GameOverOverlay {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal(Assets.UI_PATH));
 
         Label titleLabel = new Label(AppConfig.GAME_OVER, skin);
         Label timeLabel = new Label(AppConfig.SURVIVAL_TIME + String.format("%.2f seconds",

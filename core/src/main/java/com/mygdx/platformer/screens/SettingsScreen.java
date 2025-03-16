@@ -143,6 +143,7 @@ public class SettingsScreen extends ScreenAdapter {
                     AppConfig.HEALTHBAR_SPRITE_WIDTH * AppConfig.PPM * scale,
                     AppConfig.HEALTHBAR_SPRITE_HEIGHT * AppConfig.PPM * scale
                 );
+                AudioManager.playSound("sliderChanged");
             }
         });
         return scaleSlider;

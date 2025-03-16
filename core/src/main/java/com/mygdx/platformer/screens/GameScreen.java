@@ -78,7 +78,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
     private HealthBar healthBar;
 
-    private float UIScale;
+    private final float UIScale;
 
     private float cameraXPosition;
 

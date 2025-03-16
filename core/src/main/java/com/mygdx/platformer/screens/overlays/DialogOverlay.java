@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -69,14 +70,37 @@ public class DialogOverlay {
             }
         };
 
-        currentDialog.setWidth(AppConfig.ERROR_DIALOG_WIDTH);
+        boolean isUserGuide = title != null && title.equals(AppConfig.USER_GUIDE_TITLE);
+
+        currentDialog.setWidth(AppConfig.ERROR_DIALOG_WIDTH * 1.10f);
         currentDialog.setHeight(AppConfig.ERROR_DIALOG_HEIGHT);
 
         Label descriptionLabel = new Label(description, skin);
         descriptionLabel.setWrap(true);
-        descriptionLabel.setAlignment(Align.center);
 
-        currentDialog.getContentTable().add(descriptionLabel).width(300).padTop(AppConfig.ERROR_DIALOG_PADDING);
+        if (isUserGuide) {
+            descriptionLabel.setAlignment(Align.left);
+
+            Table contentTable = new Table();
+            contentTable.add(descriptionLabel).width(AppConfig.ERROR_DIALOG_WIDTH * 1.10f).padLeft(30);
+
+            com.badlogic.gdx.scenes.scene2d.ui.ScrollPane scrollPane = new com.badlogic.gdx.scenes.scene2d.ui.ScrollPane(
+                    contentTable, skin);
+            scrollPane.setFadeScrollBars(false);
+            scrollPane.setScrollingDisabled(true, false);
+            scrollPane.setOverscroll(false, false);
+            scrollPane.setScrollbarsVisible(true);
+
+            currentDialog.getContentTable().add(scrollPane)
+                    .width(AppConfig.ERROR_DIALOG_WIDTH * 1.10f)
+                    .height(AppConfig.ERROR_DIALOG_HEIGHT * 0.7f)
+                    .padTop(AppConfig.ERROR_DIALOG_PADDING);
+        } else {
+            descriptionLabel.setAlignment(Align.center);
+            currentDialog.getContentTable().add(descriptionLabel)
+                    .width(AppConfig.ERROR_DIALOG_WIDTH)
+                    .padTop(AppConfig.ERROR_DIALOG_PADDING);
+        }
 
         TextButton okButton = new TextButton(buttonText, skin);
         okButton.addListener(new ClickListener() {

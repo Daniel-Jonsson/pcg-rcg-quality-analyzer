@@ -3,6 +3,7 @@ package com.mygdx.platformer.ai.enemy;
 import com.badlogic.gdx.ai.btree.BehaviorTree;
 import com.badlogic.gdx.ai.btree.branch.Selector;
 import com.badlogic.gdx.ai.btree.branch.Sequence;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.ai.AIAgent;
 import com.mygdx.platformer.ai.enemy.tasks.AttackTask;
 import com.mygdx.platformer.ai.enemy.tasks.CharacterInRangeTask;
@@ -19,8 +20,8 @@ public class EnemyAIAgent extends AIAgent {
     private float timeAccumulator = 0f;
 
     public EnemyAIAgent(BaseCharacter character, float detectionRange, float attackRange, AttackManager attackManager,
-            float attackCooldown) {
-        super(character, detectionRange, attackRange);
+            float attackCooldown, World world) {
+        super(character, detectionRange, attackRange, world);
         this.attackManager = attackManager;
         this.attackCooldown = attackCooldown;
         setupBehaviorTree();

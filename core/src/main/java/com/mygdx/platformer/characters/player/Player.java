@@ -99,6 +99,7 @@ public class Player extends BaseCharacter {
             AppConfig.PLAYER_HEIGHT);
         this.attackManager = manager;
         this.camera = camera;
+        body.setUserData(this);
 
         MassData massData = new MassData();
         massData.mass = AppConfig.PLAYER_MASS;

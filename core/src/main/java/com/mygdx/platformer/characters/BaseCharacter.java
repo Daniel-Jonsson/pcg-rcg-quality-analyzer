@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.characters.player.Player;
 
 /**
  * Abstract class representing a base character with shared logic for both
@@ -212,5 +213,25 @@ public abstract class BaseCharacter implements CharacterActions {
         }, start, end);
 
         return isGrounded[0];
+    }
+
+    /**
+     * Used by enemies to determine whether a player is in line of sight.
+     * @param world The game world.
+     * @param start Starting point of raycast.
+     * @param end   Endpoint of raycast.
+     * @return      Boolean indicating whether the player is in line of sight.
+     */
+    public boolean checkLineOfSight(World world, Vector2 start, Vector2 end) {
+        final boolean[] isLineOfSight = {false};
+        world.rayCast((fixture, point, normal, fraction) -> {
+            if (fixture.getBody().getUserData() instanceof Player) {
+                isLineOfSight[0] = true;
+                return 0;
+            }
+            return -1;
+        }, start, end);
+
+        return isLineOfSight[0];
     }
 }

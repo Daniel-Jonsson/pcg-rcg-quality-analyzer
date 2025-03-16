@@ -26,16 +26,15 @@ import java.util.Random;
  * @author Robert Kullman
  */
 public class PlatformManager {
-    private List<Platform> platforms;
-    private Map<AppConfig.PlatformGeneratorType, IPlatformGenerator> generators;
+    private final List<Platform> platforms;
+    private final Map<AppConfig.PlatformGeneratorType, IPlatformGenerator> generators;
     private IPlatformGenerator currentGenerator;
     private AppConfig.PlatformGeneratorType currentGeneratorType;
-    private Random random = new Random();
-    private EnemyManager enemyManager;
+    private final Random random = new Random();
+    private final EnemyManager enemyManager;
 
-    private World world;
+    private final World world;
     private float lastPlatformX; // right edge of the last platform
-    private float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
 
     private float minGap;
     private float maxGap;
@@ -68,9 +67,7 @@ public class PlatformManager {
 
         for (AppConfig.PlatformGeneratorType type : PlatformGeneratorFactory.getAvailableGeneratorTypes()) {
             IPlatformGenerator generator = PlatformGeneratorFactory.createGenerator(type);
-            if (generator != null) {
-                registerGenerator(generator);
-            }
+            registerGenerator(generator);
         }
 
         setCurrentGenerator(AppConfig.PlatformGeneratorType.STANDARD);
@@ -108,16 +105,13 @@ public class PlatformManager {
      * Sets the current platform generator by type.
      *
      * @param generatorType The type of generator to use
-     * @return true if the generator was found and set, false otherwise
      */
-    public boolean setCurrentGenerator(AppConfig.PlatformGeneratorType generatorType) {
+    public void setCurrentGenerator(AppConfig.PlatformGeneratorType generatorType) {
         IPlatformGenerator generator = generators.get(generatorType);
         if (generator != null) {
             currentGenerator = generator;
             currentGeneratorType = generatorType;
-            return true;
         }
-        return false;
     }
 
     /**
@@ -145,6 +139,7 @@ public class PlatformManager {
      * @param viewportWidth The width of the viewport
      */
     public void update(float cameraX, float viewportWidth) {
+        float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
         while (lastPlatformX < cameraX + viewportWidth / 2 + rightOffscreenMargin) {
             float newBaseY = platforms.getLast().getBody().getPosition().y;
             Platform newPlatform = generatePlatform(lastPlatformX, newBaseY);

@@ -96,6 +96,7 @@ public class DialogOverlay {
      * <li>Setting up special formatting for user guides (scrollable content)</li>
      * <li>Positioning the dialog in the center of the screen</li>
      * </ul>
+     *
      * </p>
      *
      * @param title       The title of the dialog

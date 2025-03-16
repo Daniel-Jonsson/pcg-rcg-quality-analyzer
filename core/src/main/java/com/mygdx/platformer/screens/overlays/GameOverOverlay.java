@@ -21,16 +21,20 @@ import com.mygdx.platformer.utilities.Assets;
  * @author Daniel Jönsson, Robert Kullman
  */
 public class GameOverOverlay {
+    /** The Scene2D stage that contains and manages all UI elements of the game over
+     * overlay. */
     private final Stage stage;
+    /** Indicates if the overlay is currently active or not */
     private boolean isActive = false;
 
     /**
      * Creates a new Game Over overlay.
-     * @param game The main game instance, used for switching screens.
+     *
+     * @param game         The main game instance, used for switching screens.
      * @param survivalTime The time the player survived before dying.
      */
     public GameOverOverlay(final PlatformerGame game,
-                           float survivalTime) {
+            float survivalTime) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -38,7 +42,7 @@ public class GameOverOverlay {
 
         Label titleLabel = new Label(AppConfig.GAME_OVER, skin);
         Label timeLabel = new Label(AppConfig.SURVIVAL_TIME + String.format("%.2f seconds",
-            survivalTime), skin);
+                survivalTime), skin);
 
         GameButton restartButton = new GameButton(AppConfig.MAIN_MENU, skin);
         restartButton.addListener(new ClickListener() {
@@ -61,7 +65,8 @@ public class GameOverOverlay {
         table.center();
         table.add(titleLabel).padBottom(AppConfig.TITLE_BOTTOM_PADDING).row();
         table.add(timeLabel).padBottom(AppConfig.TIMER_PADDING).row();
-        table.add(restartButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT).padBottom(AppConfig.BUTTON_BOTTOM_PADDING).row();
+        table.add(restartButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT)
+                .padBottom(AppConfig.BUTTON_BOTTOM_PADDING).row();
         table.add(quitButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT);
 
         stage.addActor(table);

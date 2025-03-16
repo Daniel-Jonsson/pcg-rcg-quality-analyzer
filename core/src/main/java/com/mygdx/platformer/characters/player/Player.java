@@ -401,29 +401,6 @@ public class Player extends BaseCharacter {
     }
 
     /**
-     * Makes the player dodge an incoming projectile.
-     * <p>
-     * This method is used by the auto-play AI to avoid enemy attacks.
-     * </p>
-     */
-    public void dodge() {
-        // Implementation to be added
-    }
-
-    /**
-     * Checks if the path ahead is clear of obstacles.
-     * <p>
-     * This method is used by the auto-play AI for navigation.
-     * </p>
-     *
-     * @return True if the path is clear, false otherwise.
-     */
-    public boolean isPathClear() {
-        // Implementation to be added
-        return false;
-    }
-
-    /**
      * Uses raycasting to check if an enemy is within sight range.
      *
      * @param direction The direction to check (1 for right, -1 for left).
@@ -485,12 +462,11 @@ public class Player extends BaseCharacter {
      * platforms.
      * </p>
      *
-     * @param direction The direction to check (1 for right, -1 for left).
      * @return True if ground is detected ahead, false otherwise.
      */
-    public boolean isNotGroundAhead(float direction) {
+    public boolean isNotGroundAhead() {
         Vector2 position = body.getPosition();
-        float rayLength = 3f;
+        float rayLength = AppConfig.PLAYER_RAYCAST_LENGTH;
 
         boolean isGround = false;
         // first ray

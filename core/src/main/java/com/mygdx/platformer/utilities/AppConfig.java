@@ -115,6 +115,8 @@ public final class AppConfig {
     /** Offset for player ground detection raycasting. **/
     public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.15f;
 
+    public static final float PLAYER_RAYCAST_LENGTH = 3f;
+
     /* Procedural Content Generation (PCG) */
 
     /** Minimum gap between platforms. */

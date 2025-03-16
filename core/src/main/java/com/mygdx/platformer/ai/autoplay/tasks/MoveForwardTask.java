@@ -43,7 +43,7 @@ public class MoveForwardTask extends LeafTask<Player> {
             return Status.RUNNING;
         }
 
-        if (player.isGrounded() && player.isNotGroundAhead(player.getFacingDirection())) {
+        if (player.isGrounded() && player.isNotGroundAhead()) {
             player.moveForward(); // move forward to prepare to jump a gap
             return Status.SUCCEEDED;
         }

@@ -15,7 +15,7 @@ import com.mygdx.platformer.utilities.AppConfig;
  * Represents a base class for all attack types in the game.
  * Handles common attack behavior such as movement, and rendering.
  * This class provides the foundation for concrete implementations (e.g.,
- * {@link OrbAttack}).
+ * {@link GoblinAttack}).
  *
  * @author Daniel Jönsson, Robert Kullman
  */

@@ -582,6 +582,30 @@ public final class AppConfig {
     /** Step value for the music volume slider. */
     public static final float SETTING_MUSIC_SLIDER_STEP_VALUE = 0.05f;
 
+    /** Name of the preferences file for game settings. */
+    public static final String SETTINGS_PREFERENCES_NAME = "com.mygdx.platformer.settings";
+
+    /** Key for storing UI scale setting. */
+    public static final String SETTINGS_UI_SCALE_KEY = "uiScale";
+
+    /** Key for storing show FPS setting. */
+    public static final String SETTINGS_SHOW_FPS_KEY = "showFPS";
+
+    /** Key for storing music volume setting. */
+    public static final String SETTINGS_MUSIC_VOLUME_KEY = "musicVolume";
+
+    /** Key for storing effects volume setting. */
+    public static final String SETTINGS_EFFECTS_VOLUME_KEY = "effectsVolume";
+
+    /** Default value for showing FPS. */
+    public static final boolean SETTINGS_DEFAULT_SHOW_FPS = true;
+
+    /** Default value for music volume. */
+    public static final float SETTINGS_DEFAULT_MUSIC_VOLUME = 0.3f;
+
+    /** Default value for effects volume. */
+    public static final float SETTINGS_DEFAULT_EFFECTS_VOLUME = 0.5f;
+
     /* ERROR OVERLAY CONFIGURATIONS */
 
     /** The width of the error dialog. **/

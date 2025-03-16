@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Assets;
 import com.mygdx.platformer.utilities.Settings;
 
 /**
@@ -46,7 +47,7 @@ public class GameTimer {
         stage = new Stage(viewport);
 
         // Load default skin
-        Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal(Assets.UI_PATH));
 
         timerLabel = new Label("Time: 00:00", skin);
         fpsLabel = new Label("FPS: 60", skin);

@@ -18,7 +18,7 @@ import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Settings;
-import com.mygdx.ui.GameButton;
+import com.mygdx.platformer.ui.GameButton;
 
 /**
  * Settings screen.

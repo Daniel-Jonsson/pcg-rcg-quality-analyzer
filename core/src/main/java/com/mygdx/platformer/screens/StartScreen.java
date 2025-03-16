@@ -12,12 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.screens.overlays.UserGuideOverlay;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Settings;
+import com.mygdx.ui.GameButton;
 
 /**
  * This class represents the starting screen of the game, where the main game
@@ -47,7 +49,7 @@ public class StartScreen implements Screen {
         Label titleLabel = new Label("GAME TITLE", skin);
 
         // Buttons
-        TextButton startButton = new TextButton("Start Game", skin);
+        TextButton startButton = new GameButton("Start Game", skin);
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -55,7 +57,7 @@ public class StartScreen implements Screen {
             }
         });
 
-        TextButton quitButton = new TextButton("Quit", skin);
+        GameButton quitButton = new GameButton("Quit", skin);
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -63,7 +65,7 @@ public class StartScreen implements Screen {
             }
         });
 
-        TextButton autoPlayButton = new TextButton("Auto-play", skin);
+        GameButton autoPlayButton = new GameButton("Auto-play", skin);
         autoPlayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -71,7 +73,7 @@ public class StartScreen implements Screen {
             }
         });
 
-        TextButton settingsButton = new TextButton("Settings", skin);
+        GameButton settingsButton = new GameButton("Settings", skin);
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -79,7 +81,8 @@ public class StartScreen implements Screen {
             }
         });
 
-        TextButton userGuideButton = new TextButton("User Guide", skin);
+        GameButton userGuideButton = new GameButton("User Guide", skin);
+
         userGuideButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

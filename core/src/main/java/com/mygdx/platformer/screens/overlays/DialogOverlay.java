@@ -1,5 +1,6 @@
 package com.mygdx.platformer.screens.overlays;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.ui.GameButton;
 
 /**
  * A static utility class for displaying dialog overlays in the game.
@@ -102,7 +104,7 @@ public class DialogOverlay {
                     .padTop(AppConfig.ERROR_DIALOG_PADDING);
         }
 
-        TextButton okButton = new TextButton(buttonText, skin);
+        GameButton okButton = new GameButton(buttonText, skin);
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

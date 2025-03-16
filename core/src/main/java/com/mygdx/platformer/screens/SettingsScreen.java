@@ -15,8 +15,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
+import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Settings;
+import com.mygdx.ui.GameButton;
 
 /**
  * Settings screen.
@@ -83,11 +85,12 @@ public class SettingsScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveShowFPS(fpsCheckbox.isChecked());
+                AudioManager.playSound("checkboxClicked");
             }
         });
 
         // back button
-        TextButton backButton = new TextButton("Back", skin);
+        GameButton backButton = new GameButton("Back", skin);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -156,6 +159,7 @@ public class SettingsScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveMusicVolume(musicVolumeSlider.getValue());
+                AudioManager.playSound("sliderChanged");
             }
         });
         return musicVolumeSlider;
@@ -172,6 +176,7 @@ public class SettingsScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveEffectsVolume(effectsVolumeSlider.getValue());
+                AudioManager.playSound("sliderChanged");
             }
         });
         return effectsVolumeSlider;

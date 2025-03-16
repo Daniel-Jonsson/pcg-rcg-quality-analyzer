@@ -141,10 +141,6 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
         initCollisionListener();
         initBackgroundImage();
 
-        // init audio
-        AudioManager.loadSounds();
-        AudioManager.playBackgroundMusic();
-
     }
 
     private void initBackgroundImage() {

@@ -2,6 +2,7 @@ package com.mygdx.platformer;
 
 import com.badlogic.gdx.Game;
 import com.mygdx.platformer.screens.StartScreen;
+import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.utilities.Assets;
 
 /**
@@ -22,6 +23,8 @@ public class PlatformerGame extends Game {
     @Override
     public void create() {
         Assets.load();
+        AudioManager.loadSounds();
+        AudioManager.playBackgroundMusic();
         setScreen(new StartScreen(this));
     }
 

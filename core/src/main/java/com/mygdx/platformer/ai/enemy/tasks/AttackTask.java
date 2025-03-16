@@ -73,17 +73,11 @@ public class AttackTask extends LeafTask<AIAgent> {
 
         String enemyType = enemy.getClass().getSimpleName();
 
-        switch (enemyType) {
-            case "Goblin":
-                attackType = AppConfig.AttackType.GOBLIN_THROWING_DAGGER;
-                break;
-            case "Necromancer":
-                attackType = AppConfig.AttackType.DEATH_BOLT;
-                break;
-            default:
-                attackType = AppConfig.AttackType.PLAYER_THROWING_DAGGER;
-                break;
-        }
+        attackType = switch (enemyType) {
+            case "Goblin" -> AppConfig.AttackType.GOBLIN_THROWING_DAGGER;
+            case "Necromancer" -> AppConfig.AttackType.DEATH_BOLT;
+            default -> AppConfig.AttackType.PLAYER_THROWING_DAGGER;
+        };
 
         attackManager.spawnEnemyAttackAt(character.getBody().getPosition(), direction, attackType);
 

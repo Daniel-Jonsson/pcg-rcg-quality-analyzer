@@ -38,8 +38,7 @@ public class MoveForwardTask extends LeafTask<Player> {
         float minX = screenCenter - AppConfig.AUTO_PLAY_BACKWARD_MOVEMENT_LIMIT;
         float maxX = screenCenter + AppConfig.AUTO_PLAY_FORWARD_MOVEMENT_LIMIT;
 
-       // System.out.println("grounded: " + player.isGrounded());
-       // System.out.println("ground ahead: " + player.isGroundAhead(player.getDirection()));
+
         if(player.isDodging()) {
             return Status.RUNNING;
         }
@@ -65,7 +64,6 @@ public class MoveForwardTask extends LeafTask<Player> {
         }
         // Move forward if allowed, but only call moveForward() once
         if (!reachedFrontLimit && player.getFacingDirection() != 0) {
-            //System.out.println("moving forward");
             player.moveForward();
             return Status.RUNNING;
         }

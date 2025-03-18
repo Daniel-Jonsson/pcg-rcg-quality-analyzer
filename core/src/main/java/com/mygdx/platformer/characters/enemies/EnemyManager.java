@@ -23,23 +23,23 @@ import java.util.Random;
 public class EnemyManager {
 
     /** The Box2D world where enemies exist. */
-    private World world;
+    private final World world;
 
     /** The attack manager for the game. */
-    private AttackManager attackManager;
+    private final AttackManager attackManager;
 
     /** List of active enemies in the game. */
-    private List<BaseEnemy> enemies;
+    private final List<BaseEnemy> enemies;
 
     /** List of active AI agents in the game. */
-    private List<EnemyAIAgent> aiAgents;
+    private final List<EnemyAIAgent> aiAgents;
 
     /** The target position for the enemies to pursue. */
     private Vector2 targetPosition;
 
     /** Random number generator used for determining enemy types when
      * spawning. */
-    private Random random;
+    private final Random random;
 
     /** Multiplier that increases with difficulty */
 
@@ -50,6 +50,8 @@ public class EnemyManager {
      * the game world.
      *
      * @param world The Box2D world where enemies will be spawned and updated.
+     * @param attackManager The attack manager within the game
+     * @param targetPosition The position of the target
      */
     public EnemyManager(World world, AttackManager attackManager, Vector2 targetPosition) {
         this.world = world;
@@ -74,7 +76,7 @@ public class EnemyManager {
         float attackCooldown;
         if (random.nextBoolean()) {
             int hp = (int) (AppConfig.GOBLIN_HEALTH * multiplier);
-            int speed = (int) (AppConfig.GOBLIN_SPEED * multiplier);
+            float speed = AppConfig.GOBLIN_SPEED * multiplier;
             enemy = new Goblin(world, position, hp, speed);
             detectionRange = AppConfig.GOBLIN_DETECTION_RANGE;
             attackRange = AppConfig.GOBLIN_ATTACK_RANGE;
@@ -90,8 +92,6 @@ public class EnemyManager {
 
         enemies.add(enemy);
         aiAgents.add(new EnemyAIAgent(enemy, detectionRange, attackRange, attackManager, attackCooldown, world));
-
-        System.out.println("Spawned enemy at " + position);
     }
 
     /**
@@ -132,10 +132,19 @@ public class EnemyManager {
     }
 
 
+    /**
+     * Mutator method for setting the target position
+     * @param targetPosition The {@link Vector2} representing targets position.
+     */
     public void setTargetPosition(Vector2 targetPosition) {
         this.targetPosition = targetPosition;
     }
 
+    /**
+     * Increases difficulty level of enemies.
+     *
+     * @param difficultyLevel The current difficulty level.
+     */
     public void increaseDifficulty(int difficultyLevel) {
         multiplier = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
     }

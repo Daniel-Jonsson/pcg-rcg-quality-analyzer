@@ -3,7 +3,6 @@ package com.mygdx.platformer.ai.autoplay.tasks;
 import com.badlogic.gdx.ai.btree.LeafTask;
 import com.badlogic.gdx.ai.btree.Task;
 import com.mygdx.platformer.characters.player.Player;
-import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * In autoplay, this task stops the player and performs a jump to

@@ -13,9 +13,18 @@ import com.mygdx.platformer.utilities.AppConfig;
  * @author Daniel Jönsson
  */
 public class StandardPlatformGenerator implements IPlatformGenerator {
-    private World world;
-    private float platformHeight = AppConfig.PLATFORM_HEIGHT;
 
+    /** The Box2D world where {@link Platform} platforms should be generated. */
+    private World world;
+
+    /** The height of the platform. */
+    private final float platformHeight = AppConfig.PLATFORM_HEIGHT;
+
+    /**
+     * {@inheritDoc}
+     * @param world The Box2D world
+     * @return The initial generated Platform
+     */
     @Override
     public Platform initialize(World world) {
         this.world = world;
@@ -27,11 +36,22 @@ public class StandardPlatformGenerator implements IPlatformGenerator {
         return new Platform(world, initialX, initialY, initialWidth, platformHeight);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param x The x coordinate where the platform should be generated.
+     * @param y The y coordinate where the platform should be generated.
+     * @param width The width of the platform
+     * @return A new {@link Platform} instance of the spawned platform
+     */
     @Override
     public Platform generatePlatform(float x, float y, float width) {
         return new Platform(world, x, y, Math.round(width), platformHeight);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return The platform generator type.
+     */
     @Override
     public AppConfig.PlatformGeneratorType getGeneratorType() {
         return AppConfig.PlatformGeneratorType.STANDARD;

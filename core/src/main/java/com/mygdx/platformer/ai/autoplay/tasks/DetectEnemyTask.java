@@ -4,6 +4,13 @@ import com.badlogic.gdx.ai.btree.LeafTask;
 import com.badlogic.gdx.ai.btree.Task;
 import com.mygdx.platformer.characters.player.Player;
 
+/**
+ * This task detects enemies by ray casting forward and backward. If enemy is
+ * detected the player AI faces the enemy and begins its attack strategy.
+ *
+ * @author Daniel Jönsson
+ * @author Robert Kullman
+ */
 public class DetectEnemyTask extends LeafTask<Player> {
 
     /**

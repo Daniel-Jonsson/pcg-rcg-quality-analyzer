@@ -14,6 +14,7 @@ import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.screens.overlays.UserGuideOverlay;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.ui.GameButton;
+import com.mygdx.platformer.utilities.Assets;
 
 /**
  * This class represents the starting screen of the game, where the main game
@@ -23,9 +24,23 @@ import com.mygdx.platformer.ui.GameButton;
  * @author Daniel Jönsson
  */
 public class StartScreen implements Screen {
-    private PlatformerGame game;
-    private Skin skin;
-    private Stage stage;
+    /**
+     * The UI skin used for styling all interface components.
+     * <p>
+     * Loaded from the Assets.UI_PATH, this skin provides consistent
+     * visual styling for all UI elements including sliders, buttons,
+     * labels, and checkboxes.
+     * </p>
+     */
+    private final Skin skin;
+    /**
+     * The Scene2D stage that contains and manages all UI elements.
+     * <p>
+     * This stage handles the rendering of UI components and processes
+     * user input for interactive elements like sliders and buttons.
+     * </p>
+     */
+    private final Stage stage;
 
     /**
      * Constructor for the StartScreen, which initializes the UI elements.
@@ -33,17 +48,16 @@ public class StartScreen implements Screen {
      * @param game The main game instance used to switch screens.
      */
     public StartScreen(PlatformerGame game) {
-        this.game = game;
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        this.skin = new Skin(Gdx.files.internal(Assets.UI_PATH));
 
         // game title
-        Label titleLabel = new Label("GAME TITLE", skin);
+        Label titleLabel = new Label(AppConfig.APP_NAME, skin);
 
         // Buttons
-        TextButton startButton = new GameButton("Start Game", skin);
+        TextButton startButton = new GameButton(AppConfig.START_GAME_LABEL, skin);
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -51,7 +65,7 @@ public class StartScreen implements Screen {
             }
         });
 
-        GameButton quitButton = new GameButton("Quit", skin);
+        GameButton quitButton = new GameButton(AppConfig.QUIT, skin);
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -59,7 +73,7 @@ public class StartScreen implements Screen {
             }
         });
 
-        GameButton autoPlayButton = new GameButton("Auto-play", skin);
+        GameButton autoPlayButton = new GameButton(AppConfig.AUTO_PLAY, skin);
         autoPlayButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -67,7 +81,7 @@ public class StartScreen implements Screen {
             }
         });
 
-        GameButton settingsButton = new GameButton("Settings", skin);
+        GameButton settingsButton = new GameButton(AppConfig.SETTINGS, skin);
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -75,7 +89,7 @@ public class StartScreen implements Screen {
             }
         });
 
-        GameButton userGuideButton = new GameButton("User Guide", skin);
+        GameButton userGuideButton = new GameButton(AppConfig.USER_GUIDE_TITLE, skin);
 
         userGuideButton.addListener(new ClickListener() {
             @Override

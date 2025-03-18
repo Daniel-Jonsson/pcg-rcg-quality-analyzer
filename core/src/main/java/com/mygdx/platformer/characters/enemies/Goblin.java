@@ -22,20 +22,7 @@ public class Goblin extends BaseEnemy {
     private Animation<TextureRegion> walkAnimation;
     private Animation<TextureRegion> attackAnimation;
 
-    private TextureAtlas textureAtlas;
-
-    /**
-     * Creates a new Goblin enemy at the specified position in the game world.
-     *
-     * @param world The Box2D world where the goblin exists.
-     * @param position The initial position of the goblin.
-     */
-    public Goblin(World world, Vector2 position) {
-        super(world, position, AppConfig.GOBLIN_HEALTH,
-            AppConfig.GOBLIN_SPEED, AppConfig.GOBLIN_WIDTH, AppConfig.GOBLIN_HEIGHT);
-    }
-
-    public Goblin(World world, Vector2 position, int health, int speed) {
+    public Goblin(World world, Vector2 position, int health, float speed) {
         super(world, position, health, speed, AppConfig.GOBLIN_WIDTH, AppConfig.GOBLIN_HEIGHT);
     }
 
@@ -64,15 +51,25 @@ public class Goblin extends BaseEnemy {
      */
     @Override
     protected void setupAnimations() {
-        textureAtlas = Assets.getGoblinAtlas();
+        TextureAtlas textureAtlas = Assets.getGoblinAtlas();
 
         idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
-            textureAtlas.findRegions("goblin_idle"), Animation.PlayMode.LOOP);
+            textureAtlas.findRegions(AppConfig.GOBLIN_IDLE), Animation.PlayMode.LOOP);
         walkAnimation = new Animation<>(AppConfig.WALK_FRAME_DURATION,
-            textureAtlas.findRegions("goblin_walk"), Animation.PlayMode.LOOP);
+            textureAtlas.findRegions(AppConfig.GOBLIN_WALK), Animation.PlayMode.LOOP);
         attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION,
-            textureAtlas.findRegions("goblin_attack"), Animation.PlayMode.LOOP);
+            textureAtlas.findRegions(AppConfig.GOBLIN_ATTACK), Animation.PlayMode.LOOP);
         currentFrame = idleAnimation.getKeyFrame(0);
+    }
+
+    /**
+     * Gets the character type.
+     *
+     * @return The character type.
+     */
+    @Override
+    public AppConfig.CharacterType getCharacterType() {
+        return AppConfig.CharacterType.GOBLIN;
     }
 
     /**

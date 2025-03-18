@@ -1,7 +1,5 @@
 package com.mygdx.platformer.utilities;
 
-import com.badlogic.gdx.graphics.Color;
-
 /**
  * A configuration class that defines constants used throughout the game.
  * It includes settings for screen dimensions, physics properties,
@@ -38,6 +36,18 @@ public final class AppConfig {
 
     /** Gravity strength in the game world. */
     public static final float GRAVITY = -20f;
+
+    /** The name of the application displayed in window title. */
+    public static final String APP_NAME = "VEM VARE SOM KASTA?";
+
+    /** Label text for the start game button. */
+    public static final String START_GAME_LABEL = "Start Game";
+
+    /** Label text for the auto-play button. */
+    public static final String AUTO_PLAY = "Auto-Play";
+
+    /** Label text for the settings button. */
+    public static final String SETTINGS = "Settings";
 
     /* Screen Configuration */
 
@@ -115,6 +125,11 @@ public final class AppConfig {
     /** Offset for player ground detection raycasting. **/
     public static final float PLAYER_GROUNDCHECK_FORWARD_OFFSET = 0.15f;
 
+    /**
+     * Length of the player's raycast for ground detection and obstacle avoidance.
+     */
+    public static final float PLAYER_RAYCAST_LENGTH = 3f;
+
     /* Procedural Content Generation (PCG) */
 
     /** Minimum gap between platforms. */
@@ -131,6 +146,15 @@ public final class AppConfig {
 
     /** Height of platforms. */
     public static final float PLATFORM_HEIGHT = 0.5f;
+
+    /** Width of the platform start sprite segment. */
+    public static final float PLATFORM_START_SPRITE_WIDTH = 0.1f;
+
+    /** Width of the platform end sprite segment. */
+    public static final float PLATFORM_END_SPRITE_WIDTH = 0.1f;
+
+    /** Offset for the platform start sprite positioning. */
+    public static final float PLATFORM_START_SPRITE_OFFSET = 0.05f;
 
     /** Base y-position for platforms. */
     public static final float PLATFORM_BASE_Y_POSITION = 5f;
@@ -202,13 +226,19 @@ public final class AppConfig {
     /** Modifies the scale of the game timer. **/
     public static final float UI_TIMER_MODIFIER = 1.5f;
 
+    /** Default scaling factor for UI elements. */
     public static final float DEFAULT_UI_SCALE = 1.0f;
 
+    /** Padding for the UI scale slider in the settings screen. */
     public static final int UI_SCALE_SLIDER_PADDING = 20;
+
+    /** Width of the UI scale slider in the settings screen. */
     public static final int UI_SCALE_SLIDER_WIDTH = 300;
 
+    /** Width of the game timer display in pixels. */
     public static final float GAME_TIMER_WIDTH = 80f;
 
+    /** Speed at which the background image scrolls. */
     public static final float BACKGROUND_IMAGE_SCROLL_SPEED = 0.3f;
 
     /* Enemy Configuration */
@@ -222,6 +252,11 @@ public final class AppConfig {
     /** Enemy mass for physics calculations. */
     public static final float ENEMY_MASS = 5f;
 
+    /**
+     * The distance to cast ray for checking next platform.
+     */
+    public static final float JUMP_CHECK_DISTANCE = 6f;
+
     /** Forward in-air speed multiplier for enemy jumps. **/
     public static final int ENEMY_JUMP_FORWARD_BOOST_MULTIPLIER = 3;
 
@@ -234,6 +269,7 @@ public final class AppConfig {
     /** Offset for enemy ground detection raycasting. **/
     public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.3f;
 
+    /** Update interval for enemy behavior tree in seconds. */
     public static final float ENEMY_BT_UPDATE_INTERVAL = 0.2f;
 
     /* Collision Categories */
@@ -297,6 +333,15 @@ public final class AppConfig {
     /** The cooldown time (in seconds) between goblin attacks. **/
     public static final float GOBLIN_ATTACK_COOLDOWN = 1f;
 
+    /** Animation key for goblin idle state. */
+    public static final String GOBLIN_IDLE = "goblin_idle";
+
+    /** Animation key for goblin walking state. */
+    public static final String GOBLIN_WALK = "goblin_walk";
+
+    /** Animation key for goblin attack state. */
+    public static final String GOBLIN_ATTACK = "goblin_attack";
+
     /* Necromancer Enemy Configuration */
 
     /** The attack power of a necromancer. **/
@@ -343,6 +388,26 @@ public final class AppConfig {
 
     /** The cooldown time (in seconds) between necromancer attacks. **/
     public static final float NECROMANCER_ATTACK_COOLDOWN = 4f;
+
+    /** Animation key for necromancer idle state. */
+    public static final String NECROMANCER_IDLE = "necromancer_idle";
+
+    /** Animation key for necromancer attack state. */
+    public static final String NECROMANCER_ATTACK = "necromancer_attack";
+
+    /* Player Animation Region Names */
+
+    /** Region name for player idle animation. */
+    public static final String PLAYER_IDLE_REGION = "player_idle";
+
+    /** Region name for player walk animation. */
+    public static final String PLAYER_WALK_REGION = "player_walk";
+
+    /** Region name for player jump animation. */
+    public static final String PLAYER_JUMP_REGION = "player_jump";
+
+    /** Region name for player attack animation. */
+    public static final String PLAYER_ATTACK_REGION = "player_attack";
 
     /* UI Text Strings */
 
@@ -415,13 +480,29 @@ public final class AppConfig {
      * game.
      */
     public enum PlatformGeneratorType {
+        /** Standard platform generator that creates basic platforms. */
         STANDARD,
+    }
+
+    /**
+     * Enum representing different character types in the game.
+     */
+    public enum CharacterType {
+        /** The player character controlled by the user or AI. */
+        PLAYER,
+        /** The goblin enemy type. */
+        GOBLIN,
+        /** The necromancer enemy type. */
+        NECROMANCER,
     }
 
     /**
      * The maximum difficulty level in the game.
      */
     public static final int MAX_DIFFICULTY_LEVEL = 20;
+
+    /** The time interval between difficulty increases in seconds. */
+    public static final float DIFFICULTY_INCREASE_INTERVAL = 10f;
 
     /**
      * The time interval (in seconds) for difficulty level increase.
@@ -433,6 +514,7 @@ public final class AppConfig {
      */
     public static final float DIFFICULTY_INCREASE_AMOUNT = 0.05f;
 
+    /** The minimum multiplier for platform width at maximum difficulty. */
     public static final float MIN_PLATFORM_WIDTH_MULTIPLIER = 0.8f;
 
     /* Auto-play */
@@ -449,11 +531,94 @@ public final class AppConfig {
     /** Forward limit (in game distance units) for autoplay movement. **/
     public static final float AUTO_PLAY_FORWARD_MOVEMENT_LIMIT = 4f;
 
+    /** Range at which the AI can detect enemies during auto-play. */
     public static final float AUTO_PLAY_ENEMY_DETECTION_RANGE = 10f;
 
+    /** Range at which the AI can detect incoming projectiles during auto-play. */
     public static final float AUTO_PLAY_PROJECTILE_DETECTION_RANGE = 2.5f;
 
+    /** Number of rays used for projectile detection in auto-play mode. */
     public static final int AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS = 6;
+
+    /** File path for the death bolt sound effect. */
+    public static final String SOUND_DEATHBOLT = "sound/deathbolt.mp3";
+
+    /** File path for the first swoosh sound effect. */
+    public static final String SOUND_SWOOSH = "sound/swoosh.mp3";
+
+    /** File path for the second swoosh sound effect. */
+    public static final String SOUND_SWOOSH2 = "sound/swoosh2.mp3";
+
+    /** File path for the button hover sound effect. */
+    public static final String SOUND_BUTTON_HOVER = "sound/button-hover.mp3";
+
+    /** File path for the button click sound effect. */
+    public static final String SOUND_BUTTON_CLICK = "sound/button-click.mp3";
+
+    /** File path for the checkbox click sound effect. */
+    public static final String SOUND_CHECKBOX_CLICKED = "sound/checkbox-clicked.mp3";
+
+    /** File path for the slider change sound effect. */
+    public static final String SOUND_SLIDER_CHANGED = "sound/slider-changed.mp3";
+
+    /* SETTINGS SCREEN CONFIGURATIONS */
+
+    /** Label text for the UI scale setting. */
+    public static final String UI_SCALE_LABEL = "UI scale";
+
+    /** Label text for the music volume setting. */
+    public static final String MUSIC_VOLUME_LABEL = "Music volume";
+
+    /** Label text for the sound effects volume setting. */
+    public static final String EFFECTS_VOLUME_LABEL = "Effects volume";
+
+    /** Label text for the FPS display checkbox. */
+    public static final String FPS_CHECKBOX_LABEL = "Show FPS";
+
+    /** Label text for the back button. */
+    public static final String BACK_BUTTON_LABEL = "Back";
+
+    /** Minimum value for the UI scale slider. */
+    public static final float SETTING_SCALE_SLIDER_MIN_VALUE = 0.5f;
+
+    /** Maximum value for the UI scale slider. */
+    public static final float SETTING_SCALE_SLIDER_MAX_VALUE = 2.0f;
+
+    /** Step value for the UI scale slider. */
+    public static final float SETTING_SCALE_SLIDER_STEP_VALUE = 0.1f;
+
+    /** Minimum value for the music volume slider. */
+    public static final float SETTING_MUSIC_SLIDER_MIN_VALUE = 0.0f;
+
+    /** Maximum value for the music volume slider. */
+    public static final float SETTING_MUSIC_SLIDER_MAX_VALUE = 1.0f;
+
+    /** Step value for the music volume slider. */
+    public static final float SETTING_MUSIC_SLIDER_STEP_VALUE = 0.05f;
+
+    /** Name of the preferences file for game settings. */
+    public static final String SETTINGS_PREFERENCES_NAME = "com.mygdx.platformer.settings";
+
+    /** Key for storing UI scale setting. */
+    public static final String SETTINGS_UI_SCALE_KEY = "uiScale";
+
+    /** Key for storing show FPS setting. */
+    public static final String SETTINGS_SHOW_FPS_KEY = "showFPS";
+
+    /** Key for storing music volume setting. */
+    public static final String SETTINGS_MUSIC_VOLUME_KEY = "musicVolume";
+
+    /** Key for storing effects volume setting. */
+    public static final String SETTINGS_EFFECTS_VOLUME_KEY = "effectsVolume";
+
+    /** Default value for showing FPS. */
+    public static final boolean SETTINGS_DEFAULT_SHOW_FPS = true;
+
+    /** Default value for music volume. */
+    public static final float SETTINGS_DEFAULT_MUSIC_VOLUME = 0.3f;
+
+    /** Default value for effects volume. */
+    public static final float SETTINGS_DEFAULT_EFFECTS_VOLUME = 0.5f;
 
     /* ERROR OVERLAY CONFIGURATIONS */
 
@@ -463,25 +628,30 @@ public final class AppConfig {
     /** The height of the error dialog. **/
     public static final int ERROR_DIALOG_HEIGHT = SCREEN_HEIGHT_PIXELS / 2;
 
-    /** The padding of the error dialog. **/
-    public static final int ERROR_DIALOG_PADDING = 20;
+    /** The top padding of the error dialog content. **/
+    public static final int ERROR_DIALOG_PADDING_TOP = 20;
 
-    /** The font size of the error dialog. **/
-    public static final int ERROR_DIALOG_FONT_SIZE = 16;
+    /** The left padding of the error dialog content. **/
+    public static final int ERROR_DIALOG_PADDING_LEFT = 30;
 
-    /** The color of the error dialog. **/
-    public static final Color ERROR_DIALOG_COLOR = new Color(1, 0, 0, 0.5f);
+    /** Scale factor for the error dialog scroll pane. */
+    public static final float ERROR_DIALOG_SCROLL_SCALE = 1.1f;
 
-    /** The font of the error dialog. **/
-    public static final String ERROR_DIALOG_FONT = "Arial";
+    /** Width factor for the error dialog scroll pane. */
+    public static final float ERROR_DIALOG_SCROLL_WIDTH = 0.7f;
 
     /** OK button text. **/
     public static final String OK_BUTTON_TEXT = "OK";
 
-    /** User Guide Dialog */
+    /* User Guide Dialog */
 
+    /** Title for the user guide dialog. */
     public static final String USER_GUIDE_TITLE = "User Guide";
 
+    /**
+     * Description text for the user guide dialog explaining game controls and
+     * mechanics.
+     */
     public static final String USER_GUIDE_DESCRIPTION = """
             Platformer Game User Guide
 
@@ -497,7 +667,7 @@ public final class AppConfig {
             Survive as long as possible, your survival time is tracked and displayed.
 
             Game Elements:
-            
+
             - Player: Has a health bar at the top of the screen if it reaches 0 the game is over
             - Platforms: Procedurally generated, falling off results in game over
             - Enemies: Goblins are fast and jumpy, Necromancers are slow but strong
@@ -505,5 +675,4 @@ public final class AppConfig {
 
             Good luck!
             """;
-
 }

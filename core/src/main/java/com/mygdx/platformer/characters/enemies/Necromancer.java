@@ -17,24 +17,20 @@ import com.mygdx.platformer.utilities.Assets;
  */
 public class Necromancer extends BaseEnemy {
 
+    /** The animation for idling */
     private Animation<TextureRegion> idleAnimation;
+    /** The animation for attacking*/
     private Animation<TextureRegion> attackAnimation;
 
-    private TextureAtlas textureAtlas;
-
     /**
-     * Creates a new Necromancer enemy at the specified position in the game
-     * world.
+     * Creates a new Necromancer enemy at the specified position, health, and
+     * speed in the game world.
      *
      * @param world The Box2D world where the necromancer exists.
      * @param position The initial position of the necromancer.
+     * @param health The Necromancers health.
+     * @param speed The Necromancers speed.
      */
-    public Necromancer(World world, Vector2 position) {
-        super(world, position, AppConfig.NECROMANCER_HEALTH,
-            AppConfig.NECROMANCER_SPEED, AppConfig.NECROMANCER_WIDTH,
-            AppConfig.NECROMANCER_HEIGHT);
-    }
-
     public Necromancer(World world, Vector2 position, int health, float speed) {
         super(world, position, health, speed, AppConfig.NECROMANCER_WIDTH,
             AppConfig.NECROMANCER_HEIGHT);
@@ -62,15 +58,25 @@ public class Necromancer extends BaseEnemy {
      */
     @Override
     protected void setupAnimations() {
-        textureAtlas = Assets.getNecromancerAtlas();
+        TextureAtlas textureAtlas = Assets.getNecromancerAtlas();
 
         idleAnimation = new Animation<>(AppConfig.STANDARD_FRAME_DURATION,
-            textureAtlas.findRegions("necromancer_idle"),
+            textureAtlas.findRegions(AppConfig.NECROMANCER_IDLE),
             Animation.PlayMode.LOOP);
         attackAnimation = new Animation<>(AppConfig.ATTACK_FRAME_DURATION,
-            textureAtlas.findRegions("necromancer_attack"),
+            textureAtlas.findRegions(AppConfig.NECROMANCER_ATTACK),
             Animation.PlayMode.NORMAL);
         currentFrame = idleAnimation.getKeyFrame(0);
+    }
+
+    /**
+     * Gets the character type.
+     *
+     * @return The character type.
+     */
+    @Override
+    public AppConfig.CharacterType getCharacterType() {
+        return AppConfig.CharacterType.NECROMANCER;
     }
 
     /**

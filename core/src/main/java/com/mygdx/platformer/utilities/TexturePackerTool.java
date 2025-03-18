@@ -17,6 +17,5 @@ public class TexturePackerTool {
             "assets/atlas",           // Output folder (where atlas will be saved)
             "necromancer_sprites"          // Atlas filename
         );
-        System.out.println("Texture packing complete!");
     }
 }

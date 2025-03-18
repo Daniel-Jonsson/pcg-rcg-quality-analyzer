@@ -17,39 +17,95 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * Manages platform generation and lifecycle.
- * This class is responsible for creating, updating, rendering, and disposing
- * platforms.
- * It uses an IPlatformGenerator to generate new platforms.
+ * Manages procedural platform generation and lifecycle in the game world.
+ * <p>
+ * This class is responsible for the complete lifecycle of platforms:
+ * <ul>
+ * <li>Creating platforms using different generator strategies</li>
+ * <li>Dynamically generating new platforms as the player progresses</li>
+ * <li>Adjusting platform parameters based on difficulty level</li>
+ * <li>Removing platforms that are no longer visible</li>
+ * <li>Coordinating with the enemy manager to spawn enemies on platforms</li>
+ * </ul>
+ * </p>
+ * <p>
+ * The platform generation uses a procedural approach with parameters that
+ * control:
+ * <ul>
+ * <li>Platform width and gap distances</li>
+ * <li>Vertical variation between platforms</li>
+ * <li>Enemy spawn probability</li>
+ * </ul>
+ * </p>
+ * <p>
+ * As the game's difficulty increases, these parameters are adjusted to create
+ * more challenging level layouts with wider gaps, narrower platforms, greater
+ * height variations, and more enemies.
+ * </p>
  *
  * @author Daniel Jönsson
  * @author Robert Kullman
  */
 public class PlatformManager {
-    private List<Platform> platforms;
-    private Map<AppConfig.PlatformGeneratorType, IPlatformGenerator> generators;
+    /** List of all active platforms in the game world. */
+    private final List<Platform> platforms;
+
+    /** Map of available platform generators indexed by their type. */
+    private final Map<AppConfig.PlatformGeneratorType, IPlatformGenerator> generators;
+
+    /** The currently active platform generator. */
     private IPlatformGenerator currentGenerator;
+
+    /** The type of the currently active platform generator. */
     private AppConfig.PlatformGeneratorType currentGeneratorType;
-    private Random random = new Random();
-    private EnemyManager enemyManager;
 
-    private World world;
-    private float lastPlatformX; // right edge of the last platform
-    private float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
+    /** Random number generator for procedural generation. */
+    private final Random random = new Random();
 
+    /** Reference to the enemy manager for spawning enemies on platforms. */
+    private final EnemyManager enemyManager;
+
+    /** Reference to the Box2D physics world. */
+    private final World world;
+
+    /** X-coordinate of the right edge of the last generated platform. */
+    private float lastPlatformX;
+
+    /** Minimum gap distance between platforms. */
     private float minGap;
+
+    /** Maximum gap distance between platforms. */
     private float maxGap;
+
+    /** Minimum width of generated platforms. */
     private float minWidth;
+
+    /** Maximum width of generated platforms. */
     private float maxWidth;
+
+    /** Maximum vertical variation between adjacent platforms. */
     private float maxYvariation;
+
+    /** Base probability of spawning an enemy on a platform. */
     private float spawnProbability;
+
+    /** Minimum allowed Y position for platforms. */
     private float minYPosition;
+
+    /** Maximum allowed Y position for platforms. */
     private float maxYPosition;
 
     // Difficulty-based variables
+    /** Multiplier for gap size that increases with difficulty. */
     private float difficultyGapMultiplier = 1.0f;
+
+    /** Multiplier for platform width that decreases with difficulty. */
     private float difficultyWidthMultiplier = 1.0f;
+
+    /** Multiplier for vertical variation that increases with difficulty. */
     private float difficultyYvariationMultiplier = 1.0f;
+
+    /** Multiplier for enemy spawn probability that increases with difficulty. */
     private float difficultySpawnProbabilityMultiplier = 1.0f;
 
     /**
@@ -68,9 +124,7 @@ public class PlatformManager {
 
         for (AppConfig.PlatformGeneratorType type : PlatformGeneratorFactory.getAvailableGeneratorTypes()) {
             IPlatformGenerator generator = PlatformGeneratorFactory.createGenerator(type);
-            if (generator != null) {
-                registerGenerator(generator);
-            }
+            registerGenerator(generator);
         }
 
         setCurrentGenerator(AppConfig.PlatformGeneratorType.STANDARD);
@@ -108,16 +162,13 @@ public class PlatformManager {
      * Sets the current platform generator by type.
      *
      * @param generatorType The type of generator to use
-     * @return true if the generator was found and set, false otherwise
      */
-    public boolean setCurrentGenerator(AppConfig.PlatformGeneratorType generatorType) {
+    public void setCurrentGenerator(AppConfig.PlatformGeneratorType generatorType) {
         IPlatformGenerator generator = generators.get(generatorType);
         if (generator != null) {
             currentGenerator = generator;
             currentGeneratorType = generatorType;
-            return true;
         }
-        return false;
     }
 
     /**
@@ -132,19 +183,21 @@ public class PlatformManager {
     /**
      * Gets an array of all registered generator types.
      *
-     * @return An array of all registered generator types
-     */
-    public AppConfig.PlatformGeneratorType[] getAvailableGeneratorTypes() {
-        return generators.keySet().toArray(new AppConfig.PlatformGeneratorType[0]);
-    }
-
-    /**
-     * Updates the platform system, generating new platforms and removing old ones.
+     * @r
+     * 
+     *    return generators.keySet().toArray(new
+     *    AppConfig.PlatformGeneratorType[0]);
+     *    }
+     * 
+     *    /**
+     *    Updates the platform system, generating new platforms and removing old
+     *    ones.
      *
      * @param cameraX       The x-coordinate of the camera
      * @param viewportWidth The width of the viewport
      */
     public void update(float cameraX, float viewportWidth) {
+        float rightOffscreenMargin = AppConfig.RIGHT_OFFSCREEN_MARGIN;
         while (lastPlatformX < cameraX + viewportWidth / 2 + rightOffscreenMargin) {
             float newBaseY = platforms.getLast().getBody().getPosition().y;
             Platform newPlatform = generatePlatform(lastPlatformX, newBaseY);
@@ -188,7 +241,6 @@ public class PlatformManager {
         } else {
             yVariation = -random.nextFloat() * currentMaxYVariation;
         }
-
 
         float minRequiredGap = Math.abs(yVariation);
 
@@ -249,8 +301,26 @@ public class PlatformManager {
         return platforms;
     }
 
+    /**
+     * Adjusts platform generation parameters based on the current difficulty level.
+     * <p>
+     * As the difficulty increases:
+     * <ul>
+     * <li>Gaps between platforms become wider</li>
+     * <li>Platforms become narrower</li>
+     * <li>Vertical variation between platforms increases</li>
+     * <li>Enemy spawn probability increases</li>
+     * </ul>
+     * </p>
+     * <p>
+     * This method is typically called when the game's difficulty level changes,
+     * making the platforming challenges progressively harder as the player
+     * advances.
+     * </p>
+     *
+     * @param difficultyLevel The current difficulty level of the game
+     */
     public void increaseDifficulty(int difficultyLevel) {
-
         float gapIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
         float widthDecrease = 1.0f - (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
         float yVariationIncrease = 1.0f + (difficultyLevel * AppConfig.DIFFICULTY_INCREASE_AMOUNT);

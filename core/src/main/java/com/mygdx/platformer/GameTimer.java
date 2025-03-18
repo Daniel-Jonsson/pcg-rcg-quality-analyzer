@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.platformer.utilities.AppConfig;
+import com.mygdx.platformer.utilities.Assets;
 import com.mygdx.platformer.utilities.Settings;
 
 /**
@@ -31,7 +32,8 @@ public class GameTimer {
     /** Label for displaying framerate. **/
     private Label fpsLabel;
 
-    ScreenViewport viewport;
+    /** The viewport for the stage. */
+    private ScreenViewport viewport;
 
     /**
      * Creates a new game timer and initializes the UI. The timer starts at 0
@@ -46,7 +48,7 @@ public class GameTimer {
         stage = new Stage(viewport);
 
         // Load default skin
-        Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal(Assets.UI_PATH));
 
         timerLabel = new Label("Time: 00:00", skin);
         fpsLabel = new Label("FPS: 60", skin);
@@ -104,10 +106,18 @@ public class GameTimer {
         return elapsedTime;
     }
 
+    /**
+     * Sets the visibility of the FPS label.
+     * @param visible The visibility of the FPS label.
+     */
     public void setFPSVisible(boolean visible) {
         fpsLabel.setVisible(visible);
     }
 
+    /**
+     * Sets the UI scale for the timer.
+     * @param UIScale The UI scale to set.
+     */
     public void setUIScale(float UIScale) {
         viewport.setUnitsPerPixel(1f / UIScale / AppConfig.UI_TIMER_MODIFIER);
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),

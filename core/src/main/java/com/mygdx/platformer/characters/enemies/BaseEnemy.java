@@ -21,12 +21,17 @@ import com.mygdx.platformer.utilities.Assets;
  * @author Daniel Jönsson, Robert Kullman
  */
 public abstract class BaseEnemy extends BaseCharacter {
+
+    /** The Box2D world where the {@code BaseEnemy} exist.*/
     World world;
-
-    private Sprite healthBarSprite;
-
+    /** The health bar sprite of the {@code BaseEnemy}.*/
+    private final Sprite healthBarSprite;
+    /** Indicates whether the enemy is attacking or not.*/
     protected boolean isAttacking = false;
+    /**Indicates the elapsed time during enemy attack. Used to display
+     * correct animation.*/
     private float attackAnimationTime;
+    /** Indicates if the enemy has jumped or not.*/
     private boolean hasJumped = false;
 
 
@@ -145,14 +150,14 @@ public abstract class BaseEnemy extends BaseCharacter {
      * @param direction indicates the direction in which to check for ground.
      * @return
      */
-    public boolean isGroundAhead(float direction) {
+    public boolean isNotGroundAhead(float direction) {
         Vector2 enemyPosition = getBody().getPosition();
         float rayLength = 1f;
 
         Vector2 rayStart = new Vector2(enemyPosition.x + (direction * AppConfig.ENEMY_GROUNDCHECK_FORWARD_OFFSET), enemyPosition.y - (height / 2));
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - rayLength);
 
-        return checkForGround(world, rayStart, rayEnd);
+        return !checkForGround(world, rayStart, rayEnd);
     }
 
     /**
@@ -210,7 +215,7 @@ public abstract class BaseEnemy extends BaseCharacter {
      */
     public boolean canJumpToPlatform(float direction) {
         Vector2 enemyPosition = getBody().getPosition();
-        float jumpCheckDistance = 6f;
+        float jumpCheckDistance = AppConfig.JUMP_CHECK_DISTANCE;
 
         Vector2 rayStart = new Vector2(enemyPosition.x + (direction * jumpCheckDistance), enemyPosition.y);
         Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - 1.0f);

@@ -15,18 +15,27 @@ import com.mygdx.platformer.utilities.AppConfig;
  * Represents a base class for all attack types in the game.
  * Handles common attack behavior such as movement, and rendering.
  * This class provides the foundation for concrete implementations (e.g.,
- * {@link OrbAttack}).
+ * {@link GoblinAttack}).
  *
  * @author Daniel Jönsson, Robert Kullman
  */
 public abstract class BaseAttack {
+    /** The damage caused by the attack */
     protected int damage;
+    /** The speed of the attack */
     protected float speed;
+    /** The position of the attack */
     protected float x, y;
+    /** The attack sprite */
     protected Sprite sprite;
+    /** Indicates whether the attack should be removed from the world (i.e. if
+     *  it hit a target) */
     protected boolean shouldRemove;
+    /** The Box2D world where the attack resides*/
     protected final World world;
+    /** The Box2D body of the attack */
     protected final Body body;
+    /** Indicates whether the attack is a player attack or not.*/
     protected boolean isPlayerAttack;
 
     /**
@@ -76,21 +85,6 @@ public abstract class BaseAttack {
         shape.dispose();
 
         body.setLinearVelocity(speed, 0);
-    }
-
-    /**
-     * Constructs a new attack instance with default damage and speed values.
-     *
-     * @param world The Box2D world where the attack is created.
-     * @param x The initial x-coordinate of the attack.
-     * @param y The initial y-coordinate of the attack.
-     * @param texture The texture used for the attack's sprite.
-     * @param isPlayerAttack Whether the attack is a player attack.
-     */
-    public BaseAttack(World world, float x, float y, Texture texture, boolean isPlayerAttack) {
-        this(world, AppConfig.BASE_ATTACK_DEFAULT_DMG,
-            AppConfig.BASE_ATTACK_DEFAULT_SPEED, x, y,
-            texture, isPlayerAttack);
     }
 
     /**
@@ -153,13 +147,13 @@ public abstract class BaseAttack {
     }
 
     /**
-     * Checks if the attack is a player attack.
+     * Checks if the attack is a enemy attack.
      *
-     * @return {@code true} if the attack is a player attack, otherwise {@code
+     * @return {@code true} if the attack is a enemy attack, otherwise {@code
      * false}.
      */
-    public boolean isPlayerAttack() {
-        return isPlayerAttack;
+    public boolean isEnemyAttack() {
+        return !isPlayerAttack;
     }
 
     /**

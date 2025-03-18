@@ -9,26 +9,58 @@ import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
 /**
- * This class represents the player health bar, rendered in the upper left corner of the screen.
- * @author Robert Kullman, Daniel Jönsson
+ * Represents the player's health bar displayed as a UI element.
+ * <p>
+ * The health bar is rendered in the upper left corner of the screen and
+ * visually
+ * indicates the player's current health as a proportion of their maximum
+ * health.
+ * The bar automatically follows the camera position to remain visible during
+ * gameplay, and its size scales with the player's current health percentage.
+ * </p>
+ *
+ * @author Robert Kullman
+ * @author Daniel Jönsson
  */
 public class HealthBar {
+    /** Reference to the player character to track health status. */
     private final Player player;
+
+    /**
+     * Reference to the game camera for positioning the health bar in screen space.
+     */
     private final OrthographicCamera camera;
+
+    /** Reference to the viewport for calculating screen dimensions. */
     private final Viewport viewport;
+
+    /** The sprite used to render the health bar. */
     private final Sprite healthBarSprite;
 
+    /** The maximum width of the health bar in world units. */
     private final float barWidth;
+
+    /** The height of the health bar in world units. */
     private final float barHeight;
+
+    /** The horizontal offset from the left edge of the screen. */
     private final float offsetX;
+
+    /** The vertical offset from the top edge of the screen. */
     private final float offsetY;
 
     /**
-     * Constructor for the HealthBar.
+     * Constructs a new health bar for the specified player.
+     * <p>
+     * Initializes the health bar with the appropriate size and position based on
+     * configuration values and the provided UI scale factor.
+     * </p>
      *
-     * @param player Player instance.
-     * @param camera Orthographic camera instance.
-     * @param viewport Viewport instance.
+     * @param player   The player character whose health will be displayed
+     * @param camera   The orthographic camera used for rendering the game view
+     * @param viewport The viewport that defines the visible game area
+     * @param UIScale  Scale factor for UI elements to adjust for different screen
+     *                 sizes
      */
     public HealthBar(Player player, OrthographicCamera camera, Viewport viewport, float UIScale) {
         this.player = player;
@@ -45,9 +77,16 @@ public class HealthBar {
     }
 
     /**
-     * Renders the health bar using SpriteBatch.
+     * Renders the health bar on screen.
+     * <p>
+     * Calculates the current health percentage and adjusts the width of the health
+     * bar
+     * accordingly. The bar is positioned relative to the camera's current position
+     * to
+     * ensure it stays in the upper left corner of the screen.
+     * </p>
      *
-     * @param batch The game's SpriteBatch instance.
+     * @param batch The sprite batch used for rendering graphics
      */
     public void render(SpriteBatch batch) {
         float healthPercent = (float) player.getCurrentHealth() / player.getMaxHealth();
@@ -62,8 +101,15 @@ public class HealthBar {
     }
 
     /**
-     * Dispose of resources used by the health bar.
+     * Releases resources used by the health bar.
+     * <p>
+     * This method should be called when the health bar is no longer needed
+     * to prevent memory leaks.
+     * </p>
      */
     public void dispose() {
+        if (healthBarSprite.getTexture() != null) {
+            healthBarSprite.getTexture().dispose();
+        }
     }
 }

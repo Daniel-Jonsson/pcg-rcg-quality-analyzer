@@ -6,20 +6,59 @@ import com.mygdx.platformer.characters.BaseCharacter;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Abstract class for AI agents.
+ * Abstract base class for all AI agents in the game.
+ * <p>
+ * This class provides the core functionality for AI-controlled characters,
+ * including target tracking, distance calculations, and behavior tree
+ * integration.
+ * It serves as the foundation for specialized AI implementations such as enemy
+ * AI.
+ * </p>
+ * <p>
+ * The AIAgent maintains information about:
+ * <ul>
+ * <li>The character being controlled</li>
+ * <li>Target position and distance</li>
+ * <li>Detection and attack ranges</li>
+ * <li>Line-of-sight calculations</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Concrete implementations must provide their own update logic and behavior
+ * tree
+ * configurations to define specific AI behaviors.
+ * </p>
  *
- * @author Daniel Jönsson, Robert Kullman
+ * @author Daniel Jönsson
+ * @author Robert Kullman
  */
 public abstract class AIAgent {
+    /** The character entity controlled by this AI agent. */
     protected BaseCharacter character;
+
+    /** The behavior tree that defines this agent's decision-making process. */
     protected BehaviorTree<AIAgent> behaviorTree;
+
+    /** The current target position this agent is tracking. */
     protected Vector2 targetPosition;
+
+    /** The maximum distance at which this agent can detect targets. */
     protected float detectionRange;
+
+    /** The maximum distance at which this agent can attack targets. */
     protected float attackRange;
+
+    /** Flag indicating whether the target is within detection range. */
     protected boolean isTargetInRange;
+
+    /** Flag indicating whether the target is within attack range. */
     protected boolean isTargetInAttackRange;
+
+    /** The current calculated distance to the target. */
     protected float distanceToTarget;
-    World world;
+
+    /** Reference to the game world for physics and ray casting operations. */
+    protected World world;
 
     /**
      * Constructor for the AIAgent class.
@@ -40,23 +79,22 @@ public abstract class AIAgent {
     }
 
     /**
-     * Updates the AI agent.
+     * Updates the AI agent's state and behavior.
+     * <p>
+     * This method should be called every frame to update the agent's
+     * decision-making process and actions based on the current game state.
+     * </p>
      *
-     * @param deltaTime The time since the last update.
+     * @param deltaTime The time in seconds since the last update.
      */
     public abstract void update(float deltaTime);
 
     /**
-     * Updates the behavior tree if it exists.
-     */
-    protected void updateBehavior() {
-        if (behaviorTree != null) {
-            behaviorTree.step();
-        }
-    }
-
-    /**
-     * Sets a new target position for the AI.
+     * Sets a new target position for the AI to track.
+     * <p>
+     * This method updates the target position and recalculates
+     * the distance and range flags accordingly.
+     * </p>
      *
      * @param position The new target position.
      */
@@ -67,6 +105,11 @@ public abstract class AIAgent {
 
     /**
      * Updates the distance to the current target and range flags.
+     * <p>
+     * This method recalculates the distance to the target and updates
+     * the flags indicating whether the target is within detection and attack
+     * ranges.
+     * </p>
      */
     protected void updateTargetDistance() {
         if (targetPosition != null && character != null) {
@@ -78,35 +121,51 @@ public abstract class AIAgent {
     }
 
     /**
-     * @return The current position of the AI-controlled character
+     * Gets the current position of the AI-controlled character.
+     *
+     * @return The current position vector of the character
      */
     public Vector2 getPosition() {
         return character.getBody().getPosition();
     }
 
     /**
-     * @return The character that the AI is controlling
+     * Gets the character that the AI is controlling.
+     *
+     * @return The character controlled by this AI agent
      */
     public BaseCharacter getCharacter() {
         return character;
     }
 
     /**
-     * @return The current target position
+     * Gets the current target position.
+     *
+     * @return The position vector of the current target, or null if no target is
+     *         set
      */
     public Vector2 getTargetPosition() {
         return targetPosition;
     }
 
     /**
-     * @return Whether the target is within detection range
+     * Checks if the target is within detection range.
+     *
+     * @return true if the target is within detection range, false otherwise
      */
     public boolean isTargetInRange() {
         return isTargetInRange;
     }
 
     /**
-     * @return Whether the target is within attack range
+     * Checks if the target is within attack range and line of sight.
+     * <p>
+     * This method performs a more detailed check than the simple distance check,
+     * including verifying that there is a clear line of sight to the target.
+     * </p>
+     *
+     * @return true if the target is within attack range and line of sight, false
+     *         otherwise
      */
     public boolean isTargetInAttackRange() {
         if (targetPosition == null) {
@@ -126,19 +185,4 @@ public abstract class AIAgent {
         return character.checkLineOfSight(world, rayStart, rayEnd);
     }
 
-    /**
-     * @return The current distance to the target
-     */
-    public float getDistanceToTarget() {
-        return distanceToTarget;
-    }
-
-    /**
-     * Sets the behavior tree for this AI agent.
-     *
-     * @param tree The behavior tree to use
-     */
-    public void setBehaviorTree(BehaviorTree<AIAgent> tree) {
-        this.behaviorTree = tree;
-    }
 }

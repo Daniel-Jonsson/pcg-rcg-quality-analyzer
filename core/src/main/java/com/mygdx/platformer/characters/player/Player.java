@@ -216,7 +216,7 @@ public class Player extends BaseCharacter {
 
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {
-           // inputTimestamp = TimeUtils.nanoTime();
+            inputTimestamp = TimeUtils.nanoTime();
             jumpRequested = true;
             jumpHolding = true;
         }

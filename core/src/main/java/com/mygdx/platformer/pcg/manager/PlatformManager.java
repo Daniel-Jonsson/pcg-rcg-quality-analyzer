@@ -151,13 +151,13 @@ public class PlatformManager implements GameDifficultyObserver {
     public void update(float cameraX, float viewportWidth) {
 
         while (lastPlatformX < cameraX + viewportWidth / 2 + rightOffscreenMargin) {
-            long inputTime = TimeUtils.nanoTime();
+           // long inputTime = TimeUtils.nanoTime();
             float newBaseY = platforms.getLast().getBody().getPosition().y;
             Platform newPlatform = generatePlatform(lastPlatformX, newBaseY);
             platforms.add(newPlatform);
             lastPlatformX = newPlatform.getBody().getPosition().x + newPlatform.getWidth() / 2;
-            float resultTime = (float) (TimeUtils.nanoTime() - inputTime) / 1000000;
-            System.out.println("[Test] platform generation time: " + resultTime + " ms");
+          //  float resultTime = (float) (TimeUtils.nanoTime() - inputTime) / 1000000;
+           // System.out.println("[Test] platform generation time: " + resultTime + " ms");
         }
 
         Iterator<Platform> iter = platforms.iterator();

@@ -274,7 +274,7 @@ public final class AppConfig {
     public static final float ENEMY_JUMP_FORWARD_BOOST = 20;
 
     /** Offset for enemy ground detection raycasting. **/
-    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.3f;
+    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.6f;
 
     /** Update interval for enemy behavior tree in seconds. */
     public static final float ENEMY_BT_UPDATE_INTERVAL = 0.2f;

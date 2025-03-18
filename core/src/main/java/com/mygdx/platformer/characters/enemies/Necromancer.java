@@ -17,9 +17,9 @@ import com.mygdx.platformer.utilities.Assets;
  */
 public class Necromancer extends BaseEnemy {
 
-    /** The animation for idling */
+    /** The animation for idling. */
     private Animation<TextureRegion> idleAnimation;
-    /** The animation for attacking*/
+    /** The animation for attacking. */
     private Animation<TextureRegion> attackAnimation;
 
     /**

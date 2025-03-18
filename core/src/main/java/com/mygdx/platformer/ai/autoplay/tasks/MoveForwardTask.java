@@ -12,7 +12,11 @@ import com.mygdx.platformer.utilities.AppConfig;
  * @author Robert Kullman, Daniel Jönsson
  */
 public class MoveForwardTask extends LeafTask<Player> {
+
+    /** Reference to the game camera, needed to determine the player characters relative position. **/
     private final OrthographicCamera camera;
+
+    /** Indicates whether the forward movement limit has been reached. **/
     private boolean reachedFrontLimit = false;
 
     /**
@@ -39,7 +43,7 @@ public class MoveForwardTask extends LeafTask<Player> {
         float maxX = screenCenter + AppConfig.AUTO_PLAY_FORWARD_MOVEMENT_LIMIT;
 
 
-        if(player.isDodging()) {
+        if (player.isDodging()) {
             return Status.RUNNING;
         }
 

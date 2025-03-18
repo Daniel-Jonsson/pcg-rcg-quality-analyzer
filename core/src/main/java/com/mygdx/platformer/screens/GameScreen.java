@@ -276,6 +276,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
      * game instance.
      *
      * @param g main Game instance.
+     * @param autoPlay indicates whether autoplay is enabled.
      */
     public GameScreen(final PlatformerGame g, boolean autoPlay) {
         this.game = g; // reference main class to enable switching to another screen
@@ -391,6 +392,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
      * Updates the background position to create an infinite scrolling effect.
      * The background scrolls at a different rate than the camera to create a
      * parallax effect.
+     * @param deltaTime Time since last frame.
      */
     private void updateBackgroundPosition(float deltaTime) {
         float backgroundVelocity = AppConfig.BACKGROUND_IMAGE_SCROLL_SPEED;

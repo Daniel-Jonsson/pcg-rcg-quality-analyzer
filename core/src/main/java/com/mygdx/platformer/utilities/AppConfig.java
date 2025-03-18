@@ -130,6 +130,13 @@ public final class AppConfig {
      */
     public static final float PLAYER_RAYCAST_LENGTH = 3f;
 
+    /** player gametime reset time. **/
+    public static final int PLAYER_GAMETIME_RESET = 10000;
+
+    public static final float PLAYER_ATTACK_ANIMATION_UPPER_LIMIT = 0.1f;
+
+    public static final float PLAYER_PLATFORM_DETECTION_RANGE = 10f;
+
     /* Procedural Content Generation (PCG) */
 
     /** Minimum gap between platforms. */
@@ -267,10 +274,13 @@ public final class AppConfig {
     public static final float ENEMY_JUMP_FORWARD_BOOST = 20;
 
     /** Offset for enemy ground detection raycasting. **/
-    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.3f;
+    public static final float ENEMY_GROUNDCHECK_FORWARD_OFFSET = 0.6f;
 
     /** Update interval for enemy behavior tree in seconds. */
     public static final float ENEMY_BT_UPDATE_INTERVAL = 0.2f;
+
+    /** Determines how close an enemy will pursue the player. **/
+    public static final float ENEMY_PURSUE_CLOSURE_LIMIT = 1.5f;
 
     /* Collision Categories */
 
@@ -539,6 +549,10 @@ public final class AppConfig {
 
     /** Number of rays used for projectile detection in auto-play mode. */
     public static final int AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS = 6;
+
+    public static final float AUTO_PLAY_DECISION_FREQUENCY = 0.05f;
+
+    /* SOUNDS */
 
     /** File path for the death bolt sound effect. */
     public static final String SOUND_DEATHBOLT = "sound/deathbolt.mp3";

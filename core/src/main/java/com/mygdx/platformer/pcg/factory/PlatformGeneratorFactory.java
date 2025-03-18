@@ -15,6 +15,11 @@ import com.mygdx.platformer.utilities.AppConfig;
 public class PlatformGeneratorFactory {
 
     /**
+     * Private constructor to prevent instantiation.
+     */
+    private PlatformGeneratorFactory() {}
+
+    /**
      * Creates a platform generator of the specified type.
      *
      * @param type The type of platform generator to create

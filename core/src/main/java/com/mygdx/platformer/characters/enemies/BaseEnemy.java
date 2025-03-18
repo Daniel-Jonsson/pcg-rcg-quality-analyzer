@@ -42,6 +42,8 @@ public abstract class BaseEnemy extends BaseCharacter {
      * @param position The initial position of the enemy.
      * @param health The maxHealth points of the enemy.
      * @param speed The movement speed of the enemy.
+     * @param width The width of the enemy, in world units.
+     * @param height The height of the enemy, in world units.
      */
     public BaseEnemy(World world, Vector2 position, int health, float speed,
                      float width, float height) {
@@ -110,7 +112,7 @@ public abstract class BaseEnemy extends BaseCharacter {
 
 
     /**
-     * Gets the collision category for enemies
+     * Gets the collision category for enemies.
      * @return The collision category.
      */
     @Override
@@ -119,8 +121,8 @@ public abstract class BaseEnemy extends BaseCharacter {
     }
 
     /**
-     * The collision masks in which enemy's should collide with
-     * @return The collision masks
+     * The collision masks in which enemy's should collide with.
+     * @return The collision masks.
      */
     @Override
     protected short getCollisionMask() {
@@ -148,7 +150,7 @@ public abstract class BaseEnemy extends BaseCharacter {
     /**
      * Uses raycasting to check if the enemy unit is nearing an edge.
      * @param direction indicates the direction in which to check for ground.
-     * @return
+     * @return boolean indicating if there is no ground ahead of the enemy.
      */
     public boolean isNotGroundAhead(float direction) {
         Vector2 enemyPosition = getBody().getPosition();
@@ -204,6 +206,10 @@ public abstract class BaseEnemy extends BaseCharacter {
      */
     protected abstract float getAttackDuration();
 
+    /**
+     * Mutator for the facingRight field.
+     * @param moveDirection The current movement direction.
+     */
     public void setFacingDirection(float moveDirection) {
         facingRight = moveDirection > 0;
     }

@@ -76,7 +76,7 @@ public class AudioManager {
      * volume).
      * </p>
      */
-    private static final float effectsVolume = Settings.getEffectsVolume();
+    private static float effectsVolume = Settings.getEffectsVolume();
 
     /**
      * Map of cached sound effects.
@@ -180,5 +180,21 @@ public class AudioManager {
     public static void dispose() {
         backgroundMusic.dispose();
         sounds.values().forEach(Sound::dispose);
+    }
+
+    /**
+     * Accessor for bg music.
+     * @return The background music instance.
+     */
+    public static Music getBackgroundMusic() {
+        return backgroundMusic;
+    }
+
+    /**
+     * Mutator for the effects volume.
+     * @param volume the new volume value.
+     */
+    public static void setEffectsVolume(float volume) {
+        effectsVolume = volume;
     }
 }

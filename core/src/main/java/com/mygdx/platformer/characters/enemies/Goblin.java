@@ -18,10 +18,22 @@ import com.mygdx.platformer.utilities.Assets;
  */
 public class Goblin extends BaseEnemy {
 
+    /** The idle animation for Goblin class. **/
     private Animation<TextureRegion> idleAnimation;
+
+    /** The walk animation for Goblin class. **/
     private Animation<TextureRegion> walkAnimation;
+
+    /** The attack animation for Goblin class. **/
     private Animation<TextureRegion> attackAnimation;
 
+    /**
+     * Constructor for the Goblin class.
+     * @param world The game world.
+     * @param position The spawn position.
+     * @param health Starting health.
+     * @param speed The movement speed.
+     */
     public Goblin(World world, Vector2 position, int health, float speed) {
         super(world, position, health, speed, AppConfig.GOBLIN_WIDTH, AppConfig.GOBLIN_HEIGHT);
     }
@@ -38,7 +50,7 @@ public class Goblin extends BaseEnemy {
 
         if (isAttacking()) {
             currentFrame = attackAnimation.getKeyFrame(stateTime, false);
-        }else if (Math.abs(body.getLinearVelocity().x) > 0) {
+        } else if (Math.abs(body.getLinearVelocity().x) > 0) {
             currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         } else {
             currentFrame = idleAnimation.getKeyFrame(stateTime, true);

@@ -1,6 +1,9 @@
 package com.mygdx.platformer.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -167,6 +170,8 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
+        final Table keybindingTable = initKeybindingTable();
+
         // back button
         GameButton backButton = new GameButton(AppConfig.BACK_BUTTON_LABEL, skin);
         backButton.addListener(new ClickListener() {
@@ -199,6 +204,7 @@ public class SettingsScreen extends ScreenAdapter {
                 .padBottom(AppConfig.UI_SCALE_SLIDER_PADDING)
                 .row();
 
+        table.add(keybindingTable).row();
         table.add(backButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT).padTop(AppConfig.BUTTON_BOTTOM_PADDING);
 
         stage.addActor(table);
@@ -353,5 +359,102 @@ public class SettingsScreen extends ScreenAdapter {
         skin.dispose();
         timerPreview.dispose();
         healthBarTexture.dispose();
+    }
+
+
+    private Table initKeybindingTable() {
+        final Table keybindingTable = new Table();
+        keybindingTable.defaults().pad(AppConfig.SETTINGS_KEYBINDING_TABLE_PADDING).width(AppConfig.SETTINGS_KEYBINDING_TABLE_WIDTH).height(AppConfig.SETTINGS_KEYBINDING_TABLE_HEIGHT);
+
+        keybindingTable.add(new Label(AppConfig.SETTINGS_MOVE_LEFT_LABEL, skin)).left();
+
+        final GameButton moveLeftButton = new GameButton(Settings.getKeyName(Settings.getMoveLeftKey()), skin);
+        moveLeftButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                waitForKeyInput(moveLeftButton, key -> {
+                    Settings.saveMoveLeftKey(key);
+                    moveLeftButton.setText(Settings.getKeyName(key));
+                    return true;
+                });
+            }
+        });
+
+        keybindingTable.add(moveLeftButton).right().row();
+
+        keybindingTable.add(new Label(AppConfig.SETTINGS_MOVE_RIGHT_LABEL, skin)).left();
+
+        final GameButton moveRightButton = new GameButton(Settings.getKeyName(Settings.getMoveRightKey()), skin);
+        moveRightButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                waitForKeyInput(moveRightButton, key -> {
+                    Settings.saveMoveRightKey(key);
+                    moveRightButton.setText(Settings.getKeyName(key));
+                    return true;
+                });
+            }
+        });
+
+        keybindingTable.add(moveRightButton).right().row();
+
+        keybindingTable.add(new Label(AppConfig.SETTINGS_JUMP_LABEL, skin)).left();
+
+        final GameButton jumpButton = new GameButton(Settings.getKeyName(Settings.getJumpKey()), skin);
+        jumpButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                waitForKeyInput(jumpButton, key -> {
+                    Settings.saveJumpKey(key);
+                    jumpButton.setText(Settings.getKeyName(key));
+                    return true;
+                });
+            }
+        });
+
+        keybindingTable.add(jumpButton).right().row();
+
+        keybindingTable.add(new Label(AppConfig.SETTINGS_ATTACK_LABEL, skin)).left();
+
+        final GameButton attackButton = new GameButton(Settings.getKeyName(Settings.getAttackKey()), skin);
+        attackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                waitForKeyInput(attackButton, key -> {
+                    Settings.saveAttackKey(key);
+                    attackButton.setText(Settings.getKeyName(key));
+                    return true;
+                });
+            }
+        });
+        
+        
+        keybindingTable.add(attackButton).right().row();
+        
+        return keybindingTable;
+    }
+
+    private void waitForKeyInput(GameButton button, KeyCallback callback) {
+        button.setText("Press a key...");
+        InputProcessor originalProcessor = Gdx.input.getInputProcessor();
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.ESCAPE) {
+                    button.setText(Settings.getKeyName(keycode));
+                    Gdx.input.setInputProcessor(originalProcessor);
+                    return true;
+                }
+
+                boolean result = callback.onKeyPressed(keycode);
+
+                Gdx.input.setInputProcessor(originalProcessor);
+                return result;
+            }
+        });
+    }
+
+    private interface KeyCallback {
+        boolean onKeyPressed(int keycode);
     }
 }

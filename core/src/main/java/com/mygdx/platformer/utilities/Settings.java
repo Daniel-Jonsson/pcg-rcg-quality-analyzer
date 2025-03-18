@@ -1,6 +1,7 @@
 package com.mygdx.platformer.utilities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 
 /**
@@ -180,6 +181,46 @@ public class Settings {
     public static void saveShowFPS(boolean showFPS) {
         preferences.putBoolean(SHOW_FPS_KEY, showFPS);
         preferences.flush();
+    }
+    
+    public static void saveMoveLeftKey(int keycode) {
+        preferences.putInteger(AppConfig.SETTINGS_MOVE_LEFT_KEY, keycode);
+        preferences.flush();
+    }
+
+    public static void saveMoveRightKey(int keycode) {
+        preferences.putInteger(AppConfig.SETTINGS_MOVE_RIGHT_KEY, keycode);
+        preferences.flush();
+    }
+
+    public static void saveJumpKey(int keycode) {
+        preferences.putInteger(AppConfig.SETTINGS_JUMP_KEY, keycode);
+        preferences.flush();
+    }
+
+    public static void saveAttackKey(int keycode) {
+        preferences.putInteger(AppConfig.SETTINGS_ATTACK_KEY, keycode);
+        preferences.flush();
+    }
+    
+    public static int getMoveLeftKey() {
+        return preferences.getInteger(AppConfig.SETTINGS_MOVE_LEFT_KEY, Input.Keys.A);
+    }
+
+    public static int getMoveRightKey() {
+        return preferences.getInteger(AppConfig.SETTINGS_MOVE_RIGHT_KEY, Input.Keys.D);
+    }
+
+    public static int getJumpKey() {
+        return preferences.getInteger(AppConfig.SETTINGS_JUMP_KEY, Input.Keys.SPACE);
+    }
+
+    public static int getAttackKey() {
+        return preferences.getInteger(AppConfig.SETTINGS_ATTACK_KEY, Input.Keys.ENTER);
+    }
+
+    public static String getKeyName(int keycode) {
+        return Input.Keys.toString(keycode);
     }
 
     /**

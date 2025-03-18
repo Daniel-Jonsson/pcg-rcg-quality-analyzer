@@ -634,6 +634,16 @@ public final class AppConfig {
     /** Default value for effects volume. */
     public static final float SETTINGS_DEFAULT_EFFECTS_VOLUME = 0.5f;
 
+    /* Keybindings */
+
+    public static final String SETTINGS_MOVE_LEFT_KEY = "moveLeftKey";
+
+    public static final String SETTINGS_MOVE_RIGHT_KEY = "moveRightKey";
+
+    public static final String SETTINGS_JUMP_KEY = "jumpKey";
+
+    public static final String SETTINGS_ATTACK_KEY = "attackKey";
+
     /* ERROR OVERLAY CONFIGURATIONS */
 
     /** The width of the error dialog. **/

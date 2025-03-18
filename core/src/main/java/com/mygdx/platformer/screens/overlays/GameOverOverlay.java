@@ -24,7 +24,7 @@ public class GameOverOverlay {
     /** The Scene2D stage that contains and manages all UI elements of the game over
      * overlay. */
     private final Stage stage;
-    /** Indicates if the overlay is currently active or not */
+    /** Indicates if the overlay is currently active or not. */
     private boolean isActive = false;
 
     /**
@@ -96,6 +96,11 @@ public class GameOverOverlay {
         }
     }
 
+    /**
+     * Handles window resizing.
+     * @param width The new window width.
+     * @param height The new window height.
+     */
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }

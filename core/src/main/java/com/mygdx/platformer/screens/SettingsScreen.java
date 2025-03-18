@@ -199,7 +199,7 @@ public class SettingsScreen extends ScreenAdapter {
                 .padBottom(AppConfig.UI_SCALE_SLIDER_PADDING)
                 .row();
 
-        table.add(backButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT).padTop(20);
+        table.add(backButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT).padTop(AppConfig.BUTTON_BOTTOM_PADDING);
 
         stage.addActor(table);
     }
@@ -254,6 +254,7 @@ public class SettingsScreen extends ScreenAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveMusicVolume(musicVolumeSlider.getValue());
                 AudioManager.playSound(SoundType.SLIDERCHANGE);
+                AudioManager.getBackgroundMusic().setVolume(Settings.getMusicVolume());
             }
         });
         return musicVolumeSlider;
@@ -279,6 +280,7 @@ public class SettingsScreen extends ScreenAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 Settings.saveEffectsVolume(effectsVolumeSlider.getValue());
                 AudioManager.playSound(SoundType.SLIDERCHANGE);
+                AudioManager.setEffectsVolume(Settings.getEffectsVolume());
             }
         });
         return effectsVolumeSlider;

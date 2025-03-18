@@ -11,7 +11,11 @@ import com.mygdx.platformer.utilities.AppConfig;
  * @author Robert Kullman, Daniel Jönsson.
  */
 public class JumpTask extends LeafTask<Player> {
+
+    /** Indicates whether a jump is triggered. **/
     private boolean jumpTriggered = false;
+
+    /** tolerance span for ground position detection while jumping. **/
     private static final float tolerance = AppConfig.AUTO_PLAY_PLATFORM_DETECTION_TOLERANCE;
 
     /**

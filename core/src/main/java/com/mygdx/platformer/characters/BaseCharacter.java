@@ -24,7 +24,7 @@ public abstract class BaseCharacter implements CharacterActions {
     protected Body body;
     /** The hit points of the character. */
     protected int maxHealth;
-
+    /** The current healt of the character. **/
     protected int currentHealth;
     /** The movement speed of the character. */
     protected float movementSpeed;
@@ -191,7 +191,9 @@ public abstract class BaseCharacter implements CharacterActions {
     protected abstract void setupAnimations();
 
     /**
+     * Uses raycasting to detect ground.
      *
+     * @param world The gameworld.
      * @param start raycasting starting point.
      * @param end raycasting end point.
      * @return boolean indicating grounding status.

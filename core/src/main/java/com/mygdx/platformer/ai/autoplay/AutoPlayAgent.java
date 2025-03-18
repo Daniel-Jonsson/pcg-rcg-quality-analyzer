@@ -15,6 +15,7 @@ import com.mygdx.platformer.ai.autoplay.tasks.JumpTask;
 import com.mygdx.platformer.ai.autoplay.tasks.IdleTask;
 import com.mygdx.platformer.ai.autoplay.tasks.MoveForwardTask;
 import com.mygdx.platformer.characters.player.Player;
+import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * This class represents the base of the auto-play AI feature. It sets up the
@@ -40,6 +41,7 @@ public class AutoPlayAgent {
      * AI with a behavior tree.
      *
      * @param player The player character which is to be controlled by the AI.
+     * @param camera The camera used to display the game world.
      */
     public AutoPlayAgent(Player player, OrthographicCamera camera) {
         this.camera = camera;
@@ -89,7 +91,7 @@ public class AutoPlayAgent {
      */
     public void update(float delta) {
         aiStepTimer += delta;
-        float stepInterval = 0.05f;
+        float stepInterval = AppConfig.AUTO_PLAY_DECISION_FREQUENCY;
         if (aiStepTimer >= stepInterval) {
             aiStepTimer = 0;
             behaviorTree.step();

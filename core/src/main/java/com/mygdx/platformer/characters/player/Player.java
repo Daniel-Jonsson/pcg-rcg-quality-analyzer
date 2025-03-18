@@ -150,7 +150,7 @@ public class Player extends BaseCharacter {
 
         gameTime += deltaTime;
 
-        if (gameTime > 10000f) {
+        if (gameTime > AppConfig.PLAYER_GAMETIME_RESET) {
             gameTime = 0;
         }
 
@@ -164,7 +164,7 @@ public class Player extends BaseCharacter {
         if (attackTriggered) {
             currentFrame = attackAnimation.getKeyFrame(stateTime);
             attackAnimationTimer += deltaTime;
-            if (attackAnimationTimer > 0.1f) {
+            if (attackAnimationTimer > AppConfig.PLAYER_ATTACK_ANIMATION_UPPER_LIMIT) {
                 attackTriggered = false;
                 attackAnimationTimer = 0.0f;
             }
@@ -509,7 +509,7 @@ public class Player extends BaseCharacter {
 
         Vector2 rayStart = new Vector2(playerPos.x, playerPos.y);
 
-        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - 10);
+        Vector2 rayEnd = new Vector2(rayStart.x, rayStart.y - AppConfig.PLAYER_PLATFORM_DETECTION_RANGE);
 
         final Vector2[] platformPos = { null };
 

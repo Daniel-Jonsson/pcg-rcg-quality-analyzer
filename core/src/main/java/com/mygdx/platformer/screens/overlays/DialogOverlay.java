@@ -50,6 +50,12 @@ import com.mygdx.platformer.utilities.Assets;
  * @author Robert Kullman
  */
 public class DialogOverlay {
+
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private DialogOverlay() {}
+
     /** The Scene2D stage used for rendering and input handling. */
     private static Stage stage;
 
@@ -278,8 +284,9 @@ public class DialogOverlay {
      * @param height The new screen height
      */
     public static void resize(int width, int height) {
-        if (stage == null)
+        if (stage == null) {
             return;
+        }
 
         stage.getViewport().update(width, height, true);
 

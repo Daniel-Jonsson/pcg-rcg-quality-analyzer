@@ -11,6 +11,8 @@ import com.mygdx.platformer.characters.player.Player;
  * @author Robert Kullman, Daniel Jönsson
  */
 public class DodgeTask extends LeafTask<Player> {
+
+    /** Indicates whether a jump has been triggered. **/
     private boolean jumpTriggered = false;
 
     /**

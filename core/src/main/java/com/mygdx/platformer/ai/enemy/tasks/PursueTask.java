@@ -7,6 +7,7 @@ import com.mygdx.platformer.ai.AIAgent;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.characters.enemies.Goblin;
+import com.mygdx.platformer.utilities.AppConfig;
 
 /**
  * A behavior tree leaf task that implements pursuit behavior for enemy
@@ -66,7 +67,7 @@ public class PursueTask extends LeafTask<AIAgent> {
             return Status.RUNNING;
         }
 
-        if (distanceToTarget <= 1.5f || enemy.isNotGroundAhead(targetDirection)) {
+        if (distanceToTarget <= AppConfig.ENEMY_PURSUE_CLOSURE_LIMIT || enemy.isNotGroundAhead(targetDirection)) {
             enemy.setMoveDirection(0);
             enemy.setFacingDirection(targetPosition.x > enemyPosition.x ? 1f : -1f);
             return Status.RUNNING;

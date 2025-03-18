@@ -12,6 +12,15 @@ import com.mygdx.platformer.utilities.Assets;
  */
 public class GoblinAttack extends BaseAttack {
 
+    /**
+     * Constructor for the GoblinAttack.
+     * @param world The game world in which to spawn the attack.
+     * @param x x position.
+     * @param y y position.
+     * @param directionModifier Travel direction for the attack.
+     * @param dmg Attack damage.
+     * @param speed Movement speed of the attack.
+     */
     public GoblinAttack(World world, float x, float y, int directionModifier,
                         int dmg, float speed) {
         super(world, dmg, speed * directionModifier,

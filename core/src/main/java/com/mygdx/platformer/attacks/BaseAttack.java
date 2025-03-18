@@ -20,20 +20,20 @@ import com.mygdx.platformer.utilities.AppConfig;
  * @author Daniel Jönsson, Robert Kullman
  */
 public abstract class BaseAttack {
-    /** The damage caused by the attack */
+    /** The damage caused by the attack. */
     protected int damage;
-    /** The speed of the attack */
+    /** The speed of the attack. */
     protected float speed;
-    /** The position of the attack */
+    /** The position of the attack. */
     protected float x, y;
-    /** The attack sprite */
+    /** The attack sprite. */
     protected Sprite sprite;
     /** Indicates whether the attack should be removed from the world (i.e. if
-     *  it hit a target) */
+     *  it hit a target). */
     protected boolean shouldRemove;
-    /** The Box2D world where the attack resides*/
+    /** The Box2D world where the attack resides. */
     protected final World world;
-    /** The Box2D body of the attack */
+    /** The Box2D body of the attack. */
     protected final Body body;
     /** Indicates whether the attack is a player attack or not.*/
     protected boolean isPlayerAttack;

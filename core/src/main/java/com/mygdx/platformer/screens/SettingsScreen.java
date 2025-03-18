@@ -113,6 +113,25 @@ public class SettingsScreen extends ScreenAdapter {
     private final Sprite healthBarSprite;
 
     /**
+     * The button for moving left.
+     */
+    private GameButton moveLeftButton;
+
+    /**
+     * The button for moving right.
+     */
+    private GameButton moveRightButton;
+
+    /**
+     * The button for jumping.
+     */
+    private GameButton jumpButton;
+
+    /**
+     * The button for attacking.
+     */
+    private GameButton attackButton;
+    /**
      * Creates a new settings screen with UI components for adjusting game settings.
      * <p>
      * Initializes the stage, skin, and preview elements, and sets up all UI
@@ -205,7 +224,8 @@ public class SettingsScreen extends ScreenAdapter {
                 .row();
 
         table.add(keybindingTable).row();
-        table.add(backButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT).padTop(AppConfig.BUTTON_BOTTOM_PADDING);
+        table.add(backButton).width(AppConfig.BUTTON_WIDTH).height(AppConfig.BUTTON_HEIGHT)
+                .padTop(AppConfig.BUTTON_BOTTOM_PADDING);
 
         stage.addActor(table);
     }
@@ -361,21 +381,29 @@ public class SettingsScreen extends ScreenAdapter {
         healthBarTexture.dispose();
     }
 
-
     private Table initKeybindingTable() {
         final Table keybindingTable = new Table();
-        keybindingTable.defaults().pad(AppConfig.SETTINGS_KEYBINDING_TABLE_PADDING).width(AppConfig.SETTINGS_KEYBINDING_TABLE_WIDTH).height(AppConfig.SETTINGS_KEYBINDING_TABLE_HEIGHT);
+        keybindingTable.defaults().pad(AppConfig.SETTINGS_KEYBINDING_TABLE_PADDING)
+                .width(AppConfig.SETTINGS_KEYBINDING_TABLE_WIDTH).height(AppConfig.SETTINGS_KEYBINDING_TABLE_HEIGHT);
 
         keybindingTable.add(new Label(AppConfig.SETTINGS_MOVE_LEFT_LABEL, skin)).left();
 
-        final GameButton moveLeftButton = new GameButton(Settings.getKeyName(Settings.getMoveLeftKey()), skin);
+        moveLeftButton = new GameButton(Settings.getKeyName(Settings.getMoveLeftKey()), skin);
         moveLeftButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                waitForKeyInput(moveLeftButton, key -> {
-                    Settings.saveMoveLeftKey(key);
-                    moveLeftButton.setText(Settings.getKeyName(key));
-                    return true;
+                waitForKeyInput(moveLeftButton, new KeyCallback() {
+                    @Override
+                    public boolean onKeyPressed(int keycode) {
+                        Settings.saveMoveLeftKey(keycode);
+                        moveLeftButton.setText(Settings.getKeyName(keycode));
+                        return true;
+                    }
+
+                    @Override
+                    public Key getKey() {
+                        return Key.MOVE_LEFT;
+                    }
                 });
             }
         });
@@ -384,14 +412,22 @@ public class SettingsScreen extends ScreenAdapter {
 
         keybindingTable.add(new Label(AppConfig.SETTINGS_MOVE_RIGHT_LABEL, skin)).left();
 
-        final GameButton moveRightButton = new GameButton(Settings.getKeyName(Settings.getMoveRightKey()), skin);
+        moveRightButton = new GameButton(Settings.getKeyName(Settings.getMoveRightKey()), skin);
         moveRightButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                waitForKeyInput(moveRightButton, key -> {
-                    Settings.saveMoveRightKey(key);
-                    moveRightButton.setText(Settings.getKeyName(key));
-                    return true;
+                waitForKeyInput(moveRightButton, new KeyCallback() {
+                    @Override
+                    public boolean onKeyPressed(int keycode) {
+                        Settings.saveMoveRightKey(keycode);
+                        moveRightButton.setText(Settings.getKeyName(keycode));
+                        return true;
+                    }
+
+                    @Override
+                    public Key getKey() {
+                        return Key.MOVE_RIGHT;
+                    }
                 });
             }
         });
@@ -400,14 +436,22 @@ public class SettingsScreen extends ScreenAdapter {
 
         keybindingTable.add(new Label(AppConfig.SETTINGS_JUMP_LABEL, skin)).left();
 
-        final GameButton jumpButton = new GameButton(Settings.getKeyName(Settings.getJumpKey()), skin);
+        jumpButton = new GameButton(Settings.getKeyName(Settings.getJumpKey()), skin);
         jumpButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                waitForKeyInput(jumpButton, key -> {
-                    Settings.saveJumpKey(key);
-                    jumpButton.setText(Settings.getKeyName(key));
-                    return true;
+                waitForKeyInput(jumpButton, new KeyCallback() {
+                    @Override
+                    public boolean onKeyPressed(int keycode) {
+                        Settings.saveJumpKey(keycode);
+                        jumpButton.setText(Settings.getKeyName(keycode));
+                        return true;
+                    }
+
+                    @Override
+                    public Key getKey() {
+                        return Key.JUMP;
+                    }
                 });
             }
         });
@@ -416,45 +460,127 @@ public class SettingsScreen extends ScreenAdapter {
 
         keybindingTable.add(new Label(AppConfig.SETTINGS_ATTACK_LABEL, skin)).left();
 
-        final GameButton attackButton = new GameButton(Settings.getKeyName(Settings.getAttackKey()), skin);
+        attackButton = new GameButton(Settings.getKeyName(Settings.getAttackKey()), skin);
         attackButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                waitForKeyInput(attackButton, key -> {
-                    Settings.saveAttackKey(key);
-                    attackButton.setText(Settings.getKeyName(key));
-                    return true;
+                waitForKeyInput(attackButton, new KeyCallback() {
+                    @Override
+                    public boolean onKeyPressed(int keycode) {
+                        Settings.saveAttackKey(keycode);
+                        attackButton.setText(Settings.getKeyName(keycode));
+                        return true;
+                    }
+
+                    @Override
+                    public Key getKey() {
+                        return Key.ATTACK;
+                    }
                 });
             }
         });
-        
-        
+
         keybindingTable.add(attackButton).right().row();
-        
+
         return keybindingTable;
     }
 
+    /**
+     * Updates all keybinding buttons to show the current key assignments.
+     * This ensures all buttons reflect the current state accurately after any
+     * changes.
+     */
+    private void updateAllKeybindingButtons() {
+        moveLeftButton.setText(Settings.getKeyName(Settings.getMoveLeftKey()));
+        moveRightButton.setText(Settings.getKeyName(Settings.getMoveRightKey()));
+        jumpButton.setText(Settings.getKeyName(Settings.getJumpKey()));
+        attackButton.setText(Settings.getKeyName(Settings.getAttackKey()));
+    }
+
+    /**
+     * Waits for a key input and handles the key binding process.
+     * <p>
+     * This method displays a prompt to the user to press a key, and then assigns
+     * the pressed key to the specified action.
+     * </p>
+     * 
+     * @param button   The button to update with the key input
+     * @param callback The callback to handle the key input
+     */
     private void waitForKeyInput(GameButton button, KeyCallback callback) {
+        final String originalText = button.getText().toString();
+
         button.setText("Press a key...");
         InputProcessor originalProcessor = Gdx.input.getInputProcessor();
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.ESCAPE) {
-                    button.setText(Settings.getKeyName(keycode));
+                    button.setText(originalText);
+                    Gdx.input.setInputProcessor(originalProcessor);
+                    return true;
+                }
+
+                boolean isAlreadyAssigned = false;
+
+                if (keycode == Settings.getMoveLeftKey() && callback.getKey() != Key.MOVE_LEFT) {
+                    isAlreadyAssigned = true;
+                } else if (keycode == Settings.getMoveRightKey() && callback.getKey() != Key.MOVE_RIGHT) {
+                    isAlreadyAssigned = true;
+                } else if (keycode == Settings.getJumpKey() && callback.getKey() != Key.JUMP) {
+                    isAlreadyAssigned = true;
+                } else if (keycode == Settings.getAttackKey() && callback.getKey() != Key.ATTACK) {
+                    isAlreadyAssigned = true;
+                }
+
+                if (isAlreadyAssigned) {
+                    button.setText(originalText);
                     Gdx.input.setInputProcessor(originalProcessor);
                     return true;
                 }
 
                 boolean result = callback.onKeyPressed(keycode);
-
                 Gdx.input.setInputProcessor(originalProcessor);
+
+                updateAllKeybindingButtons();
+
+                AudioManager.playSound(SoundType.BUTTONCLICK);
                 return result;
             }
         });
     }
 
+    /**
+     * Interface for handling key callbacks with knowledge of which key action is
+     * being modified.
+     * This allows the callback to know which action it's assigned to for proper
+     * debouncing.
+     */
     private interface KeyCallback {
+        /**
+         * Called when a key is pressed during key binding.
+         * 
+         * @param keycode The key code that was pressed
+         * @return True if the key was successfully assigned, false otherwise
+         */
         boolean onKeyPressed(int keycode);
+
+        /**
+         * Gets the action type this callback is for.
+         * 
+         * @return The Key enum value representing this action
+         */
+        Key getKey();
+    }
+
+    /**
+     * Enum representing the available key actions for binding.
+     * Used to identify which action is being modified during key binding.
+     */
+    private enum Key {
+        MOVE_LEFT,
+        MOVE_RIGHT,
+        JUMP,
+        ATTACK
     }
 }

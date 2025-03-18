@@ -20,7 +20,7 @@ import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.pcg.Platform;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
-
+import com.mygdx.platformer.utilities.Settings;
 /**
  * Represents the player character in the game world.
  * <p>
@@ -247,25 +247,25 @@ public class Player extends BaseCharacter {
             moveDirection = 0;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(Settings.getMoveLeftKey())) {
             moveBackward();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (Gdx.input.isKeyPressed(Settings.getMoveRightKey())) {
             moveForward();
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+        if (Gdx.input.isKeyJustPressed(Settings.getAttackKey())) {
             attack();
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && isGrounded) {
+        if (Gdx.input.isKeyJustPressed(Settings.getJumpKey()) && isGrounded) {
             jumpRequested = true;
             jumpHolding = true;
         }
 
-        if (wasJumpKeyPressed && !Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        if (wasJumpKeyPressed && !Gdx.input.isKeyPressed(Settings.getJumpKey())) {
             jumpHolding = false;
         }
 
-        wasJumpKeyPressed = Gdx.input.isKeyPressed(Input.Keys.SPACE);
+        wasJumpKeyPressed = Gdx.input.isKeyPressed(Settings.getJumpKey());
     }
 
     /**

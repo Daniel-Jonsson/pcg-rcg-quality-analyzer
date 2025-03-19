@@ -634,6 +634,32 @@ public final class AppConfig {
     /** Default value for effects volume. */
     public static final float SETTINGS_DEFAULT_EFFECTS_VOLUME = 0.5f;
 
+    /* Keybindings */
+
+    public static final String SETTINGS_MOVE_LEFT_KEY = "moveLeftKey";
+
+    public static final String SETTINGS_MOVE_RIGHT_KEY = "moveRightKey";
+
+    public static final String SETTINGS_JUMP_KEY = "jumpKey";
+
+    public static final String SETTINGS_ATTACK_KEY = "attackKey";
+
+    public static final String SETTINGS_MOVE_LEFT_LABEL = "Move Left";
+
+    public static final String SETTINGS_MOVE_RIGHT_LABEL = "Move Right";
+
+    public static final String SETTINGS_JUMP_LABEL = "Jump";
+
+    public static final String SETTINGS_ATTACK_LABEL = "Attack";
+
+    public static final int SETTINGS_KEYBINDING_TABLE_PADDING = 5;
+
+    public static final int SETTINGS_KEYBINDING_TABLE_WIDTH = 200;
+
+    public static final int SETTINGS_KEYBINDING_TABLE_HEIGHT = 35;
+    
+    
+
     /* ERROR OVERLAY CONFIGURATIONS */
 
     /** The width of the error dialog. **/

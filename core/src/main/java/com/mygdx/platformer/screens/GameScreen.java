@@ -8,28 +8,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.platformer.characters.enemies.EnemyManager;
-import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.attacks.AttackManager;
-import com.mygdx.platformer.attacks.BaseAttack;
-import com.mygdx.platformer.characters.enemies.BaseEnemy;
 import com.mygdx.platformer.characters.player.HealthBar;
 import com.mygdx.platformer.characters.player.Player;
 import com.mygdx.platformer.difficulty.GameDifficultyManager;
 import com.mygdx.platformer.difficulty.observer.GameDifficultyObserver;
 import com.mygdx.platformer.pcg.manager.PlatformManager;
+import com.mygdx.platformer.physics.GameContactListener;
 import com.mygdx.platformer.screens.overlays.GameOverOverlay;
 import com.mygdx.platformer.sound.AudioManager;
+import com.mygdx.platformer.ui.GameTimer;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 import com.mygdx.platformer.utilities.Settings;
@@ -275,7 +268,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
      * Constructor for the GameScreen class, which initializes a reference to the
      * game instance.
      *
-     * @param g main Game instance.
+     * @param g        main Game instance.
      * @param autoPlay indicates whether autoplay is enabled.
      */
     public GameScreen(final PlatformerGame g, boolean autoPlay) {
@@ -392,6 +385,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
      * Updates the background position to create an infinite scrolling effect.
      * The background scrolls at a different rate than the camera to create a
      * parallax effect.
+     * 
      * @param deltaTime Time since last frame.
      */
     private void updateBackgroundPosition(float deltaTime) {
@@ -517,82 +511,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
      * Initializes collision detection logic.
      */
     private void initCollisionListener() {
-        world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                Fixture a = contact.getFixtureA();
-                Fixture b = contact.getFixtureB();
-                Object aUserData = a.getBody().getUserData();
-                Object bUserData = b.getBody().getUserData();
-
-                Body playerBody = player.getBody();
-
-                if (a.getBody() == playerBody || b.getBody() == playerBody) {
-                    if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
-                            || b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
-                            || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
-                            || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
-                        player.setGrounded(true);
-                    }
-                }
-
-                // Attack -> Enemy collision
-                if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
-                        && b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)
-                        || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
-                                && a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY)) {
-
-                    if (aUserData instanceof BaseAttack || bUserData instanceof BaseAttack) {
-                        BaseAttack attack = (aUserData instanceof BaseAttack) ? (BaseAttack) aUserData
-                                : (BaseAttack) bUserData;
-
-                        attack.setShouldRemove(true);
-                        BaseEnemy enemy = (aUserData instanceof BaseEnemy) ? (BaseEnemy) aUserData
-                                : (BaseEnemy) bUserData;
-
-                        enemy.takeDamage(attack.getDamage());
-                    }
-                }
-
-                if ((a.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
-                        && b.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)
-                        || (b.getFilterData().categoryBits == AppConfig.CATEGORY_ATTACK
-                                && a.getFilterData().categoryBits == AppConfig.CATEGORY_PLAYER)) {
-                    BaseAttack attack = (aUserData instanceof BaseAttack) ? (BaseAttack) aUserData
-                            : (BaseAttack) bUserData;
-
-                    if (attack.isEnemyAttack()) {
-                        attack.setShouldRemove(true);
-                        player.takeDamage(attack.getDamage());
-                    }
-                }
-            }
-
-            @Override
-            public void endContact(Contact contact) {
-                Fixture a = contact.getFixtureA();
-                Fixture b = contact.getFixtureB();
-
-                Body playerBody = player.getBody();
-
-                if (a.getBody() == playerBody || b.getBody() == playerBody) {
-                    if (a.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM ||
-                            b.getFilterData().categoryBits == AppConfig.CATEGORY_PLATFORM
-                            || a.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY
-                            || b.getFilterData().categoryBits == AppConfig.CATEGORY_ENEMY) {
-                        player.setGrounded(false);
-                    }
-                }
-            }
-
-            @Override
-            public void preSolve(final Contact contact, final Manifold manifold) {
-            }
-
-            @Override
-            public void postSolve(final Contact contact, final ContactImpulse contactImpulse) {
-            }
-        });
+        world.setContactListener(new GameContactListener(player));
     }
 
     @Override

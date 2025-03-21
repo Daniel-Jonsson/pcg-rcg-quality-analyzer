@@ -1,4 +1,4 @@
-package com.mygdx.platformer;
+package com.mygdx.platformer.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;

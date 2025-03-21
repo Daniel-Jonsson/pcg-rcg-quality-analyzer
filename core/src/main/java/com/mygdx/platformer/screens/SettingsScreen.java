@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.platformer.GameTimer;
 import com.mygdx.platformer.PlatformerGame;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.sound.SoundType;
@@ -28,6 +27,7 @@ import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 import com.mygdx.platformer.utilities.Settings;
 import com.mygdx.platformer.ui.GameButton;
+import com.mygdx.platformer.ui.GameTimer;
 
 /**
  * The settings screen of the platformer game.

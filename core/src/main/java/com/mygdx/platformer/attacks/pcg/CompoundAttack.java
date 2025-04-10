@@ -1,5 +1,6 @@
 package com.mygdx.platformer.attacks.pcg;
 
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.platformer.attacks.BaseAttack;
 import com.mygdx.platformer.attacks.NecromancerAttack;
 
@@ -16,13 +17,18 @@ public class CompoundAttack {
         projectiles = projectileNumber;
         this.speed = speed;
         this.damage = damage;
+        this.attackPattern = new ArrayList<>();
         initializeAttacks();
     }
 
-    private void initializeAttacks() {
-        attackPattern = new ArrayList<>();
+    public void initializeAttacks(World world) {
         for (int i = 0; i < projectiles; i++) {
-            attackPattern.add(new NecromancerAttack());
+            attackPattern.add(new NecromancerAttack(world, damage, speed));
         }
+    }
+
+
+    public void setWorld() {
+
     }
 }

@@ -3,6 +3,7 @@ package com.mygdx.platformer.attacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.attacks.pcg.CompoundAttack;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.sound.SoundType;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -46,6 +47,7 @@ import java.util.List;
 public class AttackManager {
     /** List of all active attacks currently in the game world. */
     private final List<BaseAttack> attacks;
+    private final List<CompoundAttack> attackPool;
 
     /** Reference to the Box2D physics world. */
     private final World world;
@@ -62,6 +64,13 @@ public class AttackManager {
     public AttackManager(World world) {
         this.world = world;
         this.attacks = new ArrayList<>();
+        this.attackPool = new ArrayList<>();
+        initializeAttackPool();
+    }
+
+
+    private void initializeAttackPool() {
+        // TODO: add initial attacks (PCG) to attack pool.
     }
 
     /**

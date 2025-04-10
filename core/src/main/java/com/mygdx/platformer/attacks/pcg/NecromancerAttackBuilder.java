@@ -1,36 +1,35 @@
 package com.mygdx.platformer.attacks.pcg;
 
 public class NecromancerAttackBuilder implements Builder {
+    private int projectiles;
+    private float speed;
+    private int damage;
 
     /**
      *
      */
     @Override
-    public void setSpeed() {
-
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 
     /**
      *
      */
     @Override
-    public void setDamage() {
-
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     /**
      *
      */
     @Override
-    public void reset() {
-
+    public void setProjectileNumber(int projectileNumber) {
+        this.projectiles = projectileNumber;
     }
 
-    /**
-     *
-     */
-    @Override
-    public void setProjectileNumber() {
-
+    public CompoundAttack getResult() {
+        return new CompoundAttack(projectiles, speed, damage);
     }
 }

@@ -3,7 +3,10 @@ package com.mygdx.platformer.attacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.attacks.pcg.Builder;
 import com.mygdx.platformer.attacks.pcg.CompoundAttack;
+import com.mygdx.platformer.attacks.pcg.Director;
+import com.mygdx.platformer.attacks.pcg.NecromancerAttackBuilder;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.sound.SoundType;
 import com.mygdx.platformer.utilities.AppConfig;
@@ -12,6 +15,7 @@ import com.mygdx.platformer.utilities.Assets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Manages all projectile attacks in the game world.
@@ -48,6 +52,8 @@ public class AttackManager {
     /** List of all active attacks currently in the game world. */
     private final List<BaseAttack> attacks;
     private final List<CompoundAttack> attackPool;
+    private final Director attackDirector;
+    private final Random random;
 
     /** Reference to the Box2D physics world. */
     private final World world;
@@ -65,12 +71,24 @@ public class AttackManager {
         this.world = world;
         this.attacks = new ArrayList<>();
         this.attackPool = new ArrayList<>();
+        this.attackDirector = new Director();
+        this.random = new Random();
         initializeAttackPool();
     }
 
 
     private void initializeAttackPool() {
-        // TODO: add initial attacks (PCG) to attack pool.
+        // TODO: Remove magic number after done experimenting
+        NecromancerAttackBuilder builder = new NecromancerAttackBuilder();
+        for (int i = 0; i < 20; i++) {
+            attackDirector.constructNecromancerPCGAttack(builder);
+            attackPool.add(builder.getResult());
+        }
+    }
+
+
+    public CompoundAttack getRandomCompoundAttack() {
+        return attackPool.get(random.nextInt(attackPool.size()));
     }
 
     /**

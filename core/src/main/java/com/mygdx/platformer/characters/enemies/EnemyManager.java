@@ -85,7 +85,8 @@ public class EnemyManager {
         } else {
             int hp = (int) (AppConfig.NECROMANCER_HEALTH * multiplier);
             float speed = AppConfig.NECROMANCER_SPEED * multiplier;
-            CompoundAttack attackPattern = attackManager.getCompoundAttack();
+            CompoundAttack attackPattern =
+                attackManager.getRandomCompoundAttack(world);
             enemy = new Necromancer(world, position, hp, speed);
             detectionRange = AppConfig.NECROMANCER_DETECTION_RANGE;
             attackRange = AppConfig.NECROMANCER_ATTACK_RANGE;

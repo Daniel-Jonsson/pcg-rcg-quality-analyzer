@@ -82,12 +82,13 @@ public class AttackManager {
         NecromancerAttackBuilder builder = new NecromancerAttackBuilder();
         for (int i = 0; i < 20; i++) {
             attackDirector.constructNecromancerPCGAttack(builder);
-            attackPool.add(builder.getResult());
+            CompoundAttack attackPattern = builder.getResult();
+            attackPool.add(attackPattern);
         }
     }
 
 
-    public CompoundAttack getRandomCompoundAttack() {
+    public CompoundAttack getRandomCompoundAttack(World world) {
         return attackPool.get(random.nextInt(attackPool.size()));
     }
 
@@ -109,39 +110,11 @@ public class AttackManager {
      * @param directionModifier The direction in which the attack moves (e.g
      *                          ., -1 for left, 1 for right).
      * @param isPlayerAttack    Whether the attack is a player attack.
-     * @param attackType        The type of attack to spawn, defined in
-     *                          {@link AppConfig.AttackType}.
      */
-    public void spawnAttackAt(Vector2 position, int directionModifier, boolean isPlayerAttack,
-            AppConfig.AttackType attackType) {
-        BaseAttack attack;
-        int dmg;
-        int speed;
-        switch (attackType) {
-            case PLAYER_THROWING_DAGGER:
-                attack = new PlayerAttack(world, position.x, position.y,
-                        Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, isPlayerAttack);
-                AudioManager.playSound(SoundType.SWOOSH);
-                break;
-            case GOBLIN_THROWING_DAGGER:
-                dmg = (int) (AppConfig.GOBLIN_ATTACK_POWER * multiplier);
-                speed = (int) (AppConfig.GOBLIN_ATTACK_SPEED * multiplier);
-                attack = new GoblinAttack(world, position.x, position.y, directionModifier, dmg, speed);
-                AudioManager.playSound(SoundType.SWOOSH2);
-                break;
-            case DEATH_BOLT:
-                dmg = (int) (AppConfig.NECROMANCER_ATTACK_POWER * multiplier);
-                speed = (int) (AppConfig.NECROMANCER_ATTACK_SPEED * multiplier);
-                attack = new NecromancerAttack(world, position.x, position.y, directionModifier, dmg, speed);
-                AudioManager.playSound(SoundType.DEATHBOLT);
-                break;
-
-            default:
-                attack = new PlayerAttack(world, position.x, position.y,
-                        Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, false);
-                break;
-        }
-
+    public void spawnAttackAt(BaseAttack attack, Vector2 position,
+                              int directionModifier, boolean isPlayerAttack) {
+        attack.x = position.x;
+        attack.y = position.y;
         attacks.add(attack);
     }
 

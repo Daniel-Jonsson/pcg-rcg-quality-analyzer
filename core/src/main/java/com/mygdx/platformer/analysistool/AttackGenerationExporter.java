@@ -15,10 +15,14 @@ public class AttackGenerationExporter {
     private static final int GENERATIONS = 10;
     private static final String OUTPUT_DIR = "out/generated/";
 
+    // change the path to where sonarscanner is located locally
+    private static final String SONAR_SCANNER_PATH = "C:\\sonarscanner\\sonar-scanner-7.1.0.4889-windows-x64\\bin\\sonar-scanner.bat";
+
     private static final Random random = new Random();
 
     public static void main(String[] args) {
         generateAndExportAttacks();
+        runSonarScanner();
     }
 
     public static void generateAndExportAttacks() {
@@ -60,9 +64,8 @@ public class AttackGenerationExporter {
     }
 
     private static CompoundAttack mutateAttack(CompoundAttack host, CompoundAttack donor) {
-
         int newAttackSize = donor.getAttackSize();
-        return new CompoundAttack(newAttackSize, 5.0f, 10); // placeholder vörden
+        return new CompoundAttack(newAttackSize, 5.0f, 10);
     }
 
     private static void saveGeneration(List<CompoundAttack> generation, int generationNumber, String method) {
@@ -91,5 +94,26 @@ public class AttackGenerationExporter {
             "        super(" + attack.getAttackSize() + ", 5.0f, 10);\n" +
             "    }\n" +
             "}\n";
+    }
+
+    private static void runSonarScanner() {
+        System.out.println("Starting SonarScanner...");
+
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(SONAR_SCANNER_PATH);
+            processBuilder.directory(new File(OUTPUT_DIR)); // run from the folder where the attacks are generated
+            processBuilder.inheritIO(); // show output in terminal
+            Process process = processBuilder.start();
+
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println("SonarScanner completed successfully!");
+            } else {
+                System.err.println("SonarScanner failed with exit code: " + exitCode);
+            }
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

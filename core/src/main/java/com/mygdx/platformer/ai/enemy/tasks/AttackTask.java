@@ -1,6 +1,7 @@
 package com.mygdx.platformer.ai.enemy.tasks;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.ai.btree.LeafTask;
@@ -8,8 +9,11 @@ import com.badlogic.gdx.ai.btree.Task;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.platformer.ai.AIAgent;
 import com.mygdx.platformer.attacks.AttackManager;
+import com.mygdx.platformer.attacks.BaseAttack;
+import com.mygdx.platformer.attacks.NecromancerAttackTemplate;
 import com.mygdx.platformer.characters.BaseCharacter;
 import com.mygdx.platformer.characters.enemies.BaseEnemy;
+import com.mygdx.platformer.characters.enemies.Necromancer;
 import com.mygdx.platformer.utilities.AppConfig;
 
 /**
@@ -50,6 +54,8 @@ public class AttackTask extends LeafTask<AIAgent> {
         BaseEnemy enemy = (BaseEnemy) character;
         long lastAttackTime = attackCooldowns.getOrDefault(character, 0L);
 
+         // TODO: Access the list of AttackTemplate and run them with cooldown.
+
         long currentTime = System.currentTimeMillis();
 
         long cooldownMs = (long) (attackCooldown * 1000);
@@ -70,15 +76,25 @@ public class AttackTask extends LeafTask<AIAgent> {
         int direction = targetPosition.x > character.getBody().getPosition().x ? 1 : -1;
 
         AppConfig.AttackType attackType;
+        AppConfig.CharacterType characterType = character.getCharacterType();
 
-
-        attackType = switch (character.getCharacterType()) {
+        attackType = switch (characterType) {
             case GOBLIN -> AppConfig.AttackType.GOBLIN_THROWING_DAGGER;
             case NECROMANCER -> AppConfig.AttackType.DEATH_BOLT;
             default -> AppConfig.AttackType.PLAYER_THROWING_DAGGER;
         };
 
-        attackManager.spawnEnemyAttackAt(character.getBody().getPosition(), direction, attackType);
+        if (characterType.equals(AppConfig.CharacterType.NECROMANCER)) {
+            Necromancer necromancer = (Necromancer) character;
+            List<NecromancerAttackTemplate> attackTemplates = necromancer.getAttackSequence().getAttackPattern();
+            for (NecromancerAttackTemplate attackTemplate : attackTemplates) {
+                attackManager.spawnNecroAttackAt(attackTemplate,
+                    necromancer.getBody().getPosition(), direction);
+            }
+        } else {
+            attackManager.spawnEnemyAttackAt(character.getBody().getPosition(), direction, attackType);
+        }
+
 
         lastAttackTime = currentTime;
 

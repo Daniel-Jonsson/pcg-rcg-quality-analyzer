@@ -1,34 +1,38 @@
 package com.mygdx.platformer.attacks.pcg;
 
-import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.platformer.attacks.BaseAttack;
-import com.mygdx.platformer.attacks.NecromancerAttack;
+import com.mygdx.platformer.attacks.NecromancerAttackTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CompoundAttack {
-    private final int projectiles;
+    private final int numberOfAttacks;
     private final int damage;
     private final float speed;
-    private final List<BaseAttack> attackPattern;
+    private final List<NecromancerAttackTemplate> attackPattern;
 
     public CompoundAttack(int projectileNumber, float speed, int damage) {
-        projectiles = projectileNumber;
+        numberOfAttacks = projectileNumber;
         this.speed = speed;
         this.damage = damage;
-        this.attackPattern = new ArrayList<>();
-        initializeAttacks();
+        this.attackPattern = generateAttackPattern();
     }
 
-    public void initializeAttacks(World world) {
-        for (int i = 0; i < projectiles; i++) {
-            attackPattern.add(new NecromancerAttack(world, damage, speed));
+    private List<NecromancerAttackTemplate> generateAttackPattern() {
+        List<NecromancerAttackTemplate> attackTemplates = new ArrayList<>();
+        // TODO: Change arc and projectileCount so it uses correct value later
+        for (int i = 0; i < numberOfAttacks; i++) {
+            attackTemplates.add(new NecromancerAttackTemplate(45, speed,
+                damage, 5));
         }
+        return attackTemplates;
     }
 
+    public int getAttackSize() {
+        return attackPattern.size();
+    }
 
-    public void setWorld() {
-
+    public List<NecromancerAttackTemplate> getAttackPattern() {
+        return attackPattern;
     }
 }

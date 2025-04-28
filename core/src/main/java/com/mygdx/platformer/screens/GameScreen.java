@@ -385,7 +385,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
      * Updates the background position to create an infinite scrolling effect.
      * The background scrolls at a different rate than the camera to create a
      * parallax effect.
-     * 
+     *
      * @param deltaTime Time since last frame.
      */
     private void updateBackgroundPosition(float deltaTime) {
@@ -516,6 +516,7 @@ public class GameScreen extends ScreenAdapter implements GameDifficultyObserver 
 
     @Override
     public void onDifficultyChanged(int difficultyLevel) {
+        System.out.println("HEEJ");
         enemyManager.increaseDifficulty(difficultyLevel);
         platformManager.increaseDifficulty(difficultyLevel);
         attackManager.increaseDifficulty(difficultyLevel);

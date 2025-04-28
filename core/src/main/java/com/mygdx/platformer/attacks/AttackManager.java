@@ -3,19 +3,16 @@ package com.mygdx.platformer.attacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.platformer.attacks.pcg.Builder;
 import com.mygdx.platformer.attacks.pcg.CompoundAttack;
 import com.mygdx.platformer.attacks.pcg.Director;
 import com.mygdx.platformer.attacks.pcg.NecromancerAttackBuilder;
+import com.mygdx.platformer.difficulty.GameDifficultyManager;
 import com.mygdx.platformer.sound.AudioManager;
 import com.mygdx.platformer.sound.SoundType;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Manages all projectile attacks in the game world.
@@ -50,10 +47,11 @@ import java.util.Random;
  */
 public class AttackManager {
     /** List of all active attacks currently in the game world. */
-    private final List<BaseAttack> attacks;
-    private final List<CompoundAttack> attackPool;
+    private final List<BaseAttack> activeAttacks;
+    private final HashMap<Integer, ArrayList<CompoundAttack>> attackGenerationList;
     private final Director attackDirector;
     private final Random random;
+    private int currentDifficulty;
 
     /** Reference to the Box2D physics world. */
     private final World world;
@@ -68,28 +66,71 @@ public class AttackManager {
      * @param world The Box2D world where attacks will be spawned and managed.
      */
     public AttackManager(World world) {
+        this.attackGenerationList = new HashMap<>();
         this.world = world;
-        this.attacks = new ArrayList<>();
-        this.attackPool = new ArrayList<>();
+        this.activeAttacks = new ArrayList<>();
         this.attackDirector = new Director();
         this.random = new Random();
-        initializeAttackPool();
+        currentDifficulty = 0;
+        generatePCGAttacks(currentDifficulty);
     }
 
 
-    private void initializeAttackPool() {
+    /**
+     * Initializes the first generation of {@link CompoundAttack} objects.
+     */
+    private void generatePCGAttacks(int difficultyLevel) {
         // TODO: Remove magic number after done experimenting
         NecromancerAttackBuilder builder = new NecromancerAttackBuilder();
-        for (int i = 0; i < 20; i++) {
+        ArrayList<CompoundAttack> initalAttacks = new ArrayList<>();
+        for (int i = 0; i < AppConfig.GENERATION_SIZE; i++) {
             attackDirector.constructNecromancerPCGAttack(builder);
             CompoundAttack attackPattern = builder.getResult();
-            attackPool.add(attackPattern);
+            initalAttacks.add(attackPattern);
         }
+        attackGenerationList.put(difficultyLevel, initalAttacks);
+    }
+
+    private void generateRCGAttackList(int difficultyLevel) {
+        List<CompoundAttack> lastGeneration =
+            attackGenerationList.get(difficultyLevel - 1);
+        ArrayList<CompoundAttack> newGeneration = new ArrayList<>();
+        for (int i = 0; i < lastGeneration.size(); i++) {
+            newGeneration.add(attackDirector.constructNecromancerRCGAttack(lastGeneration, i));
+        }
+        attackGenerationList.put(difficultyLevel, newGeneration);
     }
 
 
-    public CompoundAttack getRandomCompoundAttack(World world) {
-        return attackPool.get(random.nextInt(attackPool.size()));
+    public CompoundAttack getCompoundAttack() {
+        ArrayList<CompoundAttack> currentGen = attackGenerationList.get(currentDifficulty);
+        return currentGen.get(random.nextInt(currentGen.size()));
+    }
+
+    /**
+     * Spawns an attack at the given position with a specified direction.
+     * <p>
+     * This method creates a new attack object based on the specified type,
+     * initializes it
+     * with the appropriate properties (position, direction, damage, speed), plays
+     * the
+     * corresponding sound effect, and adds it to the list of active attacks.
+     * </p>
+     * <p>
+     * Enemy attack damage and speed are scaled by the current difficulty
+     * multiplier.
+     * </p>
+     *
+     * @param position          The position where the attack should be created.
+     * @param directionModifier The direction in which the attack moves (e.g
+     *                          ., -1 for left, 1 for right).
+     */
+    public void spawnNecroAttackAt(NecromancerAttackTemplate attack,
+                               Vector2 position,
+                              int directionModifier) {
+        BaseAttack activeAttack = attack.execute(world, position,
+            directionModifier, multiplier);
+        activeAttacks.add(activeAttack);
     }
 
     /**
@@ -110,14 +151,40 @@ public class AttackManager {
      * @param directionModifier The direction in which the attack moves (e.g
      *                          ., -1 for left, 1 for right).
      * @param isPlayerAttack    Whether the attack is a player attack.
+     * @param attackType        The type of attack to spawn, defined in
+     *                          {@link AppConfig.AttackType}.
      */
-    public void spawnAttackAt(BaseAttack attack, Vector2 position,
-                              int directionModifier, boolean isPlayerAttack) {
-        attack.x = position.x;
-        attack.y = position.y;
-        attacks.add(attack);
+    public void spawnAttackAt(Vector2 position, int directionModifier, boolean isPlayerAttack,
+                              AppConfig.AttackType attackType) {
+        BaseAttack attack;
+        int dmg;
+        int speed;
+        switch (attackType) {
+            case PLAYER_THROWING_DAGGER:
+                attack = new PlayerAttack(world, position.x, position.y,
+                    Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE),
+                    directionModifier, isPlayerAttack);
+                AudioManager.playSound(SoundType.SWOOSH);
+                break;
+            case GOBLIN_THROWING_DAGGER:
+                dmg = (int) (AppConfig.GOBLIN_ATTACK_POWER * multiplier);
+                speed = (int) (AppConfig.GOBLIN_ATTACK_SPEED * multiplier);
+                attack = new GoblinAttack(world, position.x, position.y, directionModifier, dmg, speed);
+                AudioManager.playSound(SoundType.SWOOSH2);
+                break;
+            default:
+                attack = new PlayerAttack(world, position.x, position.y,
+                    Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, false);
+                break;
+        }
+
+        activeAttacks.add(attack);
     }
 
+
+    public void addNewActiveAttack(BaseAttack attack) {
+        activeAttacks.add(attack);
+    }
     /**
      * Convenience method to spawn an enemy attack.
      * <p>
@@ -150,7 +217,7 @@ public class AttackManager {
      *                      visibility of attacks.
      */
     public void update(float cameraX, float viewPortWidth) {
-        Iterator<BaseAttack> iterator = attacks.iterator();
+        Iterator<BaseAttack> iterator = activeAttacks.iterator();
         while (iterator.hasNext()) {
             BaseAttack attack = iterator.next();
             attack.update(cameraX, viewPortWidth);
@@ -172,7 +239,7 @@ public class AttackManager {
      * @param batch The sprite batch used for rendering attacks.
      */
     public void render(SpriteBatch batch) {
-        for (BaseAttack attack : attacks) {
+        for (BaseAttack attack : activeAttacks) {
             attack.render(batch);
         }
     }
@@ -189,5 +256,9 @@ public class AttackManager {
      */
     public void increaseDifficulty(int difficulty) {
         multiplier = 1.0f + (difficulty * AppConfig.DIFFICULTY_INCREASE_AMOUNT);
+        currentDifficulty = difficulty;
+        if (difficulty > 0) {
+            generateRCGAttackList(difficulty);
+        }
     }
 }

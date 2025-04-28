@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.attacks.pcg.CompoundAttack;
 import com.mygdx.platformer.utilities.AppConfig;
 import com.mygdx.platformer.utilities.Assets;
 
@@ -21,6 +22,7 @@ public class Necromancer extends BaseEnemy {
     private Animation<TextureRegion> idleAnimation;
     /** The animation for attacking. */
     private Animation<TextureRegion> attackAnimation;
+    private CompoundAttack attackSequence;
 
     /**
      * Creates a new Necromancer enemy at the specified position, health, and
@@ -31,9 +33,11 @@ public class Necromancer extends BaseEnemy {
      * @param health The Necromancers health.
      * @param speed The Necromancers speed.
      */
-    public Necromancer(World world, Vector2 position, int health, float speed) {
+    public Necromancer(World world, Vector2 position, int health, float speed
+        , CompoundAttack attackSequence) {
         super(world, position, health, speed, AppConfig.NECROMANCER_WIDTH,
             AppConfig.NECROMANCER_HEIGHT);
+        this.attackSequence = attackSequence;
     }
 
     /**
@@ -125,5 +129,9 @@ public class Necromancer extends BaseEnemy {
     @Override
     protected void onAttackEnd() {
         stateTime = 0;
+    }
+
+    public CompoundAttack getAttackSequence() {
+        return attackSequence;
     }
 }

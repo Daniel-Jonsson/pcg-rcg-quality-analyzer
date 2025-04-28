@@ -24,8 +24,9 @@ public class NecromancerAttack extends BaseAttack {
      * @param speed The speed of which the attack moves.
      */
 
-    public NecromancerAttack(World world, int dmg, float speed) {
-        super(world, dmg, speed,
+    public NecromancerAttack(World world, int dmg, float speed, float x,
+                             float y, int directionModifier) {
+        super(world, dmg, speed * directionModifier, x, y,
             Assets.assetManager.get(Assets.DEATH_BOLT), false);
         sprite.setSize(sprite.getWidth() * AppConfig.NECROMANCER_ATTACK_SCALE,
             sprite.getHeight() * AppConfig.NECROMANCER_ATTACK_SCALE);

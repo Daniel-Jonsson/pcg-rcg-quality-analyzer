@@ -11,6 +11,8 @@ package com.mygdx.platformer.utilities;
  */
 public final class AppConfig {
 
+    public static final int GENERATION_SIZE = 20;
+
     /**
      * Private constructor to prevent instantiation.
      */
@@ -657,8 +659,8 @@ public final class AppConfig {
     public static final int SETTINGS_KEYBINDING_TABLE_WIDTH = 200;
 
     public static final int SETTINGS_KEYBINDING_TABLE_HEIGHT = 35;
-    
-    
+
+
 
     /* ERROR OVERLAY CONFIGURATIONS */
 

@@ -44,15 +44,19 @@ public abstract class BaseAttack {
      * @param world The Box2D world where the attack is created.
      * @param damage The damage the attack deals when colliding with target.
      * @param speed The speed at which the attack moves.
+     * @param x The initial x-coordinate of the attack.
+     * @param y The initial y-coordinate of the attack.
      * @param texture The texture used for the attack's sprite.
      * @param isPlayerAttack Whether the attack is a player attack.
      */
-    public BaseAttack(World world, int damage, float speed,
+    public BaseAttack(World world, int damage, float speed, float x, float y,
                       Texture texture, boolean isPlayerAttack) {
         this.world = world;
         this.damage = damage;
         this.isPlayerAttack = isPlayerAttack;
         this.speed = speed;
+        this.x = x;
+        this.y = y;
         this.sprite = new Sprite(texture);
 
         sprite.setSize(AppConfig.ATTACK_SPRITE_WIDTH, AppConfig.ATTACK_SPRITE_HEIGHT);

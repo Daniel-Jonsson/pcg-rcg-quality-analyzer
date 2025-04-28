@@ -130,6 +130,7 @@ public class AttackManager {
                               int directionModifier) {
         BaseAttack activeAttack = attack.execute(world, position,
             directionModifier, multiplier);
+        AudioManager.playSound(SoundType.DEATHBOLT);
         activeAttacks.add(activeAttack);
     }
 

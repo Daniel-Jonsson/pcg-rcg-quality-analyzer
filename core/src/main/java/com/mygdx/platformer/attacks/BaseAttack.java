@@ -163,4 +163,8 @@ public abstract class BaseAttack {
     public Body getBody() {
         return body;
     }
+
+    public float getSpeed() {
+        return speed;
+    }
 }

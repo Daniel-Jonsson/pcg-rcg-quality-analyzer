@@ -1,108 +1,107 @@
 package com.mygdx.platformer.analysistool;
 
-import com.mygdx.platformer.attacks.pcg.CompoundAttack;
-import com.mygdx.platformer.attacks.pcg.Director;
-import com.mygdx.platformer.attacks.pcg.NecromancerAttackBuilder;
+import com.mygdx.platformer.attacks.NecromancerAttackTemplate;
+import com.mygdx.platformer.attacks.movement.*;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
 public class AttackGenerationExporter {
 
-    private static final int INITIAL_ATTACKS = 20;
+    private static final int COMPOUND_COUNT = 20;
+    private static final int ATTACKS_PER_COMPOUND = 5;
     private static final int GENERATIONS = 10;
-    private static final String OUTPUT_DIR = "out/generated/";
-
-    // change the path to where sonarscanner is located locally
-    private static final String SONAR_SCANNER_PATH = "C:\\sonarscanner\\sonar-scanner-7.1.0.4889-windows-x64\\bin\\sonar-scanner.bat";
-
     private static final Random random = new Random();
 
+    private static final String SONAR_SCANNER_PATH = "C:\\sonarscanner\\sonar-scanner-7.1.0.4889-windows-x64\\bin\\sonar-scanner.bat";
+
     public static void main(String[] args) {
-        generateAndExportAttacks();
+        List<List<NecromancerAttackTemplate>> currentGeneration = generatePCG();
+        AttackExporter.exportCompounds(currentGeneration, 0, "PCG");
+
+        for (int gen = 1; gen <= GENERATIONS; gen++) {
+            currentGeneration = generateRCG(currentGeneration);
+            AttackExporter.exportCompounds(currentGeneration, gen, "RCG");
+        }
+
         runSonarScanner();
     }
 
-    public static void generateAndExportAttacks() {
-        // PCG Generation
-        List<CompoundAttack> currentGeneration = generatePCGGeneration();
-        saveGeneration(currentGeneration, 0, "PCG");
+    private static List<List<NecromancerAttackTemplate>> generatePCG() {
+        List<List<NecromancerAttackTemplate>> compounds = new ArrayList<>();
 
-        // RCG Generations
-        for (int gen = 1; gen <= GENERATIONS; gen++) {
-            currentGeneration = generateRCGGeneration(currentGeneration);
-            saveGeneration(currentGeneration, gen, "RCG");
+        for (int i = 0; i < COMPOUND_COUNT; i++) {
+            List<NecromancerAttackTemplate> attacks = new ArrayList<>();
+            for (int j = 0; j < ATTACKS_PER_COMPOUND; j++) {
+                attacks.add(createRandomAttack());
+            }
+            compounds.add(attacks);
         }
+        return compounds;
     }
 
-    private static List<CompoundAttack> generatePCGGeneration() {
-        Director director = new Director();
-        NecromancerAttackBuilder builder = new NecromancerAttackBuilder();
+    private static List<List<NecromancerAttackTemplate>> generateRCG(List<List<NecromancerAttackTemplate>> previousGeneration) {
+        List<List<NecromancerAttackTemplate>> newGeneration = new ArrayList<>();
 
-        List<CompoundAttack> attacks = new ArrayList<>();
-        for (int i = 0; i < INITIAL_ATTACKS; i++) {
-            director.constructNecromancerPCGAttack(builder);
-            attacks.add(builder.getResult());
-        }
-        return attacks;
-    }
+        for (int i = 0; i < COMPOUND_COUNT; i++) {
+            // select the host
+            List<NecromancerAttackTemplate> host = previousGeneration.get(i);
 
-    private static List<CompoundAttack> generateRCGGeneration(List<CompoundAttack> previousGeneration) {
-        List<CompoundAttack> newGeneration = new ArrayList<>();
+            // make a copy of the attack list
+            List<NecromancerAttackTemplate> newCompound = new ArrayList<>(host);
 
-        for (int i = 0; i < previousGeneration.size(); i++) {
-            CompoundAttack host = previousGeneration.get(i);
-            CompoundAttack donor = previousGeneration.get(random.nextInt(previousGeneration.size()));
+            // Choose which attack to replace with a new attack from the donor
+            int indexToReplace = random.nextInt(ATTACKS_PER_COMPOUND);
 
-            CompoundAttack mutated = mutateAttack(host, donor);
-            newGeneration.add(mutated);
+            // select random donor and random attack from that donor
+            List<NecromancerAttackTemplate> donorCompound = previousGeneration.get(random.nextInt(previousGeneration.size()));
+            NecromancerAttackTemplate donorAttack = donorCompound.get(random.nextInt(donorCompound.size()));
+
+            // replace the old attack with the new one
+            newCompound.set(indexToReplace, cloneAttack(donorAttack));
+
+            newGeneration.add(newCompound);
         }
 
         return newGeneration;
     }
 
-    private static CompoundAttack mutateAttack(CompoundAttack host, CompoundAttack donor) {
-        int newAttackSize = donor.getAttackSize();
-        return new CompoundAttack(newAttackSize, 5.0f, 10);
+
+    private static NecromancerAttackTemplate createRandomAttack() {
+        int damage = random.nextInt(10, 30);
+        float speed = random.nextFloat(1.0f, 5.0f);
+        MovementPatternBehavior pattern = createRandomMovement();
+        return new NecromancerAttackTemplate(45, speed, damage, 5, pattern);
     }
 
-    private static void saveGeneration(List<CompoundAttack> generation, int generationNumber, String method) {
-        String folderPath = OUTPUT_DIR + method + "/gen" + generationNumber;
-        new File(folderPath).mkdirs();
-
-        for (int i = 0; i < generation.size(); i++) {
-            CompoundAttack attack = generation.get(i);
-            String filename = folderPath + "/CompoundAttack_" + i + ".java";
-
-            try (FileWriter writer = new FileWriter(filename)) {
-                writer.write(convertAttackToJavaClass(attack, i, generationNumber, method));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    private static MovementPatternBehavior createRandomMovement() {
+        return switch (random.nextInt(3)) {
+            case 0 -> new StraightMovement();
+            case 1 -> new ZigZagMovement();
+            case 2 -> new AccelerateMovement();
+            default -> new StraightMovement();
+        };
     }
 
-    private static String convertAttackToJavaClass(CompoundAttack attack, int attackId, int genNumber, String method) {
-        return "package generated." + method.toLowerCase() + ".gen" + genNumber + ";\n\n" +
-            "import com.mygdx.platformer.attacks.pcg.CompoundAttack;\n" +
-            "import com.mygdx.platformer.attacks.NecromancerAttackTemplate;\n" +
-            "import java.util.*;\n\n" +
-            "public class CompoundAttack_" + attackId + " extends CompoundAttack {\n\n" +
-            "    public CompoundAttack_" + attackId + "() {\n" +
-            "        super(" + attack.getAttackSize() + ", 5.0f, 10);\n" +
-            "    }\n" +
-            "}\n";
+    private static NecromancerAttackTemplate cloneAttack(NecromancerAttackTemplate original) {
+        // clone the instance
+        return new NecromancerAttackTemplate(
+            45,
+            original.getSpeed(),
+            original.getDamage(),
+            5,
+            original.getMovementPattern()
+        );
     }
 
     private static void runSonarScanner() {
-        System.out.println("Starting SonarScanner...");
+        System.out.println("Starting SonarScanner analysis...");
 
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(SONAR_SCANNER_PATH);
-            processBuilder.directory(new File(OUTPUT_DIR)); // run from the folder where the attacks are generated
-            processBuilder.inheritIO(); // show output in terminal
+            processBuilder.directory(new File("out/generated")); // Run from the generation folder
+            processBuilder.inheritIO(); // show information in terminal
             Process process = processBuilder.start();
 
             int exitCode = process.waitFor();

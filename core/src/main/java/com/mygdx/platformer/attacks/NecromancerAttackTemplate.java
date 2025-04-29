@@ -26,6 +26,8 @@ public class NecromancerAttackTemplate {
         BaseAttack attack = new NecromancerAttack(world, Math.round(damage * multiplier), speed,
             initialPos.x, initialPos.y, directionModifier);
 
+        attack.setMovementBehavior(this.movementPattern);
+
         // use pattern to update attack
         if (movementPattern != null) {
             movementPattern.update(attack);

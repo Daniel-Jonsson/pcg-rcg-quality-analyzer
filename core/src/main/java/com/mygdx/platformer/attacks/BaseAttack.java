@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.attacks.movement.MovementPatternBehavior;
 import com.mygdx.platformer.utilities.AppConfig;
 
 /**
@@ -37,6 +38,8 @@ public abstract class BaseAttack {
     protected final Body body;
     /** Indicates whether the attack is a player attack or not.*/
     protected boolean isPlayerAttack;
+
+    protected MovementPatternBehavior movementBehavior;
 
     /**
      * Constructs a new attack instance with specified parameters.
@@ -95,6 +98,10 @@ public abstract class BaseAttack {
      * @param viewPortWidth The width of the viewport.
      */
     public void update(float cameraX, float viewPortWidth) {
+        if (movementBehavior != null) {
+            movementBehavior.update(this);
+        }
+
         Vector2 pos = body.getPosition();
         sprite.setPosition(pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2);
 
@@ -166,5 +173,9 @@ public abstract class BaseAttack {
 
     public float getSpeed() {
         return speed;
+    }
+
+    public void setMovementBehavior(MovementPatternBehavior movementBehavior) {
+        this.movementBehavior = movementBehavior;
     }
 }

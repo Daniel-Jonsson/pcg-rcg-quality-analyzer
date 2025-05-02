@@ -2,6 +2,7 @@ package com.mygdx.platformer.attacks.pcg;
 
 import com.mygdx.platformer.attacks.NecromancerAttackTemplate;
 import com.mygdx.platformer.attacks.movement.AccelerateMovement;
+import com.mygdx.platformer.attacks.movement.MixedMovement;
 import com.mygdx.platformer.attacks.movement.MovementPatternBehavior;
 import com.mygdx.platformer.attacks.movement.StraightMovement;
 import com.mygdx.platformer.attacks.movement.ZigZagMovement;
@@ -26,10 +27,13 @@ public class CompoundAttack {
     }
 
     private List<NecromancerAttackTemplate> generateAttackPattern() {
-        int movementSelector = random.nextInt(2);
+        int movementSelector = random.nextInt(3);
+
+
         MovementPatternBehavior pattern = switch (movementSelector) {
             case 0 -> new ZigZagMovement();
             case 1 -> new AccelerateMovement();
+            case 3 -> new MixedMovement();
             default -> new StraightMovement();
         };
 

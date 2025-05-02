@@ -17,12 +17,18 @@ public class AttackGenerationExporter {
     private static final String SONAR_SCANNER_PATH = "C:\\sonarscanner\\sonar-scanner-7.1.0.4889-windows-x64\\bin\\sonar-scanner.bat";
 
     public static void main(String[] args) {
-        List<List<NecromancerAttackTemplate>> currentGeneration = generatePCG();
-        AttackExporter.exportCompounds(currentGeneration, 0, "PCG");
+        List<List<NecromancerAttackTemplate>> pcgGen0 = generatePCG();
+        AttackExporter.exportCompounds(pcgGen0, 0, "PCG");
+
+        List<List<NecromancerAttackTemplate>> rcgPrevGen = pcgGen0;
+        for (int gen = 1; gen <= GENERATIONS; gen++) {
+            rcgPrevGen = generateRCG(rcgPrevGen);
+            AttackExporter.exportCompounds(rcgPrevGen, gen, "RCG");
+        }
 
         for (int gen = 1; gen <= GENERATIONS; gen++) {
-            currentGeneration = generateRCG(currentGeneration);
-            AttackExporter.exportCompounds(currentGeneration, gen, "RCG");
+            List<List<NecromancerAttackTemplate>> standalonePCG = generatePCG();
+            AttackExporter.exportCompounds(standalonePCG, gen, "PCG");
         }
 
         runSonarScanner();
@@ -76,10 +82,11 @@ public class AttackGenerationExporter {
     }
 
     private static MovementPatternBehavior createRandomMovement() {
-        return switch (random.nextInt(3)) {
+        return switch (random.nextInt(4)) {
             case 0 -> new StraightMovement();
             case 1 -> new ZigZagMovement();
             case 2 -> new AccelerateMovement();
+            case 3 -> new MixedMovement();
             default -> new StraightMovement();
         };
     }
@@ -94,6 +101,7 @@ public class AttackGenerationExporter {
             original.getMovementPattern()
         );
     }
+
 
     private static void runSonarScanner() {
         System.out.println("Starting SonarScanner analysis...");

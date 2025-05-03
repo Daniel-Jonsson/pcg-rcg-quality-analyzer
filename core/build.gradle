@@ -1,5 +1,12 @@
+plugins {
+  id 'jacoco'
+}
+
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
+
+
 
 java {
   toolchain {
@@ -17,6 +24,7 @@ task copyGeneratedAttacks(type: Copy) {
   into("src/main/java/generated")
   includeEmptyDirs = false
 }
+
 
 
 tasks.named('compileJava') {
@@ -49,4 +57,19 @@ dependencies {
 
 test {
   useJUnitPlatform()
+}
+
+jacoco {
+  toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+  dependsOn test // ensure tests are run first
+
+  reports {
+    xml.required = false
+    csv.required = false
+    html.required = true
+    html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+  }
 }

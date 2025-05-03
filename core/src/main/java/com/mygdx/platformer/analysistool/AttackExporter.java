@@ -24,7 +24,7 @@ public class AttackExporter {
                 String filename = compoundFolder + "/NecromancerAttack_" + attackId + ".java";
 
                 try (FileWriter writer = new FileWriter(filename)) {
-                    writer.write(convertAttackToJavaClass(attack, attackId));
+                    writer.write(convertAttackToJavaClass(attack, attackId, generation, compoundId, method));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -32,8 +32,11 @@ public class AttackExporter {
         }
     }
 
-    private static String convertAttackToJavaClass(NecromancerAttackTemplate attack, int attackId) {
-        return "import com.badlogic.gdx.math.Vector2;\n" +
+    private static String convertAttackToJavaClass(NecromancerAttackTemplate attack, int attackId, int generation, int compoundId, String method) {
+        String packageName = "generated." + method.toLowerCase() + ".gen" + generation + ".compound_" + compoundId + ";";
+        System.out.println(packageName);
+        return "package " + packageName + "\n\n" +
+                "import com.badlogic.gdx.math.Vector2;\n" +
             "import com.badlogic.gdx.physics.box2d.World;\n" +
             "import com.mygdx.platformer.attacks.BaseAttack;\n" +
             "import com.mygdx.platformer.attacks.NecromancerAttack;\n" +

@@ -32,6 +32,11 @@ public class AttackGenerationExporter {
         }
 
         runSonarScanner();
+
+        runJacocoReport();
+
+        CoverageParser.extractCoverageToCSV();
+
     }
 
     private static List<List<NecromancerAttackTemplate>> generatePCG() {
@@ -123,4 +128,31 @@ public class AttackGenerationExporter {
             e.printStackTrace();
         }
     }
+
+    private static void runJacocoReport() {
+        System.out.println("Running JaCoCo report task...");
+
+        try {
+            ProcessBuilder pb = new ProcessBuilder("gradlew.bat", ":core:jacocoTestReport");
+            pb.directory(new File(System.getProperty("user.dir")));
+            pb.inheritIO(); // send output to console
+
+            Process process = pb.start();
+            int exitCode = process.waitFor();
+
+            if (exitCode == 0) {
+                System.out.println("JaCoCo report completed successfully.");
+            } else {
+                System.err.println("JaCoCo report failed with exit code: " + exitCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+
 }

@@ -9,9 +9,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileWriter;
 
-
+/**
+ * Utility class used for extracting coverage from a Jacoco report, and export
+ * it to a csv file. Only generated attack classes are included in the
+ * export. Line and branch coverage is included.
+ */
 public class CoverageParser {
 
+    /**
+     * Extracts coverage data from jacoco XML and writes it to a csv file.
+     */
     public static void extractCoverageToCSV() {
         String xmlPath = "core/build/reports/jacoco/test/jacocoTestReport.xml";
         String outputCsvPath = "core/build/reports/jacoco/coverage_report.csv";
@@ -75,6 +82,12 @@ public class CoverageParser {
         }
     }
 
+    /**
+     * Helper method for calculating coverage percentage.
+     * @param covered the number of covered lines.
+     * @param missed The number of missed lines.
+     * @return Coverage percentage.
+     */
     private static double percentage(int covered, int missed) {
         int total = covered + missed;
         return total == 0 ? 0 : (100.0 * covered) / total;

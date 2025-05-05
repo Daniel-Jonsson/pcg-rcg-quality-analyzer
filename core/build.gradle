@@ -1,9 +1,47 @@
+plugins {
+  id 'jacoco'
+}
+
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
+
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
+
+task cleanGeneratedAttacks(type: Delete) {
+  delete "src/main/java/generated"
+}
+
+task copyGeneratedAttacks(type: Copy) {
+  dependsOn cleanGeneratedAttacks
+  from("../out/generated")
+  into("src/main/java/generated")
+  includeEmptyDirs = false
+}
+
+
+
+tasks.named('compileJava') {
+  dependsOn copyGeneratedAttacks
+}
+
+sourceSets {
+  main {
+    java {
+      srcDirs += 'src/main/java/generated'
+    }
+  }
+}
+
 dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
-  api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion" // Optional: Add if core uses Box2D directly
+  api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
   api "com.github.tommyettinger:libgdx-utils-box2d:$utilsBox2dVersion"
   api "com.github.tommyettinger:libgdx-utils:$utilsVersion"
   api "com.badlogicgames.gdx:gdx-ai:1.8.2"
@@ -12,7 +50,7 @@ dependencies {
   testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
   testImplementation 'org.mockito:mockito-core:5.10.0'
 
-  if(enableGraalNative == 'true') {
+  if (enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
 }
@@ -20,3 +58,22 @@ dependencies {
 test {
   useJUnitPlatform()
 }
+
+jacoco {
+  toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+  dependsOn test
+
+  reports {
+    xml.required.set(true)
+    html.required.set(true)
+  }
+
+  sourceDirectories.setFrom(files(sourceSets.main.allSource.srcDirs))
+  classDirectories.setFrom(files(sourceSets.main.output))
+  executionData.setFrom(fileTree(buildDir).include("/jacoco/test.exec"))
+}
+
+

@@ -33,7 +33,7 @@ public class CompoundAttack {
         MovementPatternBehavior pattern = switch (movementSelector) {
             case 0 -> new ZigZagMovement();
             case 1 -> new AccelerateMovement();
-            case 3 -> new MixedMovement();
+            case 2 -> new MixedMovement();
             default -> new StraightMovement();
         };
 

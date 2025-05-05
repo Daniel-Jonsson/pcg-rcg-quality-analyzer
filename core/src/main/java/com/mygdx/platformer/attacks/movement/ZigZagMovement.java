@@ -10,7 +10,6 @@ public class ZigZagMovement implements MovementPatternBehavior {
         float cycleLength = 2.0f;
         float offsetY;
 
-        //TODO: this needs to be fixed, right now it is just an angled attack, it fails to zigzag
         if (((int)(pos.x / cycleLength)) % 2 == 0) {
             offsetY = 2f;
         } else {

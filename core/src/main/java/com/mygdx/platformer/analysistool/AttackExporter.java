@@ -47,6 +47,7 @@ public class AttackExporter {
             "        float speed = " + attack.getSpeed() + "f;\n" +
             "        BaseAttack attack = new NecromancerAttack(world, Math.round(damage * multiplier), speed, initialPos.x, initialPos.y, directionModifier);\n" +
             attack.getMovementLogicCode() + "\n" +
+                attack.getModifierLogicCode() + "\n" +
             "        return attack;\n" +
             "    }\n" +
             "}\n";

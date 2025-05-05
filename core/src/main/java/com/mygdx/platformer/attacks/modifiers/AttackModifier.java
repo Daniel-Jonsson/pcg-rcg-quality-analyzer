@@ -5,4 +5,5 @@ import com.mygdx.platformer.attacks.BaseAttack;
 
 public interface AttackModifier {
     abstract void update(BaseAttack attack);
+    String getInlineLogicCode();
 }

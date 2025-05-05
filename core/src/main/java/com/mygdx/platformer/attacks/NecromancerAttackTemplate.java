@@ -59,4 +59,8 @@ public class NecromancerAttackTemplate {
     public String getMovementLogicCode() {
         return movementPattern != null ? movementPattern.getInlineLogicCode(speed) : "";
     }
+
+    public String getModifierLogicCode() {
+        return modifier != null ? modifier.getInlineLogicCode() : "";
+    }
 }

@@ -1,6 +1,7 @@
 package com.mygdx.platformer.attacks.pcg;
 
 import com.mygdx.platformer.attacks.NecromancerAttackTemplate;
+import com.mygdx.platformer.attacks.modifiers.PulseModifier;
 import com.mygdx.platformer.attacks.movement.AccelerateMovement;
 import com.mygdx.platformer.attacks.movement.MixedMovement;
 import com.mygdx.platformer.attacks.movement.MovementPatternBehavior;
@@ -41,7 +42,7 @@ public class CompoundAttack {
         // TODO: Change arc and projectileCount so it uses correct value later
         for (int i = 0; i < numberOfAttacks; i++) {
             attackTemplates.add(new NecromancerAttackTemplate(45, speed,
-                damage, 5, pattern));
+                damage, 5, pattern, new PulseModifier(2, 0.5f)));
         }
         return attackTemplates;
     }

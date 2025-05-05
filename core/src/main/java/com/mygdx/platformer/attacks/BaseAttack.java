@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.platformer.attacks.modifiers.AttackModifier;
 import com.mygdx.platformer.attacks.movement.MovementPatternBehavior;
 import com.mygdx.platformer.utilities.AppConfig;
 
@@ -41,6 +42,11 @@ public abstract class BaseAttack {
 
     protected MovementPatternBehavior movementBehavior;
 
+    protected AttackModifier attackModifier;
+
+    private final float originalWidth;
+    private final float originalHeight;
+
     /**
      * Constructs a new attack instance with specified parameters.
      *
@@ -63,6 +69,9 @@ public abstract class BaseAttack {
         this.sprite = new Sprite(texture);
 
         sprite.setSize(AppConfig.ATTACK_SPRITE_WIDTH, AppConfig.ATTACK_SPRITE_HEIGHT);
+        originalWidth = sprite.getWidth();
+        originalHeight = sprite.getHeight();
+
         sprite.setPosition(x, y);
 
         BodyDef bodyDef = new BodyDef();
@@ -100,6 +109,9 @@ public abstract class BaseAttack {
     public void update(float cameraX, float viewPortWidth) {
         if (movementBehavior != null) {
             movementBehavior.update(this);
+        }
+        if (attackModifier != null) {
+            attackModifier.update(this);
         }
 
         Vector2 pos = body.getPosition();
@@ -177,5 +189,15 @@ public abstract class BaseAttack {
 
     public void setMovementBehavior(MovementPatternBehavior movementBehavior) {
         this.movementBehavior = movementBehavior;
+    }
+
+    public void setAttackModifier(AttackModifier modifier) {
+        this.attackModifier = modifier;
+    }
+
+    public void setVisualScale(float visualScale) {
+        float newWidth = originalWidth * visualScale;
+        float newHeight = originalHeight * visualScale;
+        sprite.setSize(newWidth, newHeight);
     }
 }

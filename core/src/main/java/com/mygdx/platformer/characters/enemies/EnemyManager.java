@@ -75,7 +75,7 @@ public class EnemyManager {
         float detectionRange;
         float attackRange;
         float attackCooldown;
-        if (random.nextBoolean()) {
+        if (false) {
             int hp = (int) (AppConfig.GOBLIN_HEALTH * multiplier);
             float speed = AppConfig.GOBLIN_SPEED * multiplier;
             enemy = new Goblin(world, position, hp, speed);

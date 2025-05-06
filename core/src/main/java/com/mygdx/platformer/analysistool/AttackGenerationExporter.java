@@ -1,6 +1,8 @@
 package com.mygdx.platformer.analysistool;
 
 import com.mygdx.platformer.attacks.NecromancerAttackTemplate;
+import com.mygdx.platformer.attacks.modifiers.AttackModifier;
+import com.mygdx.platformer.attacks.modifiers.PulseModifier;
 import com.mygdx.platformer.attacks.movement.*;
 
 import java.io.File;
@@ -83,7 +85,8 @@ public class AttackGenerationExporter {
         int damage = random.nextInt(10, 30);
         float speed = random.nextFloat(1.0f, 5.0f);
         MovementPatternBehavior pattern = createRandomMovement();
-        return new NecromancerAttackTemplate(45, speed, damage, 5, pattern);
+        AttackModifier modifier = createRandomAttackModifier();
+        return new NecromancerAttackTemplate(45, speed, damage, 5, pattern, modifier);
     }
 
     private static MovementPatternBehavior createRandomMovement() {
@@ -96,6 +99,14 @@ public class AttackGenerationExporter {
         };
     }
 
+    private static AttackModifier createRandomAttackModifier() {
+        return switch (random.nextInt(2)) {
+            case 0 -> new PulseModifier(2f, 0.5f);
+            case 1 -> null;
+            default -> null;
+        };
+    }
+
     private static NecromancerAttackTemplate cloneAttack(NecromancerAttackTemplate original) {
         // clone the instance
         return new NecromancerAttackTemplate(
@@ -103,7 +114,7 @@ public class AttackGenerationExporter {
             original.getSpeed(),
             original.getDamage(),
             5,
-            original.getMovementPattern()
+            original.getMovementPattern(), original.getModifier()
         );
     }
 

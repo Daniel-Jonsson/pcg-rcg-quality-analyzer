@@ -149,6 +149,10 @@ nb-configuration.xml
 .DS_Store
 Thumbs.db
 
+## SonarQube:
+.env
+sonar-project.properties
+
 ## Miscellaneous:
 *~
 *.*#

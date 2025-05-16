@@ -9,23 +9,24 @@ public class AccelerateMovement implements MovementPatternBehavior {
     public void update(BaseAttack attack) {
         Vector2 pos = attack.getBody().getPosition();
         float speedX = attack.getBody().getLinearVelocity().x;
-        float newSpeed;
+        float direction = Math.signum(speedX);
+        float absSpeedX = Math.abs(speedX);
+        float newAbsSpeedX;
 
-        if (speedX < 1.5f) {
-            newSpeed = speedX + 0.2f;
-        } else if (speedX < 3.0f) {
+        if (absSpeedX < 1.5f) {
+            newAbsSpeedX = absSpeedX + 0.2f;
+        } else if (absSpeedX < 3.0f) {
             if (pos.y > 50) {
-                newSpeed = speedX * 1.1f;
+                newAbsSpeedX = absSpeedX * 1.1f;
             } else {
-                newSpeed = speedX * 1.05f;
+                newAbsSpeedX = absSpeedX * 1.05f;
             }
-        } else if (speedX > 5.0f) {
-            newSpeed = speedX * 0.95f;
+        } else if (absSpeedX > 5.0f) {
+            newAbsSpeedX = absSpeedX * 0.95f;
         } else {
-            newSpeed = speedX;
+            newAbsSpeedX = absSpeedX;
         }
-
-        attack.getBody().setLinearVelocity(newSpeed, 0);
+        attack.getBody().setLinearVelocity(newAbsSpeedX * direction, 0);
     }
 
     @Override

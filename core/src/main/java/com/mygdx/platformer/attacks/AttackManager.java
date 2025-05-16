@@ -130,6 +130,8 @@ public class AttackManager {
                               int directionModifier) {
         BaseAttack activeAttack = attack.execute(world, position,
             directionModifier, multiplier);
+        System.out.println(directionModifier);
+        activeAttack.setDirectionModifier(directionModifier);
         AudioManager.playSound(SoundType.DEATHBOLT);
         activeAttacks.add(activeAttack);
     }
@@ -178,12 +180,7 @@ public class AttackManager {
                     Assets.assetManager.get(Assets.THROWING_DAGGER_TEXTURE), directionModifier, false);
                 break;
         }
-
-        activeAttacks.add(attack);
-    }
-
-
-    public void addNewActiveAttack(BaseAttack attack) {
+        attack.setDirectionModifier(directionModifier);
         activeAttacks.add(attack);
     }
     /**

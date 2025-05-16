@@ -33,6 +33,8 @@ public abstract class BaseAttack {
     /** Indicates whether the attack should be removed from the world (i.e. if
      *  it hit a target). */
     protected boolean shouldRemove;
+
+    private int directionModifier;
     /** The Box2D world where the attack resides. */
     protected final World world;
     /** The Box2D body of the attack. */
@@ -189,6 +191,14 @@ public abstract class BaseAttack {
 
     public void setMovementBehavior(MovementPatternBehavior movementBehavior) {
         this.movementBehavior = movementBehavior;
+    }
+
+    public void setDirectionModifier(int directionModifier) {
+        this.directionModifier = directionModifier;
+    }
+
+    public int getDirectionModifier() {
+        return directionModifier;
     }
 
     public void setAttackModifier(AttackModifier modifier) {

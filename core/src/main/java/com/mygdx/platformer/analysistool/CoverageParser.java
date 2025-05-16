@@ -13,6 +13,8 @@ import java.io.FileWriter;
  * Utility class used for extracting coverage from a Jacoco report, and export
  * it to a csv file. Only generated attack classes are included in the
  * export. Line and branch coverage is included.
+ * @author Daniel Jönsson
+ * @author Robert Kullman
  */
 public class CoverageParser {
 

@@ -7,8 +7,57 @@ import com.mygdx.platformer.attacks.movement.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
+/**
+ * Entry point and utility for generating, exporting, and analyzing procedurally
+ * and recombinantly generated attack compounds.
+ * <p>
+ * This class orchestrates the creation of multiple generations of
+ * {@link NecromancerAttackTemplate} compounds using both
+ * Procedural Content Generation (PCG) and Reuse-based Content
+ * Generation (RCG) methods. It serializes these
+ * generated attack patterns into Java source files using
+ * {@link AttackExporter}, organizing them in a structured output
+ * directory for later static analysis.
+ * <p>
+ * The exported files are used to gather data on code complexity as part of the
+ * research and analysis pipeline. This enables automated, large-scale
+ * evaluation of generated attack logic.
+ * </p>
+ *
+ * <h2>Workflow</h2>
+ * <ol>
+ * <li>Generates an initial set of PCG compounds and exports them.</li>
+ * <li>Iteratively generates new RCG generations from previous ones, exporting
+ * each generation.</li>
+ * <li>Optionally generates additional standalone PCG generations for
+ * comparison.</li>
+ * <li>Runs static analysis tools (e.g., SonarQube) on the generated
+ * codebase.</li>
+ * </ol>
+ *
+ * <h2>Output Structure</h2>
+ * <ul>
+ * <li>out/generated/{method}/gen{generation}/compound_{compoundId}/NecromancerAttack_{attackId}.java</li>
+ * </ul>
+ *
+ * <h2>Usage</h2>
+ * 
+ * <pre>
+ * // Run from the command line or as a main class to generate and export attack
+ * // compounds.
+ * AttackGenerationExporter.main(args);
+ * </pre>
+ *
+ * @see NecromancerAttackTemplate
+ * @see AttackExporter
+ * @see com.mygdx.platformer.analysistool.CoverageParser
+ * @author Daniel Jönsson
+ * @author Robert Kullman
+ */
 public class AttackGenerationExporter {
 
     private static final int COMPOUND_COUNT = 20;
@@ -18,6 +67,23 @@ public class AttackGenerationExporter {
 
     private static final String SONAR_SCANNER_PATH = "C:\\sonarscanner\\sonar-scanner-7.1.0.4889-windows-x64\\bin\\sonar-scanner.bat";
 
+    /**
+     * Main entry point for generating, exporting, and analyzing attack compounds.
+     * <p>
+     * This method generates an initial set of PCG compounds, then iteratively
+     * generates
+     * RCG generations from previous ones, exporting each generation using
+     * {@link AttackExporter}.
+     * It also generates additional standalone PCG generations for comparison, and
+     * runs
+     * static analysis tools (e.g., SonarQube) on the generated codebase.
+     * <p>
+     * Code coverage analysis and coverage export are available but commented out by
+     * default.
+     * </p>
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         List<List<NecromancerAttackTemplate>> pcgGen0 = generatePCG();
         AttackExporter.exportCompounds(pcgGen0, 0, "PCG");
@@ -35,12 +101,23 @@ public class AttackGenerationExporter {
 
         runSonarScanner();
 
-        runJacocoReport();
+        // runJacocoReport();
 
-        CoverageParser.extractCoverageToCSV();
+        // CoverageParser.extractCoverageToCSV();
 
     }
 
+    /**
+     * Generates a list of attack compounds using Procedural Content Generation
+     * (PCG).
+     * <p>
+     * Each compound is a list of randomly created {@link NecromancerAttackTemplate}
+     * objects,
+     * representing a unique attack pattern.
+     * </p>
+     *
+     * @return A list of PCG-generated attack compounds.
+     */
     private static List<List<NecromancerAttackTemplate>> generatePCG() {
         List<List<NecromancerAttackTemplate>> compounds = new ArrayList<>();
 
@@ -54,6 +131,20 @@ public class AttackGenerationExporter {
         return compounds;
     }
 
+    /**
+     * Generates a new generation of attack compounds using Reuse-based
+     * Content Generation (RCG).
+     * <p>
+     * Each new compound is created by copying a host compound from the previous
+     * generation and
+     * replacing one of its attacks with a randomly selected attack from a donor
+     * compound.
+     * </p>
+     *
+     * @param previousGeneration The previous generation of attack compounds to
+     *                           recombine.
+     * @return A new list of RCG-generated attack compounds.
+     */
     private static List<List<NecromancerAttackTemplate>> generateRCG(List<List<NecromancerAttackTemplate>> previousGeneration) {
         List<List<NecromancerAttackTemplate>> newGeneration = new ArrayList<>();
 
@@ -81,6 +172,16 @@ public class AttackGenerationExporter {
     }
 
 
+    /**
+     * Creates a single {@link NecromancerAttackTemplate} with randomized
+     * parameters.
+     * <p>
+     * The attack's damage, speed, movement pattern, and modifier are randomly
+     * selected.
+     * </p>
+     *
+     * @return A randomly generated attack template.
+     */
     private static NecromancerAttackTemplate createRandomAttack() {
         int damage = random.nextInt(10, 30);
         float speed = random.nextFloat(1.0f, 5.0f);
@@ -89,6 +190,11 @@ public class AttackGenerationExporter {
         return new NecromancerAttackTemplate(45, speed, damage, 5, pattern, modifier);
     }
 
+    /**
+     * Randomly selects and creates a movement pattern for an attack.
+     *
+     * @return A randomly chosen {@link MovementPatternBehavior} instance.
+     */
     private static MovementPatternBehavior createRandomMovement() {
         return switch (random.nextInt(4)) {
             case 0 -> new StraightMovement();
@@ -99,6 +205,14 @@ public class AttackGenerationExporter {
         };
     }
 
+    /**
+     * Randomly selects and creates an attack modifier.
+     * <p>
+     * May return {@code null} if no modifier is selected.
+     * </p>
+     *
+     * @return A randomly chosen {@link AttackModifier}, or {@code null}.
+     */
     private static AttackModifier createRandomAttackModifier() {
         return switch (random.nextInt(2)) {
             case 0 -> new PulseModifier(2f, 0.5f);
@@ -107,6 +221,13 @@ public class AttackGenerationExporter {
         };
     }
 
+    /**
+     * Creates a deep copy of a given {@link NecromancerAttackTemplate}.
+     *
+     * @param original The attack template to clone.
+     * @return A new {@link NecromancerAttackTemplate} with the same properties as
+     *         the original.
+     */
     private static NecromancerAttackTemplate cloneAttack(NecromancerAttackTemplate original) {
         // clone the instance
         return new NecromancerAttackTemplate(
@@ -119,6 +240,15 @@ public class AttackGenerationExporter {
     }
 
 
+    /**
+     * Runs the SonarScanner static analysis tool on the generated attack source
+     * files.
+     * <p>
+     * This method executes SonarScanner as an external process, using the output
+     * directory
+     * as the working directory. It prints the result to the console.
+     * </p>
+     */
     private static void runSonarScanner() {
         System.out.println("Starting SonarScanner analysis...");
 
@@ -140,6 +270,14 @@ public class AttackGenerationExporter {
         }
     }
 
+    /**
+     * Runs the JaCoCo code coverage report task using Gradle.
+     * <p>
+     * This method executes the Gradle JaCoCo report task as an external process and
+     * prints
+     * the result to the console.
+     * </p>
+     */
     private static void runJacocoReport() {
         System.out.println("Running JaCoCo report task...");
 

@@ -15,12 +15,14 @@ import com.badlogic.gdx.math.Vector2;
  * </p>
  *
  * <h2>Usage</h2>
- * 
+ *
  * <pre>
  * // Attach to an attack to make it move straight horizontally
  * attack.setMovementBehavior(new StraightMovement());
  * </pre>
  *
+ * @author Daniel Jönsson
+ * @author Robert Kullman
  * @see MovementPatternBehavior
  * @see com.mygdx.platformer.attacks.BaseAttack
  */

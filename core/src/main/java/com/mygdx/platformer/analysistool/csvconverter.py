@@ -7,12 +7,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Set your SonarQube server and project key
+# Set SonarQube server and project key
 SONAR_URL = "http://localhost:9000"
 PROJECT_KEY = "attack-generation"
 METRICS = "complexity,cognitive_complexity"
 
-# Get the component tree (all files/folders)
+# Get the component tree
 url = f"{SONAR_URL}/api/measures/component_tree"
 page_size = 500
 page = 1
@@ -65,18 +65,15 @@ for component in all_components:
         elif attack_type == 'pcg':
             pcg_rows.append(row)
 
-# Sort by generation, then compound_id (both as integers)
 rcg_rows.sort(key=lambda x: (int(x[0]), int(x[1])))
 pcg_rows.sort(key=lambda x: (int(x[0]), int(x[1])))
 
-# Set output directory and file
 output_dir = r"C:\Users\danne\Documents\Thesis\Analysis-data"
 os.makedirs(output_dir, exist_ok=True)
 
 with open(os.path.join(output_dir, 'rcg.csv'), 'w', newline='') as f:
     writer = csv.writer(f, delimiter=";")
     writer.writerow(['generation', 'compound_id', 'cyclomatic complexity', 'cognitive complexity'])
-    # Convert all values to strings for writing
     writer.writerows([[str(i) for i in row] for row in rcg_rows])
 
 with open(os.path.join(output_dir, 'pcg.csv'), 'w', newline='') as f:

@@ -3,11 +3,51 @@ package com.mygdx.platformer.attacks.movement;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.platformer.attacks.BaseAttack;
 
+/**
+ * A {@link MovementPatternBehavior} that alternates an attack's movement
+ * between straight and zigzag patterns.
+ * <p>
+ * The movement mode switches at regular intervals (every 1 second), randomly
+ * choosing between
+ * a straight horizontal movement and a zigzag pattern. In zigzag mode, the
+ * attack's vertical
+ * velocity alternates between positive and negative values based on its
+ * horizontal position,
+ * creating a wave-like path. In straight mode, the attack moves horizontally
+ * with no vertical offset.
+ * </p>
+ *
+ * <h2>Usage</h2>
+ * 
+ * <pre>
+ * // Attach to an attack to make it alternate between straight and zigzag
+ * // movement
+ * attack.setMovementBehavior(new MixedMovement());
+ * </pre>
+ *
+ * @see MovementPatternBehavior
+ * @see com.mygdx.platformer.attacks.BaseAttack
+ */
 public class MixedMovement implements MovementPatternBehavior {
 
     private float timeSinceLastSwitch = 0f;
     private boolean useZigZag = false;
 
+    /**
+     * Updates the attack's movement pattern, alternating between straight and
+     * zigzag modes.
+     * <p>
+     * Every second, the movement mode is randomly switched. In zigzag mode, the
+     * attack's vertical
+     * velocity alternates between positive and negative values based on its
+     * horizontal position,
+     * creating a zigzag or wave-like path. In straight mode, the attack moves
+     * horizontally with no
+     * vertical offset.
+     * </p>
+     *
+     * @param attack The attack instance whose movement is being updated.
+     */
     @Override
     public void update(BaseAttack attack) {
         timeSinceLastSwitch += com.badlogic.gdx.Gdx.graphics.getDeltaTime();

@@ -552,6 +552,7 @@ public final class AppConfig {
     /** Number of rays used for projectile detection in auto-play mode. */
     public static final int AUTO_PLAY_NUMBER_OF_PROJECTILE_DETECTION_RAYS = 6;
 
+    /** Frequency of decision-making in auto-play mode. */
     public static final float AUTO_PLAY_DECISION_FREQUENCY = 0.05f;
 
     /* SOUNDS */
@@ -638,28 +639,38 @@ public final class AppConfig {
 
     /* Keybindings */
 
+    /** Key for storing move left key binding. */
     public static final String SETTINGS_MOVE_LEFT_KEY = "moveLeftKey";
 
+    /** Key for storing move right key binding. */
     public static final String SETTINGS_MOVE_RIGHT_KEY = "moveRightKey";
 
+    /** Key for storing jump key binding. */
     public static final String SETTINGS_JUMP_KEY = "jumpKey";
 
+    /** Key for storing attack key binding. */
     public static final String SETTINGS_ATTACK_KEY = "attackKey";
 
+    /** Label for move left key binding. */
     public static final String SETTINGS_MOVE_LEFT_LABEL = "Move Left";
 
+    /** Label for move right key binding. */
     public static final String SETTINGS_MOVE_RIGHT_LABEL = "Move Right";
 
+    /** Label for jump key binding. */
     public static final String SETTINGS_JUMP_LABEL = "Jump";
 
+    /** Label for attack key binding. */
     public static final String SETTINGS_ATTACK_LABEL = "Attack";
 
+    /** Padding for keybinding table. */
     public static final int SETTINGS_KEYBINDING_TABLE_PADDING = 5;
 
+    /** Width of keybinding table. */
     public static final int SETTINGS_KEYBINDING_TABLE_WIDTH = 200;
 
+    /** Height of keybinding table. */
     public static final int SETTINGS_KEYBINDING_TABLE_HEIGHT = 35;
-
 
 
     /* ERROR OVERLAY CONFIGURATIONS */

@@ -33,6 +33,8 @@ public abstract class BaseAttack {
     /** Indicates whether the attack should be removed from the world (i.e. if
      *  it hit a target). */
     protected boolean shouldRemove;
+
+    private int directionModifier;
     /** The Box2D world where the attack resides. */
     protected final World world;
     /** The Box2D body of the attack. */
@@ -183,18 +185,50 @@ public abstract class BaseAttack {
         return body;
     }
 
+    /**
+     * Accessor for the attack speed.
+     * @return The attack speed.
+     */
     public float getSpeed() {
         return speed;
     }
 
+    /**
+     * Sets the movement behavior for the attack.
+     * @param movementBehavior The movement behavior to set.
+     */
     public void setMovementBehavior(MovementPatternBehavior movementBehavior) {
         this.movementBehavior = movementBehavior;
     }
 
+    /**
+     * Sets the direction modifier for the attack.
+     * @param directionModifier The direction modifier to set.
+     */
+    public void setDirectionModifier(int directionModifier) {
+        this.directionModifier = directionModifier;
+    }
+
+    /**
+     * Accessor for the direction modifier.
+     * @return The direction modifier.
+     */ 
+    public int getDirectionModifier() {
+        return directionModifier;
+    }
+
+    /**
+     * Sets the attack modifier for the attack.
+     * @param modifier The attack modifier to set.
+     */ 
     public void setAttackModifier(AttackModifier modifier) {
         this.attackModifier = modifier;
     }
 
+    /**
+     * Sets the visual scale for the attack.
+     * @param visualScale The visual scale to set.
+     */ 
     public void setVisualScale(float visualScale) {
         float newWidth = originalWidth * visualScale;
         float newHeight = originalHeight * visualScale;

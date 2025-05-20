@@ -131,6 +131,10 @@ public class Necromancer extends BaseEnemy {
         stateTime = 0;
     }
 
+    /**
+     * Accessor method for getting the attack sequence.
+     * @return The attack sequence.
+     */ 
     public CompoundAttack getAttackSequence() {
         return attackSequence;
     }
